@@ -3,3 +3,4 @@ db/insert.sql
 db/reset.sql
 db/queries.sql
 server/package-lock.json
+.vscode/
