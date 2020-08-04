@@ -1,11 +1,10 @@
-const express = require('express');
-const app = express();
+const { port, env } = require('./config/vars');
+const { app } = require('./config/express');
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+app.listen(port, function () {
+  console.log(`Example app listening on port ${port}!`);
 });
 
-module.exports.app = app;
+if (env === 'test') {
+  module.exports.app = app;
+}
