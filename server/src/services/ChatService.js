@@ -6,8 +6,10 @@ class ChatService {
 
 
     /**
+     * Return chat by id
      * 
      * @param {number} id id of chat 
+     * @returns {Object}
      */
     async getById(id) {
         const [chat] = await query('SELECT * FROM Chats WHERE id=?', [id]);
@@ -15,8 +17,21 @@ class ChatService {
     }
 
     /**
+     * Return chat by key
+     * 
+     * @param {string} key key of chat
+     * @returns {Object}
+     */
+    async getByKey(key) {
+        const chat = await query('SELECT * FROM Chats WHERE `key`=?', [key]);
+        return chat;
+    }
+
+    /**
+     * Return array of user chats by user id
      * 
      * @param {number} user_id
+     * @returns {Array}
      */
     async getByUserId(user_id) {
         const [chats] = await query(`
@@ -32,10 +47,12 @@ class ChatService {
     }
 
     /**
+     * Create chat
      * 
      * @param {Object} chat
      * @param {string} chat.name name of chat
      * @param {Date} chat.creation_date
+     * @returns {Object}
      */
     async create(chat) {
         const key = token();
@@ -44,19 +61,36 @@ class ChatService {
             INSERT INTO Chats(\`name\`, \`creation_date\`, \`key\`) VALUES (?, ?, ?);
             `, 
             [chat.name, creation_date, key]);
-        return result;
+        return {
+            name: chat.name,
+            creation_date: creation_date,
+            key: key
+        };
     }
 
+    /**
+     * Add member to chat
+     * 
+     * @param {number} user_id 
+     * @param {string} key 
+     * @returns {boolean}
+     */
     async addMember(user_id, key) {
         let [chat_id] = await query('SELECT Chats.id FROM Chats WHERE `key`=?', [key]);
         chat_id = chat_id[0].id;
         if (chat_id) {
             const result = await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [user_id, chat_id]);
-            return 'member add';
+            return true;
         }
-        return 0;
+        return false;
     }
 
+    /**
+     * Delete chat by id
+     * 
+     * @param {number} id id of chat 
+     * @returns {boolean}
+     */
     async deleteById(id) {
         const [users] = await query(`
             SELECT Users.id  
@@ -70,9 +104,9 @@ class ChatService {
             [id]);
         if(!users.length) {
             query(`DELETE FROM Chats WHERE id=?`, [id]);
-            return 'deleted';
+            return true;
         }
-        return `chat has ${users.length} members`;
+        return false;
     }
 }
 
