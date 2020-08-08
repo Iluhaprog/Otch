@@ -20,34 +20,19 @@ class MessagesController {
         res.json(message);
     }
 
-    async create(req, res) {
-        const message = req.body.message;
+    async create(message) {
         const result = await MessagesService.create(message);
-        if (result) {
-            res.sendStatus(201);
-        } else {
-            res.sendStatus(400);
-        }
+        return result;
     }
 
-    async update(req, res) {
-        const message = req.body.message;
+    async update(message) {
         const result = await MessagesService.updateById(message.id, message.message);
-        if (result) {
-            res.sendStatus(201);
-        } else {
-            res.sendStatus(400);
-        }
+        return result;
     }
 
-    async deleteById(req, res) {
-        const message = req.body.message;
+    async deleteById(message) {
         const result = await MessagesService.deleteById(message.id);
-        if (result) {
-            res.sendStatus(201);
-        } else {
-            res.sendStatus(400);
-        }
+        return result;
     }
 }
 
