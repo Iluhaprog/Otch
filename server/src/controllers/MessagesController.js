@@ -17,7 +17,7 @@ class MessagesController {
     async getByUserIdAndChatId(req, res) {
         const { user_id, chat_id } = req.body;
         const messages = await MessagesService.getByUserIdAndChatId(user_id, chat_id);
-        res.json(message);
+        res.json(messages);
     }
 
     async create(message) {

@@ -2,29 +2,31 @@ const express = require('../config/express').express;
 const router = express.Router();
 const MessagesController = require('../controllers/MessagesController');
 
-router.ws('/message', (ws, req) => {
-    ws.on('send', async (msg) => {
-        let result = await MessagesController.create(msg);
-        if (result) {
-            ws.send(msg);
-        }
-        ws.send({msg: 'Don\'t send'})
+router.ws('/send', (ws, req) => {
+    ws.on('message', async (msg) => {
+        const result = await MessagesController.create(JSON.parse(msg));
+        const res = result ? msg : 'Don\'t send';
+        ws.send(res);
     });
-    ws.on('update', async (msg) => {
-        let result = await MessagesController.update(msg);
-        if (result) {
-            ws.send(msg);
-        }
-        ws.send({msg: 'Don\'t update'})
-    });
-    ws.on('delete', async (msg) => {
-        let result = await MessagesController.deleteById(msg);
-        if (result) {
-            ws.send({msg: 'ok'});
-        }
-        ws.send({msg: 'Don\'t delete'})
-    })
 });
+
+router.ws('/update', (ws, req) => {
+    ws.on('message', async (msg) => {
+        const result = await MessagesController.update(JSON.parse(msg));
+        const res = result ? msg : 'Don\'t send';
+        ws.send(res);
+    });
+});
+
+router.ws('/delete', (ws, req) => {
+    ws.on('message', async (msg) => {
+        const result = await MessagesController.deleteById(JSON.parse(msg));
+        const res = result ? msg : 'Don\'t send';
+        ws.send(res);
+    });
+});
+
+
 
 router
     .get('/byId', MessagesController.getById)

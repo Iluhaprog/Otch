@@ -10,7 +10,7 @@ class MessagesService {
      * @returns {Objects} message
      */
     async getById(id) {
-        const [message] = await query('SELECT * FROM Users WHERE id=?', [id]);
+        const [message] = await query('SELECT * FROM Messages WHERE id=?', [id]);
         return message || null;
     }
 
@@ -49,9 +49,10 @@ class MessagesService {
      */
     async create(message) {
         if (message) {
+            const creation_date = message.creation_date || new Date();
             await query(`INSERT INTO Messages(\`user_id\`, \`chat_id\`, \`message\`, \`creation_date\`) VALUES
                             (?, ?, ?, ?)`,
-                        [message.user_id, message.chat_id, message.message, formatDate(message.creation_date)]);
+                        [message.user_id, message.chat_id, message.message, formatDate(creation_date)]);
             return true;
         }
         return false;
@@ -61,13 +62,13 @@ class MessagesService {
      * Update message
      * 
      * @param {number} id 
-     * @param {string} message 
+     * @param {string} newMessage 
      * @return {boolean} true - message updated, false - message don't updated
      */
-    async updateById(id, message) {
+    async updateById(id, newMessage) {
         const message = await this.getById(id);
         if (message) {
-            await query('UPDATE Messages SET message=? WHERE id=?', [id]);
+            await query('UPDATE Messages SET message=? WHERE id=?', [newMessage, id]);
             return true;
         }
         return false;
@@ -82,7 +83,7 @@ class MessagesService {
     async deleteById(id) {
         const message = await this.getById(id);
         if(message) {
-            await query('DELETE FROM Users WHERE id=?', [id]);
+            await query('DELETE FROM Messages WHERE id=?', [id]);
             return true;
         }
         return false;
