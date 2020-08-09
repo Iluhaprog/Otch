@@ -1,13 +1,30 @@
-const { express, wsInstance } = require('../config/express').express;
+const { express, wsInstance } = require('../config/express');
 const router = express.Router();
 const MessagesController = require('../controllers/MessagesController');
 
-router.ws('/send', (ws, req) => {
+const roomsConnects = new Map();
 
-    ws.on('message', async (msg) => {
+router.ws('/send', (ws, req) => {
+    const key = req.query.key;
+
+    if (roomsConnects.has(key)) {
+        let connects = roomsConnects.get(key);
+        connects.push(ws);
+    } else {
+        roomsConnects.set(key, [ws]);
+    }
+
+    ws.on('message', async msg => {
         const result = await MessagesController.create(JSON.parse(msg));
-        const res = result ? msg : 'Don\'t send';
-        ws.send(res);
+        if (result) {
+            roomsConnects.get(key).forEach(socket => {
+                socket.send(msg);
+            });
+        } else {
+            msg = JSON.parse(msg);
+            msg.error = true;
+            ws.send(JSON.stringify(msg));
+        }
     });
 });
 
