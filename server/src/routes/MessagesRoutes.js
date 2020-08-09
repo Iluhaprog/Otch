@@ -1,8 +1,9 @@
-const express = require('../config/express').express;
+const { express, wsInstance } = require('../config/express').express;
 const router = express.Router();
 const MessagesController = require('../controllers/MessagesController');
 
 router.ws('/send', (ws, req) => {
+
     ws.on('message', async (msg) => {
         const result = await MessagesController.create(JSON.parse(msg));
         const res = result ? msg : 'Don\'t send';

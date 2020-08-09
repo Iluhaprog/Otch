@@ -17,5 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 module.exports = {
     app: app,
     express: express,
-    logger: logger
+    logger: logger,
+    wsInstance: expressWs
 };
