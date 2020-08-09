@@ -4,47 +4,55 @@ const MessagesController = require('../controllers/MessagesController');
 
 const roomsConnects = new Map();
 
+const addConnect = (socket, key) => {
+    if (roomsConnects.has(key)) {
+        const roomConnects = roomsConnects.get(key);
+        roomConnects.push(socket);
+        roomsConnects.set(key, roomConnects);
+    } else {
+        roomsConnects.set(key, [socket]);
+    }
+}
+
+const send = (message, key) => {
+    roomsConnects.get(key).forEach(socket => {
+        socket.send(JSON.stringify(message));
+    });
+}
+
 router.ws('/send', (ws, req) => {
     const key = req.query.key;
+    addConnect(ws, key);
 
-    if (roomsConnects.has(key)) {
-        let connects = roomsConnects.get(key);
-        connects.push(ws);
-    } else {
-        roomsConnects.set(key, [ws]);
-    }
-
-    ws.on('message', async msg => {
-        const result = await MessagesController.create(JSON.parse(msg));
-        if (result) {
-            roomsConnects.get(key).forEach(socket => {
-                socket.send(msg);
-            });
-        } else {
-            msg = JSON.parse(msg);
-            msg.error = true;
-            ws.send(JSON.stringify(msg));
+    ws.on('message', async message => {
+        const act = req.query.a;
+        let result = false;
+        message = JSON.parse(message);
+        switch(act) {
+            case 'c':
+                result = await MessagesController.create(message);
+                break;
+            case 'u':
+                result = await MessagesController.update(message);
+                break;
+            case 'd':
+                result = await MessagesController.deleteById(message);
+                break;
         }
+        if (!result) {
+            message.error = true;
+        }
+        message.act = act
+        send(message, key);
     });
+
+    ws.on('close', () => {
+        const connects = roomsConnects.get(key).filter(connect => {
+            return !(connect === ws);
+        });
+        roomsConnects.set(key, connects);
+    })
 });
-
-router.ws('/update', (ws, req) => {
-    ws.on('message', async (msg) => {
-        const result = await MessagesController.update(JSON.parse(msg));
-        const res = result ? msg : 'Don\'t send';
-        ws.send(res);
-    });
-});
-
-router.ws('/delete', (ws, req) => {
-    ws.on('message', async (msg) => {
-        const result = await MessagesController.deleteById(JSON.parse(msg));
-        const res = result ? msg : 'Don\'t send';
-        ws.send(res);
-    });
-});
-
-
 
 router
     .get('/byId', MessagesController.getById)
