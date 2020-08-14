@@ -1,8 +1,11 @@
 const { port, env } = require('./config/vars');
-const { app } = require('./config/express');
+const { app, express, passport } = require('./config/express');
 const MessagesRouter = require('./routes/MessagesRoutes'); 
+const UsersRoutes = require('./routes/UsersRoutes');
 
+app.use(express.static(__dirname + '/public'));
 app.use('/messages', MessagesRouter);
+app.use('/users', UsersRoutes);
 
 app.listen(port, function () {
   console.log(`Example app listening on port ${port}!`);

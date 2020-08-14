@@ -1,4 +1,4 @@
-const { express, wsInstance } = require('../config/express');
+const { express } = require('../config/express');
 const router = express.Router();
 const MessagesController = require('../controllers/MessagesController');
 
