@@ -30,7 +30,7 @@ class UserService {
      * Return user by id
      * 
      * @param {number} id
-     * @returns {Object} user or null if user does not exist
+     * @returns {Answer} user or null if user does not exist
      */
     async getById(id) {
         const [[user]] = await query('SELECT * FROM Users WHERE `id`=?', [id]);
@@ -146,7 +146,7 @@ class UserService {
     async update(user) {
         const oldUser = await this.getById(user.id);
         if (oldUser.getStatus()) {
-            await query('UPDATE Users SET `name`=?, `age`=? WHERE `id`=?', [user.name, user.age, oldUser.id]);
+            await query('UPDATE Users SET name=?, age=? WHERE id=?', [user.name, user.age, user.id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
