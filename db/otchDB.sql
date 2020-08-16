@@ -7,6 +7,7 @@ CREATE TABLE Users(
     `email` VARCHAR(254) NOT NULL,
     `login` VARCHAR(50) UNIQUE NOT NULL,
     `name` VARCHAR(40) NOT NULL,
+    `age` INT NOT NULL DEFAULT 18,
     `password` TEXT NOT NULL,
     `salt` TEXT NOT NULL,
     `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -28,8 +29,10 @@ CREATE TABLE Messages(
     `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `message` TEXT NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`user_id`) REFERENCES Users(`id`),
+    FOREIGN KEY (`user_id`) REFERENCES Users(`id`)
+        ON DELETE CASCADE,
     FOREIGN KEY (`chat_id`) REFERENCES Chats(`id`)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE Users_Chats(
@@ -37,6 +40,8 @@ CREATE TABLE Users_Chats(
     `user_id` INT NOT NULL,
     `chat_id` INT NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`user_id`) REFERENCES Users(`id`),
+    FOREIGN KEY (`user_id`) REFERENCES Users(`id`)
+        ON DELETE CASCADE,
     FOREIGN KEY (`chat_id`) REFERENCES Chats(`id`)
+        ON DELETE CASCADE
 );

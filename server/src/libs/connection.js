@@ -3,6 +3,12 @@ const config = require('../config/db');
 
 const pool = mysql.createPool(config);
 
+/**
+ * Makes query to database
+ * 
+ * @param {string} query sql query
+ * @param {string} params array of params
+ */
 const query = (query, params) => {
     return new Promise((resolve, reject) => {
         pool.getConnection((err, connection) => {
