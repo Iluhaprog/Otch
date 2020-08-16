@@ -4,6 +4,12 @@ const MessagesController = require('../controllers/MessagesController');
 
 const roomsConnects = new Map();
 
+/**
+ * Add connection to the room
+ * 
+ * @param {WebSocket} socket 
+ * @param {strign} key 
+ */
 const addConnect = (socket, key) => {
     if (roomsConnects.has(key)) {
         const roomConnects = roomsConnects.get(key);
@@ -14,6 +20,12 @@ const addConnect = (socket, key) => {
     }
 }
 
+/**
+ * Send message for room connections
+ * 
+ * @param {string} message 
+ * @param {string} key 
+ */
 const send = (message, key) => {
     roomsConnects.get(key).forEach(socket => {
         socket.send(JSON.stringify(message));
@@ -25,10 +37,10 @@ router.ws('/send', (ws, req) => {
     addConnect(ws, key);
 
     ws.on('message', async message => {
-        const act = req.query.a;
+        const action = req.query.a;
         let result = false;
         message = JSON.parse(message);
-        switch(act) {
+        switch(action) {
             case 'c':
                 result = await MessagesController.create(message);
                 break;
@@ -42,7 +54,7 @@ router.ws('/send', (ws, req) => {
         if (!result) {
             message.error = true;
         }
-        message.act = act
+        message.action = action
         send(message, key);
     });
 

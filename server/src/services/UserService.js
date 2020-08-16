@@ -8,7 +8,7 @@ class UserService {
     /**
      * 
      * @param {string} login
-     * @returns {boolean} 
+     * @returns {boolean} true - login is unique, false - login don't unique
      */
     async loginIsUnique(login) {
         return !(await this.getByLogin(login));
@@ -17,7 +17,7 @@ class UserService {
     /**
      * 
      * @param {string} email
-     * @returns {boolean} 
+     * @returns {boolean} true - email is unique, email - login don't unique
      */
     async emailIsUnique(email) {
         return !(await this.getByEmail(email));
@@ -27,7 +27,7 @@ class UserService {
      * Return user by id
      * 
      * @param {number} id
-     * @returns {Object}
+     * @returns {Object} user or null if user does not exist
      */
     async getById(id) {
         const [[user]] = await query('SELECT * FROM Users WHERE `id`=?', [id]);
@@ -38,7 +38,7 @@ class UserService {
      * Return user by login
      * 
      * @param {string} login
-     * @returns {Object}
+     * @returns {Object} user or null if user does not exist
      */
     async getByLogin(login) {
         const [[user]] = await query('SELECT * FROM Users WHERE `login`=?', [login]);
@@ -50,7 +50,7 @@ class UserService {
      * Return user by email
      * 
      * @param {string} email
-     * @returns {Object}
+     * @returns {Object} user or null if user does not exist
      */
     async getByEmail(email) {
         const [[user]] = await query('SELECT * FROM Users WHERE `email`=?', [email]);
@@ -62,7 +62,7 @@ class UserService {
      * 
      * @param {string} login 
      * @param {string} password 
-     * @returns {Object}  
+     * @returns {Object} user or null if user does not exist
      */
     async getByLoginAndPassord(login, password) {
         const [[user]] = await query('SELECT * FROM Users WHERE login=? AND password=?;', [login, password]);
@@ -74,7 +74,7 @@ class UserService {
      * 
      * @param {string} email 
      * @param {string} password 
-     * @returns {Object}  
+     * @returns {Object} user or null if user does not exist
      */
     async getByEmailAndPassword(email, password) {
         const [[user]] = await query('SELECT * FROM Users WHERE email=? AND password=?;', [email, password]);
@@ -91,7 +91,7 @@ class UserService {
      * @param {number} user.age
      * @param {Date} user.creation_date
      * @param {string} user.password
-     * @returns {boolean}
+     * @returns {Object} Object contains info about errors
      */
     async create(user) {
         const passHash = hash(user.password);
@@ -106,7 +106,6 @@ class UserService {
             return result;
         }
 
-        console.log(emailIsUnique, '----', loginIsUnique);
         if (!emailIsUnique) {
             result.status = EMAIL_E;
         } else if (!loginIsUnique) {
@@ -121,7 +120,7 @@ class UserService {
      * @param {string} email 
      * @param {string} oldPassword 
      * @param {string} newPassword 
-     * @returns {boolean}
+     * @returns {boolean} true - user password updated, false - user password don't updated
      */
     async updatePassword(id, newPassword) {
         const user = await this.getById(id);
@@ -154,12 +153,13 @@ class UserService {
      * Delete user by id
      * 
      * @param {number} id
-     * @returns {boolean} 
+     * @returns {boolean} true - user deleted, false - user don't deleted
      */
     async deleteById(id) {
         const user = await this.getById(id)
         if (user) {
             await query('DELETE FROM Users WHERE `id`=?', [id]);
+            return true;
         }
         return false;
     }
