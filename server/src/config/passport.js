@@ -16,9 +16,7 @@ passport.use(new LocalStrategy({
         usernameField: 'email',
         passwordField: 'password'
     }, async (username, password, done) => {
-        console.log(username + " --- " + password);
         const user = await UsersService.getByEmail(username);
-        console.log(user);
         console.log(compare(password, user.password));
         if (!user) {
             return done(null, false, {message: 'User does not exist'});

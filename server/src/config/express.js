@@ -3,11 +3,7 @@ const express = require('express');
 const app = express();
 
 const expressWs = require('express-ws')(app);
-const expressSession = require('express-session')({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false
-})
+const expressSession = require('express-session');
 
 const pino = require('pino');
 const expressPino = require('express-pino-logger');
@@ -21,7 +17,11 @@ app.use(expressLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(expressSession);
+app.use(expressSession({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 

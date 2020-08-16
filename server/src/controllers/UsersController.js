@@ -1,5 +1,4 @@
 const UsersService = require('../services/UserService');
-const passport = require('passport');
 const { SUCCESS, EMAIL_E, LOGIN_E } = require('../libs/userCreateStatuses');
 
 class UsersController {
@@ -24,6 +23,21 @@ class UsersController {
 
     async login(req, res) {
         res.send('login');
+    }
+
+    async logout(req, res)  {
+        req.logout();
+        res.json({logout: true});
+    }
+
+    async update(req, res) {
+        const user = req.body.user;
+        const result = await UsersService.update(user);
+        if (result) {
+            res.json({updated: true});
+        } else {
+            res.json({updated: false});
+        }
     }
 
 }

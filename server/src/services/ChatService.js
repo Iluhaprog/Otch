@@ -12,8 +12,8 @@ class ChatService {
      * @returns {Object}
      */
     async getById(id) {
-        const [chat] = await query('SELECT * FROM Chats WHERE id=?', [id]);
-        return chat;
+        const [[chat]] = await query('SELECT * FROM Chats WHERE id=?', [id]);
+        return chat || null;
     }
 
     /**
@@ -23,8 +23,8 @@ class ChatService {
      * @returns {Object}
      */
     async getByKey(key) {
-        const chat = await query('SELECT * FROM Chats WHERE `key`=?', [key]);
-        return chat;
+        const [[chat]] = await query('SELECT * FROM Chats WHERE `key`=?', [key]);
+        return chat || null;
     }
 
     /**
@@ -76,10 +76,10 @@ class ChatService {
      * @returns {boolean}
      */
     async addMember(user_id, key) {
-        let [chat_id] = await query('SELECT Chats.id FROM Chats WHERE `key`=?', [key]);
-        chat_id = chat_id[0].id;
+        let [[chat_id]] = await query('SELECT Chats.id FROM Chats WHERE `key`=?', [key]);
+        chat_id = chat_id.id;
         if (chat_id) {
-            const result = await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [user_id, chat_id]);
+            await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [user_id, chat_id]);
             return true;
         }
         return false;

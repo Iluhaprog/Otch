@@ -30,7 +30,7 @@ class UserService {
      * @returns {Object}
      */
     async getById(id) {
-        const [user] = await query('SELECT * FROM Users WHERE `id`=?', [id]);
+        const [[user]] = await query('SELECT * FROM Users WHERE `id`=?', [id]);
         return user || null;
     }
 
@@ -65,7 +65,7 @@ class UserService {
      * @returns {Object}  
      */
     async getByLoginAndPassord(login, password) {
-        const [user] = await query('SELECT * FROM Users WHERE login=? AND password=?;', [login, password]);
+        const [[user]] = await query('SELECT * FROM Users WHERE login=? AND password=?;', [login, password]);
         return user || null;
     }
 
@@ -77,7 +77,7 @@ class UserService {
      * @returns {Object}  
      */
     async getByEmailAndPassword(email, password) {
-        const [user] = await query('SELECT * FROM Users WHERE email=? AND password=?;', [email, password]);
+        const [[user]] = await query('SELECT * FROM Users WHERE email=? AND password=?;', [email, password]);
         return user || null;
     }
 
@@ -136,12 +136,10 @@ class UserService {
     /**
      * Update name and age of user
      * 
-     * @param {Object} user 
-     * @param {string} user.email
+     * @param {Object} user
      * @param {string} user.name
      * @param {number} user.age
-     * @param {string} user.password
-     * @returns {boolean}
+     * @returns {boolean} true - user updated, false - user don't updated
      */
     async update(user) {
         const oldUser = await this.getById(user.id);
