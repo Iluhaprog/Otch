@@ -41,7 +41,7 @@ class UserService {
      * Return user by login
      * 
      * @param {string} login
-     * @returns {Object} user or null if user does not exist
+     * @returns {Answer} user or null if user does not exist
      */
     async getByLogin(login) {
         const [[user]] = await query('SELECT * FROM Users WHERE `login`=?', [login]);
@@ -53,7 +53,7 @@ class UserService {
      * Return user by email
      * 
      * @param {string} email
-     * @returns {Object} user or null if user does not exist
+     * @returns {Answer} user or null if user does not exist
      */
     async getByEmail(email) {
         const [[user]] = await query('SELECT * FROM Users WHERE `email`=?', [email]);
@@ -65,7 +65,7 @@ class UserService {
      * 
      * @param {string} login 
      * @param {string} password 
-     * @returns {Object} user or null if user does not exist
+     * @returns {Answer} user or null if user does not exist
      */
     async getByLoginAndPassord(login, password) {
         const [[user]] = await query('SELECT * FROM Users WHERE login=? AND password=?;', [login, password]);
@@ -77,7 +77,7 @@ class UserService {
      * 
      * @param {string} email 
      * @param {string} password 
-     * @returns {Object} user or null if user does not exist
+     * @returns {Answer} user or null if user does not exist
      */
     async getByEmailAndPassword(email, password) {
         const [[user]] = await query('SELECT * FROM Users WHERE email=? AND password=?;', [email, password]);
@@ -94,7 +94,7 @@ class UserService {
      * @param {number} user.age
      * @param {Date} user.creation_date
      * @param {string} user.password
-     * @returns {Object} Object contains info about errors
+     * @returns {Answer} Answer contains info about errors
      */
     async create(user) {
         const passHash = hash(user.password);
@@ -123,7 +123,7 @@ class UserService {
      * @param {string} email 
      * @param {string} oldPassword 
      * @param {string} newPassword 
-     * @returns {boolean} true - user password updated, false - user password don't updated
+     * @returns {Answer} true - user password updated, false - user password don't updated
      */
     async updatePassword(id, newPassword) {
         const user = await this.getById(id);
@@ -141,7 +141,7 @@ class UserService {
      * @param {Object} user
      * @param {string} user.name
      * @param {number} user.age
-     * @returns {boolean} true - user updated, false - user don't updated
+     * @returns {Answer} true - user updated, false - user don't updated
      */
     async update(user) {
         const oldUser = await this.getById(user.id);
@@ -156,7 +156,7 @@ class UserService {
      * Delete user by id
      * 
      * @param {number} id
-     * @returns {boolean} true - user deleted, false - user don't deleted
+     * @returns {Answer} true - user deleted, false - user don't deleted
      */
     async deleteById(id) {
         const user = await this.getById(id)
