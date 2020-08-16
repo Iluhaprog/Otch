@@ -12,7 +12,8 @@ class UserService {
      * @returns {boolean} true - login is unique, false - login don't unique
      */
     async loginIsUnique(login) {
-        return !(await this.getByLogin(login));
+        const answer = await this.getByLogin(login); 
+        return !(answer.getStatus());
     }
 
     /**
@@ -21,7 +22,8 @@ class UserService {
      * @returns {boolean} true - email is unique, email - login don't unique
      */
     async emailIsUnique(email) {
-        return !(await this.getByEmail(email));
+        const answer = await this.getByEmail(email); 
+        return !(answer.getStatus());
     }
 
     /**
@@ -32,7 +34,7 @@ class UserService {
      */
     async getById(id) {
         const [[user]] = await query('SELECT * FROM Users WHERE `id`=?', [id]);
-        return user || null;
+        return user ? new Answer(SUCCESS, user) : new Answer(FAILURE);
     }
 
     /**
@@ -43,7 +45,7 @@ class UserService {
      */
     async getByLogin(login) {
         const [[user]] = await query('SELECT * FROM Users WHERE `login`=?', [login]);
-        return user || null;
+        return user ? new Answer(SUCCESS, user) : new Answer(FAILURE);
     }
 
 
@@ -55,7 +57,7 @@ class UserService {
      */
     async getByEmail(email) {
         const [[user]] = await query('SELECT * FROM Users WHERE `email`=?', [email]);
-        return user || null;
+        return user ? new Answer(SUCCESS, user) : new Answer(FAILURE);
     }
 
     /**
@@ -67,7 +69,7 @@ class UserService {
      */
     async getByLoginAndPassord(login, password) {
         const [[user]] = await query('SELECT * FROM Users WHERE login=? AND password=?;', [login, password]);
-        return user || null;
+        return user ? new Answer(SUCCESS, user) : new Answer(FAILURE);
     }
 
     /**
@@ -79,7 +81,7 @@ class UserService {
      */
     async getByEmailAndPassword(email, password) {
         const [[user]] = await query('SELECT * FROM Users WHERE email=? AND password=?;', [email, password]);
-        return user || null;
+        return user ? new Answer(SUCCESS, user) : new Answer(FAILURE);
     }
 
     /**
@@ -125,7 +127,7 @@ class UserService {
      */
     async updatePassword(id, newPassword) {
         const user = await this.getById(id);
-        if (user) {
+        if (user.getStatus()) {
             newPassword = hash(newPassword);
             await query('UPDATE Users SET `password`=?, `salt`=? WHERE `id`=?', [newPassword.hash, newPassword.salt, id]);
             return new Answer(SUCCESS);
@@ -143,7 +145,7 @@ class UserService {
      */
     async update(user) {
         const oldUser = await this.getById(user.id);
-        if (oldUser) {
+        if (oldUser.getStatus()) {
             await query('UPDATE Users SET `name`=?, `age`=? WHERE `id`=?', [user.name, user.age, oldUser.id]);
             return new Answer(SUCCESS);
         }
@@ -158,7 +160,7 @@ class UserService {
      */
     async deleteById(id) {
         const user = await this.getById(id)
-        if (user) {
+        if (user.getStatus()) {
             await query('DELETE FROM Users WHERE `id`=?', [id]);
             return new Answer(SUCCESS);
         }
