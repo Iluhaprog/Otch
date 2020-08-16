@@ -1,6 +1,8 @@
 const { express } = require('../config/express');
 const router = express.Router();
 const MessagesController = require('../controllers/MessagesController');
+const Answer = require('../libs/Answer');
+const { SUCCESS, FAILURE } = require('../libs/statuses');
 
 const roomsConnects = new Map();
 
@@ -38,7 +40,7 @@ router.ws('/send', (ws, req) => {
 
     ws.on('message', async message => {
         const action = req.query.a;
-        let result = false;
+        let result = new Answer(FAILURE);
         message = JSON.parse(message);
         switch(action) {
             case 'c':
@@ -51,11 +53,9 @@ router.ws('/send', (ws, req) => {
                 result = await MessagesController.deleteById(message);
                 break;
         }
-        if (!result) {
-            message.error = true;
-        }
         message.action = action
-        send(message, key);
+        result.setData(message);
+        send(result, key);
     });
 
     ws.on('close', () => {

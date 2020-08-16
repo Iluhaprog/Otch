@@ -1,5 +1,7 @@
 const query = require('../libs/connection');
 const formatDate = require('../libs/formatDate');
+const Answer = require('../libs/Answer');
+const { SUCCESS, FAILURE } = require('../libs/statuses');
 
 class MessagesService {
 
@@ -10,8 +12,8 @@ class MessagesService {
      * @returns {Objects} message
      */
     async getById(id) {
-        const [message] = await query('SELECT * FROM Messages WHERE id=?', [id]);
-        return message || null;
+        const [[message]] = await query('SELECT * FROM Messages WHERE id=?', [id]);
+        return message ? new Answer(SUCCESS, message) : new Answer(FAILURE);
     }
 
     /**
@@ -22,7 +24,7 @@ class MessagesService {
      */
     async getByChatId(chat_id) {
         const [messages] = await query('SELECT * FROM Messages WHERE chat_id=?', [chat_id]);
-        return messages || null;
+        return messages ? new Answer(SUCCESS, messages) : new Answer(FAILURE);
     }
 
     /**
@@ -34,7 +36,7 @@ class MessagesService {
      */
     async getByUserIdAndChatId(user_id, chat_id) {
         const [messages] = await query('SELECT * FROM Messages WHERE user_id=? and chat_id=?', [user_id, chat_id]);
-        return messages || null;
+        return messages ? new Answer(SUCCESS, messages) : new Answer(FAILURE);
     }
 
     /**
@@ -53,9 +55,9 @@ class MessagesService {
             await query(`INSERT INTO Messages(\`user_id\`, \`chat_id\`, \`message\`, \`creation_date\`) VALUES
                             (?, ?, ?, ?)`,
                         [message.user_id, message.chat_id, message.message, formatDate(creation_date)]);
-            return true;
+            return new Answer(SUCCESS);
         }
-        return false;
+        return new Answer(FAILURE);
     }
 
     /**
@@ -67,11 +69,11 @@ class MessagesService {
      */
     async updateById(id, newMessage) {
         const message = await this.getById(id);
-        if (message) {
+        if (message.getStatus()) {
             await query('UPDATE Messages SET message=? WHERE id=?', [newMessage, id]);
-            return true;
+            return new Answer(SUCCESS);
         }
-        return false;
+        return new Answer(FAILURE);
     }
 
     /**
@@ -82,11 +84,11 @@ class MessagesService {
      */
     async deleteById(id) {
         const message = await this.getById(id);
-        if(message) {
+        if(message.getStatus()) {
             await query('DELETE FROM Messages WHERE id=?', [id]);
-            return true;
+            return new Answer(SUCCESS);
         }
-        return false;
+        return new Answer(FAILURE);
     }
 
 }

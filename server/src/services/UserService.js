@@ -1,7 +1,8 @@
 const query = require('../libs/connection');
 const { hash } = require('../libs/crypt');
 const formatDate = require('../libs/formatDate');
-const { SUCCESS, EMAIL_E, LOGIN_E } = require('../libs/userCreateStatuses');
+const { SUCCESS, EMAIL_E, LOGIN_E, FAILURE } = require('../libs/statuses');
+const Answer = require('../libs/Answer');
 
 class UserService {
 
@@ -98,7 +99,7 @@ class UserService {
         const creation_date = user.creation_date ? formatDate(user.creation_date) : formatDate(new Date());
         const emailIsUnique = await this.emailIsUnique(user.email);
         const loginIsUnique = await this.loginIsUnique(user.login);
-        const result = {status: SUCCESS};
+        const result = new Answer(SUCCESS);
         if (user && emailIsUnique && loginIsUnique) {
             await query(`INSERT INTO Users(\`email\`, \`login\`, \`name\`, \`age\`, \`creation_date\`, \`password\`, \`salt\`) 
                             VALUE (?, ?, ?, ?, ?, ?, ?);`,
@@ -107,9 +108,9 @@ class UserService {
         }
 
         if (!emailIsUnique) {
-            result.status = EMAIL_E;
+            result.setStatus(EMAIL_E);
         } else if (!loginIsUnique) {
-            result.status = LOGIN_E;
+            result.setStatus(LOGIN_E);
         }
         return result;
     }
@@ -127,9 +128,9 @@ class UserService {
         if (user) {
             newPassword = hash(newPassword);
             await query('UPDATE Users SET `password`=?, `salt`=? WHERE `id`=?', [newPassword.hash, newPassword.salt, id]);
-            return true;
+            return new Answer(SUCCESS);
         }
-        return false;
+        return new Answer(FAILURE);
     }
 
     /**
@@ -144,9 +145,9 @@ class UserService {
         const oldUser = await this.getById(user.id);
         if (oldUser) {
             await query('UPDATE Users SET `name`=?, `age`=? WHERE `id`=?', [user.name, user.age, oldUser.id]);
-            return true;
+            return new Answer(SUCCESS);
         }
-        return false;
+        return new Answer(FAILURE);
     }
 
     /**
@@ -159,9 +160,9 @@ class UserService {
         const user = await this.getById(id)
         if (user) {
             await query('DELETE FROM Users WHERE `id`=?', [id]);
-            return true;
+            return new Answer(SUCCESS);
         }
-        return false;
+        return new Answer(FAILURE);
     }
 }
 
