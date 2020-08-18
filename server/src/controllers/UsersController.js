@@ -26,6 +26,18 @@ class UsersController {
         res.json(result);
     }
 
+    async getById(req, res) {
+        const id = req.body.id;
+        const result = await UsersService.getById(id);
+        res.json(result);
+    }
+
+    async deleteById(req, res) {
+        const id = req.body.id;
+        const result = await UsersService.deleteById(id);
+        res.json(result);
+    }
+
 }
 
 module.exports = new UsersController();

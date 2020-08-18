@@ -1,7 +1,7 @@
 const query = require('../libs/connection');
 const { hash } = require('../libs/crypt');
 const formatDate = require('../libs/formatDate');
-const { SUCCESS, EMAIL_E, LOGIN_E, FAILURE } = require('../libs/statuses');
+const { SUCCESS, EMAIL_E, LOGIN_E, FAILURE, RECORD_NF } = require('../libs/statuses');
 const Answer = require('../libs/Answer');
 
 class UserService {
@@ -30,22 +30,22 @@ class UserService {
      * Return user by id
      * 
      * @param {number} id
-     * @returns {Answer} user or null if user does not exist
+     * @returns {Answer} Answer contains information about error and data
      */
     async getById(id) {
         const [[user]] = await query('SELECT * FROM Users WHERE `id`=?', [id]);
-        return user ? new Answer(SUCCESS, user) : new Answer(FAILURE);
+        return user ? new Answer(SUCCESS, user) : new Answer(RECORD_NF);
     }
 
     /**
      * Return user by login
      * 
      * @param {string} login
-     * @returns {Object} user or null if user does not exist
+     * @returns {Answer} Answer contains information about error and data
      */
     async getByLogin(login) {
         const [[user]] = await query('SELECT * FROM Users WHERE `login`=?', [login]);
-        return user ? new Answer(SUCCESS, user) : new Answer(FAILURE);
+        return user ? new Answer(SUCCESS, user) : new Answer(RECORD_NF);
     }
 
 
@@ -53,11 +53,11 @@ class UserService {
      * Return user by email
      * 
      * @param {string} email
-     * @returns {Object} user or null if user does not exist
+     * @returns {Answer} Answer contains information about error and data
      */
     async getByEmail(email) {
         const [[user]] = await query('SELECT * FROM Users WHERE `email`=?', [email]);
-        return user ? new Answer(SUCCESS, user) : new Answer(FAILURE);
+        return user ? new Answer(SUCCESS, user) : new Answer(RECORD_NF);
     }
 
     /**
@@ -65,11 +65,11 @@ class UserService {
      * 
      * @param {string} login 
      * @param {string} password 
-     * @returns {Object} user or null if user does not exist
+     * @returns {Answer} Answer contains information about error and data
      */
     async getByLoginAndPassord(login, password) {
         const [[user]] = await query('SELECT * FROM Users WHERE login=? AND password=?;', [login, password]);
-        return user ? new Answer(SUCCESS, user) : new Answer(FAILURE);
+        return user ? new Answer(SUCCESS, user) : new Answer(RECORD_NF);
     }
 
     /**
@@ -77,11 +77,11 @@ class UserService {
      * 
      * @param {string} email 
      * @param {string} password 
-     * @returns {Object} user or null if user does not exist
+     * @returns {Answer} Answer contains information about error and data
      */
     async getByEmailAndPassword(email, password) {
         const [[user]] = await query('SELECT * FROM Users WHERE email=? AND password=?;', [email, password]);
-        return user ? new Answer(SUCCESS, user) : new Answer(FAILURE);
+        return user ? new Answer(SUCCESS, user) : new Answer(RECORD_NF);
     }
 
     /**
@@ -94,7 +94,7 @@ class UserService {
      * @param {number} user.age
      * @param {Date} user.creation_date
      * @param {string} user.password
-     * @returns {Object} Object contains info about errors
+     * @returns {Answer} Answer contains information about error and data
      */
     async create(user) {
         const passHash = hash(user.password);
@@ -123,7 +123,7 @@ class UserService {
      * @param {string} email 
      * @param {string} oldPassword 
      * @param {string} newPassword 
-     * @returns {boolean} true - user password updated, false - user password don't updated
+     * @returns {Answer} Answer contains information about error and data
      */
     async updatePassword(id, newPassword) {
         const user = await this.getById(id);
@@ -141,7 +141,7 @@ class UserService {
      * @param {Object} user
      * @param {string} user.name
      * @param {number} user.age
-     * @returns {boolean} true - user updated, false - user don't updated
+     * @returns {Answer} Answer contains information about error and data
      */
     async update(user) {
         const oldUser = await this.getById(user.id);
@@ -156,7 +156,7 @@ class UserService {
      * Delete user by id
      * 
      * @param {number} id
-     * @returns {boolean} true - user deleted, false - user don't deleted
+     * @returns {Answer} Answer contains information about error and data
      */
     async deleteById(id) {
         const user = await this.getById(id)

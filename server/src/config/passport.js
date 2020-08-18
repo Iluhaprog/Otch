@@ -17,9 +17,10 @@ passport.use(new LocalStrategy({
         passwordField: 'password'
     }, async (username, password, done) => {
         const user = (await UsersService.getByEmail(username)).getData();
-        if (!user) {
-            return done(null, false, {message: 'User does not exist'});
+        if (Object.keys(user).length === 0) {
+            return done(null, false);
         }
+
         if (compare(password, user.password)) {
             return done(null, user);
         } else {
