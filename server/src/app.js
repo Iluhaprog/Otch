@@ -4,7 +4,7 @@ const MessagesRouter = require('./routes/MessagesRoutes');
 const UsersRoutes = require('./routes/UsersRoutes');
 
 app.use(express.static(__dirname + '/public'));
-app.use('/messages', MessagesRouter);
+app.use('/messages', passport.authenticate('local'), MessagesRouter);
 app.use('/users', UsersRoutes);
 
 app.listen(port, function () {
