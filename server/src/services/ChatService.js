@@ -1,6 +1,8 @@
 const query = require('../libs/connection');
 const formatDate = require('../libs/formatDate');
 const { token } = require('../libs/crypt');
+const Answer = require('../libs/Answer');
+const { SUCCESS, FAILURE } = require('../libs/statuses');
 
 class ChatService {
 
@@ -13,7 +15,7 @@ class ChatService {
      */
     async getById(id) {
         const [[chat]] = await query('SELECT * FROM Chats WHERE id=?', [id]);
-        return chat || null;
+        return chat ? new Answer(SUCCESS, chat) : new Answer(FAILURE);
     }
 
     /**
@@ -24,7 +26,7 @@ class ChatService {
      */
     async getByKey(key) {
         const [[chat]] = await query('SELECT * FROM Chats WHERE `key`=?', [key]);
-        return chat || null;
+        return  chat ? new Answer(SUCCESS, chat) : new Answer(FAILURE);
     }
 
     /**
@@ -43,7 +45,7 @@ class ChatService {
                     ON Users.id = Users_Chats.user_id WHERE Users.id = ?;
             `, 
             [user_id]);
-        return chats;
+        return chats.length ? new Answer(SUCCESS, chats) : new Answer(FAILURE);
     }
 
     /**
@@ -61,11 +63,7 @@ class ChatService {
             INSERT INTO Chats(\`name\`, \`creation_date\`, \`key\`) VALUES (?, ?, ?);
             `, 
             [chat.name, creation_date, key]);
-        return {
-            name: chat.name,
-            creation_date: creation_date,
-            key: key
-        };
+        return new Answer(SUCCESS);
     }
 
     /**
@@ -76,13 +74,13 @@ class ChatService {
      * @returns {boolean} true - member was added, false - member not added
      */
     async addMember(user_id, key) {
-        let [[chat]] = await this.getByKey(key);
+        let chat = (await this.getByKey(key)).getData();
         chat_id = chat.id;
         if (chat_id) {
             await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [user_id, chat_id]);
-            return true;
+            return new Answer(SUCCESS);
         }
-        return false;
+        return new Answer(FAILURE);
     }
 
     /**
@@ -103,10 +101,10 @@ class ChatService {
             `, 
             [id]);
         if(!users.length) {
-            query(`DELETE FROM Chats WHERE id=?`, [id]);
-            return true;
+            await query(`DELETE FROM Chats WHERE id=?`, [id]);
+            return new Answer(SUCCESS);
         }
-        return false;
+        return new Answer(FAILURE);
     }
 }
 
