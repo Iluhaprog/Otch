@@ -58,7 +58,7 @@ class ChatService {
      */
     async create(chat) {
         const key = token();
-        const creation_date = formatDate(chat.creation_date) || formatDate(new Date());
+        const creation_date = formatDate(chat.creation_date || new Date());
         await query(`
             INSERT INTO Chats(\`name\`, \`creation_date\`, \`key\`) VALUES (?, ?, ?);
             `, 
@@ -75,7 +75,7 @@ class ChatService {
      */
     async addMember(user_id, key) {
         let chat = (await this.getByKey(key)).getData();
-        chat_id = chat.id;
+        const chat_id = chat.id;
         if (chat_id) {
             await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [user_id, chat_id]);
             return new Answer(SUCCESS);
