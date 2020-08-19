@@ -2,6 +2,9 @@ const { logLevel } = require('./vars');
 const express = require('express');
 const app = express();
 
+const https = require('https');
+const fs = require('fs');
+
 const expressWs = require('express-ws')(app);
 const expressSession = require('express-session');
 
@@ -25,10 +28,21 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
+const key = fs.readFileSync('/home/ilya/Documents/projects/otch/selfsigned.key');
+const cert = fs.readFileSync('/home/ilya/Documents/projects/otch/selfsigned.crt');
+const ca = fs.readFileSync('/home/ilya/Documents/projects/otch/ca.key')
+const options = {
+    key: key,
+    cert: cert,
+    ca: ca
+};
+
 module.exports = {
     app: app,
     express: express,
     logger: logger,
     wsInstance: expressWs,
-    passport: passport
+    passport: passport,
+    https: https,
+    options: options
 };
