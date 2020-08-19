@@ -8,6 +8,7 @@ router
     .get('/getByUserId', ChatsController.getByUserId)
     .post('/create', ChatsController.create)
     .put('/addMember', ChatsController.addMember)
+    .delete('/deleteMember', ChatsController.deleteMember)
     .delete('/deleteById', ChatsController.deleteById);
 
 module.exports = router;

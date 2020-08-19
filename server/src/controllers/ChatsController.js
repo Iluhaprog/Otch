@@ -32,6 +32,12 @@ class ChatsController {
         res.json(result);
     }
 
+    async deleteMember(req, res) {
+        const { memberId, key } = req.body;
+        const result = await ChatsService.deleteMember(memberId, key);
+        res.json(result);
+    }
+
     async deleteById(req, res) {
         const id = req.body.id;
         const result = await ChatsService.deleteById(id);

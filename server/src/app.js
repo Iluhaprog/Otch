@@ -9,12 +9,12 @@ const ErrorsController = require('./controllers/ErrorsController');
 
 app.use(express.static(__dirname + '/public'));
 
-app.use(ErrorsController.error404);
-app.use(ErrorsController.error500);
-
 app.use('/messages', passport.authenticate('local'), MessagesRouter);
 app.use('/users', UsersRoutes);
 app.use('/chats', passport.authenticate('local'), ChatsRoutes);
+
+app.use(ErrorsController.error404);
+app.use(ErrorsController.error500);
 
 const server = https.createServer(options, app);
 

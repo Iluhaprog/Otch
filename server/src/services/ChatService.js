@@ -87,6 +87,23 @@ class ChatService {
     }
 
     /**
+     * Delete member form chat
+     * 
+     * @param {number} userId 
+     * @param {string} key
+     * @return {Answer} If member deleted, then Answer contains status SUCCESS, otherwise status FAILURE 
+     */
+    async deleteMember(userId, key) {
+        const chat = (await this.getByKey(key)).getData();
+        if (chat) {
+            const chatId = chat.id;
+            await query('DELETE FROM Users_Chats WHERE `user_id`=? AND `chat_id`=?', [userId, chatId]);
+            return new Answer(SUCCESS);
+        }
+        return new Answer(FAILURE);
+    }
+
+    /**
      * Delete chat by id
      * 
      * @param {number} id id of chat 
