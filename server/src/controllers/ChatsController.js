@@ -15,8 +15,8 @@ class ChatsController {
     }
 
     async getByUserId(req, res) {
-        const user_id = req.body.user_id;
-        const result = await ChatsService.getByUserId(user_id);
+        const userId = req.body.userId;
+        const result = await ChatsService.getByUserId(userId);
         res.json(result);
     }
 
@@ -27,8 +27,8 @@ class ChatsController {
     }
 
     async addMember(req, res) {
-        const { member_id, key } = req.body;
-        const result = await ChatsService.addMember(member_id, key);
+        const { memberId, key } = req.body;
+        const result = await ChatsService.addMember(memberId, key);
         res.json(result);
     }
 

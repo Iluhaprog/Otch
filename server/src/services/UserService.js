@@ -30,7 +30,7 @@ class UserService {
      * Return user by id
      * 
      * @param {number} id
-     * @returns {Answer} Answer contains information about error and data
+     * @returns {Answer} If user exist, then Answer contains status SUCCESS and data is user, otherwise status FAILURE and data is empty
      */
     async getById(id) {
         const [[user]] = await query('SELECT * FROM Users WHERE `id`=?', [id]);
@@ -41,7 +41,7 @@ class UserService {
      * Return user by login
      * 
      * @param {string} login
-     * @returns {Answer} Answer contains information about error and data
+     * @returns {Answer} If user exist, then Answer contains status SUCCESS and data is user, otherwise status FAILURE and data is empty
      */
     async getByLogin(login) {
         const [[user]] = await query('SELECT * FROM Users WHERE `login`=?', [login]);
@@ -53,7 +53,7 @@ class UserService {
      * Return user by email
      * 
      * @param {string} email
-     * @returns {Answer} Answer contains information about error and data
+     * @returns {Answer} If user exist, then Answer contains status SUCCESS and data is user, otherwise status FAILURE and data is empty
      */
     async getByEmail(email) {
         const [[user]] = await query('SELECT * FROM Users WHERE `email`=?', [email]);
@@ -65,7 +65,7 @@ class UserService {
      * 
      * @param {string} login 
      * @param {string} password 
-     * @returns {Answer} Answer contains information about error and data
+     * @returns {Answer} If user exist, then Answer contains status SUCCESS and data is user, otherwise status FAILURE and data is empty
      */
     async getByLoginAndPassord(login, password) {
         const [[user]] = await query('SELECT * FROM Users WHERE login=? AND password=?;', [login, password]);
@@ -77,7 +77,7 @@ class UserService {
      * 
      * @param {string} email 
      * @param {string} password 
-     * @returns {Answer} Answer contains information about error and data
+     * @returns {Answer} If user exist, then Answer contains status SUCCESS and data is user, otherwise status FAILURE and data is empty
      */
     async getByEmailAndPassword(email, password) {
         const [[user]] = await query('SELECT * FROM Users WHERE email=? AND password=?;', [email, password]);
@@ -92,20 +92,20 @@ class UserService {
      * @param {string} user.login
      * @param {string} user.name
      * @param {number} user.age
-     * @param {Date} user.creation_date
+     * @param {Date} user.creationDate
      * @param {string} user.password
-     * @returns {Answer} Answer contains information about error and data
+     * @returns {Answer} If user created, then Answer status SUCCESS, else if email exist status is EMAIL_E, else if login exist status is LOGIN_E  
      */
     async create(user) {
         const passHash = hash(user.password);
-        const creation_date = user.creation_date ? formatDate(user.creation_date) : formatDate(new Date());
+        const creationDate = user.creationDate ? formatDate(user.creationDate) : formatDate(new Date());
         const emailIsUnique = await this.emailIsUnique(user.email);
         const loginIsUnique = await this.loginIsUnique(user.login);
         const result = new Answer(SUCCESS);
         if (user && emailIsUnique && loginIsUnique) {
             await query(`INSERT INTO Users(\`email\`, \`login\`, \`name\`, \`age\`, \`creation_date\`, \`password\`, \`salt\`) 
                             VALUE (?, ?, ?, ?, ?, ?, ?);`,
-                        [user.email, user.login, user.name, user.age, creation_date, passHash.hash, passHash.salt]);
+                        [user.email, user.login, user.name, user.age, creationDate, passHash.hash, passHash.salt]);
             return result;
         }
 
@@ -123,7 +123,7 @@ class UserService {
      * @param {string} email 
      * @param {string} oldPassword 
      * @param {string} newPassword 
-     * @returns {Answer} Answer contains information about error and data
+     * @returns {Answer} If password updated, then Answer contains status SUCCESS, otherwise status FAILURE
      */
     async updatePassword(id, newPassword) {
         const user = await this.getById(id);
@@ -141,7 +141,7 @@ class UserService {
      * @param {Object} user
      * @param {string} user.name
      * @param {number} user.age
-     * @returns {Answer} Answer contains information about error and data
+     * @returns {Answer} If user updated, then Answer contains status SUCCESS, otherwise status FAILURE
      */
     async update(user) {
         const oldUser = await this.getById(user.id);
@@ -156,7 +156,7 @@ class UserService {
      * Delete user by id
      * 
      * @param {number} id
-     * @returns {Answer} Answer contains information about error and data
+     * @returns {Answer} If user deleted, then Answer contains status SUCCESS, otherwise status FAILURE
      */
     async deleteById(id) {
         const user = await this.getById(id)

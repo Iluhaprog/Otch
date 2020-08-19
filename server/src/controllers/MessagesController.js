@@ -9,14 +9,14 @@ class MessagesController {
     }
 
     async getByChatId(req, res) {
-        const chat_id = req.body.chat_id;
-        const messages = await MessagesService.getByChatId(chat_id);
+        const chatId = req.body.chatId;
+        const messages = await MessagesService.getByChatId(chatId);
         res.json(messages);
     }
 
     async getByUserIdAndChatId(req, res) {
-        const { user_id, chat_id } = req.body;
-        const messages = await MessagesService.getByUserIdAndChatId(user_id, chat_id);
+        const { userId, chatId } = req.body;
+        const messages = await MessagesService.getByUserIdAndChatId(userId, chatId);
         res.json(messages);
     }
 
