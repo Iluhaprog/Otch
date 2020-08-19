@@ -9,7 +9,7 @@ class MessagesService {
      * Return message by id
      * 
      * @param {number} id
-     * @returns {Objects} message
+     * @returns {Answer} If message exist, then Answer contains status SUCCESS and data is message, otherwise status FAILURE and data is empty
      */
     async getById(id) {
         const [[message]] = await query('SELECT * FROM Messages WHERE id=?', [id]);
@@ -19,23 +19,23 @@ class MessagesService {
     /**
      * Return all messages of chat
      * 
-     * @param {number} chat_id 
-     * @returns {Array} array of messages
+     * @param {number} chatId 
+     * @returns {Answer} If messages exist, then Answer contains status SUCCESS and data is messages, otherwise status FAILURE and data is empty
      */
-    async getByChatId(chat_id) {
-        const [messages] = await query('SELECT * FROM Messages WHERE chat_id=?', [chat_id]);
+    async getByChatId(chatId) {
+        const [messages] = await query('SELECT * FROM Messages WHERE chat_id=?', [chatId]);
         return messages ? new Answer(SUCCESS, messages) : new Answer(FAILURE);
     }
 
     /**
      * Return all messages of user in chat 
      * 
-     * @param {number} user_id 
-     * @param {number} chat_id 
-     * @returns {Array} array of messages 
+     * @param {number} userId 
+     * @param {number} chatId 
+     * @returns {Answer} If messages exist, then Answer contains status SUCCESS and data is messages, otherwise status FAILURE and data is empty
      */
-    async getByUserIdAndChatId(user_id, chat_id) {
-        const [messages] = await query('SELECT * FROM Messages WHERE user_id=? and chat_id=?', [user_id, chat_id]);
+    async getByUserIdAndChatId(userId, chatId) {
+        const [messages] = await query('SELECT * FROM Messages WHERE user_id=? and chat_id=?', [userId, chatId]);
         return messages ? new Answer(SUCCESS, messages) : new Answer(FAILURE);
     }
 
@@ -43,18 +43,18 @@ class MessagesService {
      * Create message
      * 
      * @param {Object} message
-     * @param {number} message.user_id
-     * @param {number} message.chat_id
+     * @param {number} message.userId
+     * @param {number} message.chatId
      * @param {string} message.message
-     * @param {Date} message.creation_date
-     * @return {boolean} true - message created, false - message don't created
+     * @param {Date} message.creationDate
+     * @return {Answer} If message created, then Answer contains status SUCCESS, otherwise FAILURE
      */
     async create(message) {
         if (message) {
-            const creation_date = message.creation_date || new Date();
+            const creationDate = message.creationDate || new Date();
             await query(`INSERT INTO Messages(\`user_id\`, \`chat_id\`, \`message\`, \`creation_date\`) VALUES
                             (?, ?, ?, ?)`,
-                        [message.user_id, message.chat_id, message.message, formatDate(creation_date)]);
+                        [message.userId, message.chatId, message.message, formatDate(creationDate)]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -65,7 +65,7 @@ class MessagesService {
      * 
      * @param {number} id 
      * @param {string} newMessage 
-     * @return {boolean} true - message updated, false - message don't updated
+     * @return {Answer} If message updated, then Answer contains status SUCCESS, otherwise FAILURE
      */
     async updateById(id, newMessage) {
         const message = await this.getById(id);
@@ -80,7 +80,7 @@ class MessagesService {
      * Delete message
      * 
      * @param {number} id
-     * @return {boolean} true - message deleted, false - message don't deleted
+     * @return {Answer} If message deleted, then Answer contains status SUCCESS, otherwise FAILURE
      */
     async deleteById(id) {
         const message = await this.getById(id);

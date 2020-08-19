@@ -11,7 +11,7 @@ class ChatService {
      * Return chat by id
      * 
      * @param {number} id id of chat 
-     * @returns {Object} chat or null if chat exist
+     * @returns {Answer} If chat exist, then Answer contains status SUCCESS and data is chat, otherwise status FAILURE and data is empty 
      */
     async getById(id) {
         const [[chat]] = await query('SELECT * FROM Chats WHERE id=?', [id]);
@@ -22,7 +22,7 @@ class ChatService {
      * Return chat by key
      * 
      * @param {string} key key of chat
-     * @returns {Object} chat or null if chat exist
+     * @returns {Answer} If chat exist, then Answer contains status SUCCESS and data is chat, otherwise status FAILURE and data is empty 
      */
     async getByKey(key) {
         const [[chat]] = await query('SELECT * FROM Chats WHERE `key`=?', [key]);
@@ -32,10 +32,10 @@ class ChatService {
     /**
      * Return array of user chats by user id
      * 
-     * @param {number} user_id
-     * @returns {Array} array of user chats
+     * @param {number} userId
+     * @returns {Answer} If chats exist, then Answer contains status SUCCESS and data is chats, otherwise status FAILURE and data is empty 
      */
-    async getByUserId(user_id) {
+    async getByUserId(userId) {
         const [chats] = await query(`
             SELECT Chats.id, Chats.name, Chats.creation_date, Chats.key  
                 FROM Chats
@@ -44,7 +44,7 @@ class ChatService {
                 JOIN Users
                     ON Users.id = Users_Chats.user_id WHERE Users.id = ?;
             `, 
-            [user_id]);
+            [userId]);
         return chats.length ? new Answer(SUCCESS, chats) : new Answer(FAILURE);
     }
 
@@ -54,30 +54,33 @@ class ChatService {
      * @param {Object} chat
      * @param {string} chat.name name of chat
      * @param {Date} chat.creation_date
-     * @returns {Object}
+     * @returns {Answer} If chat created, then Answer contains status SUCCESS, otherwise status FAILURE
      */
     async create(chat) {
-        const key = token();
-        const creation_date = formatDate(chat.creation_date || new Date());
-        await query(`
-            INSERT INTO Chats(\`name\`, \`creation_date\`, \`key\`) VALUES (?, ?, ?);
-            `, 
-            [chat.name, creation_date, key]);
-        return new Answer(SUCCESS);
+        if (chat) {
+            const key = token();
+            const creation_date = formatDate(chat.creation_date || new Date());
+            await query(`
+                INSERT INTO Chats(\`name\`, \`creation_date\`, \`key\`) VALUES (?, ?, ?);
+                `, 
+                [chat.name, creation_date, key]);
+            return new Answer(SUCCESS);
+        }
+        return new Answer(FAILURE);
     }
 
     /**
      * Add member to chat
      * 
-     * @param {number} user_id 
+     * @param {number} userId 
      * @param {string} key 
-     * @returns {boolean} true - member was added, false - member not added
+     * @returns {Answer} If member added to chat, then Answer contains status SUCCESS, othewise status FAILURE
      */
-    async addMember(user_id, key) {
+    async addMember(userId, key) {
         let chat = (await this.getByKey(key)).getData();
-        const chat_id = chat.id;
-        if (chat_id) {
-            await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [user_id, chat_id]);
+        const chatId = chat.id;
+        if (chatId) {
+            await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [userId, chatId]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -87,7 +90,7 @@ class ChatService {
      * Delete chat by id
      * 
      * @param {number} id id of chat 
-     * @returns {boolean} true - chat deleted, false - chat don't deleted
+     * @returns {Answer} If chat deleted, then Answer contains status SUCCESS, otherwise status FAILURE
      */
     async deleteById(id) {
         const [users] = await query(`
