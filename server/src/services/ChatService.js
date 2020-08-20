@@ -2,7 +2,7 @@ const query = require('../libs/connection');
 const formatDate = require('../libs/formatDate');
 const { token } = require('../libs/crypt');
 const Answer = require('../libs/Answer');
-const { SUCCESS, FAILURE, NOT_CHAT_ADMIN } = require('../libs/statuses');
+const { SUCCESS, FAILURE, NOT_CHAT_ADMIN, USER_E } = require('../libs/statuses');
 
 class ChatService {
 
@@ -80,11 +80,23 @@ class ChatService {
      */
     async addMember(adminId, userId, key) {
         let chat = (await this.getByKey(key)).getData();
-        if (adminId === chat.admin_id) {
-            await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [userId, chat.id]);
-            return new Answer(SUCCESS);
+        let [user] = await query(`select Users.name  
+                                    from Chats
+                                    join Users_Chats
+                                        on Users_Chats.chat_id = Chats.id
+                                    JOIN Users
+                                        on Users.id = Users_Chats.user_id
+                                    where Users.id=? and Chats.id=?;`, [userId, chat.id]);
+                                    console.log(user);
+        if (!user.length){
+            if (adminId === chat.admin_id) {
+                await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [userId, chat.id]);
+                return new Answer(SUCCESS);
+            } else {
+                return new Answer(NOT_CHAT_ADMIN);
+            }
         }
-        return new Answer(NOT_CHAT_ADMIN);
+        return new Answer(USER_E);
     }
 
     /**
