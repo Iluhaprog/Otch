@@ -3,5 +3,6 @@ module.exports = {
     SUCCESS: 1,
     EMAIL_E: 2, // Email exist
     LOGIN_E: 3, // Login exist
-    RECORD_NF: 4 // Record not found
+    RECORD_NF: 4, // Record not found
+    NOT_CHAT_ADMIN: 5
 }

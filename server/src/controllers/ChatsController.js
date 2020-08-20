@@ -27,14 +27,14 @@ class ChatsController {
     }
 
     async addMember(req, res) {
-        const { memberId, key } = req.body;
-        const result = await ChatsService.addMember(memberId, key);
+        const { adminId, memberId, key } = req.body;
+        const result = await ChatsService.addMember(adminId, memberId, key);
         res.json(result);
     }
 
     async deleteMember(req, res) {
-        const { memberId, key } = req.body;
-        const result = await ChatsService.deleteMember(memberId, key);
+        const { adminId, memberId, key } = req.body;
+        const result = await ChatsService.deleteMember(adminId, memberId, key);
         res.json(result);
     }
 

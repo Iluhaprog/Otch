@@ -2,7 +2,7 @@ const query = require('../libs/connection');
 const formatDate = require('../libs/formatDate');
 const { token } = require('../libs/crypt');
 const Answer = require('../libs/Answer');
-const { SUCCESS, FAILURE } = require('../libs/statuses');
+const { SUCCESS, FAILURE, NOT_CHAT_ADMIN } = require('../libs/statuses');
 
 class ChatService {
 
@@ -52,6 +52,7 @@ class ChatService {
      * Create chat
      * 
      * @param {Object} chat
+     * @param {number} chat.adminId
      * @param {string} chat.name name of chat
      * @param {Date} chat.creation_date
      * @returns {Answer} If chat created, then Answer contains status SUCCESS, otherwise status FAILURE
@@ -61,9 +62,9 @@ class ChatService {
             const key = token();
             const creation_date = formatDate(chat.creation_date || new Date());
             await query(`
-                INSERT INTO Chats(\`name\`, \`creation_date\`, \`key\`) VALUES (?, ?, ?);
+                INSERT INTO Chats(\`name\`, \`creation_date\`, \`key\`, \`admin_id\`) VALUES (?, ?, ?, ?);
                 `, 
-                [chat.name, creation_date, key]);
+                [chat.name, creation_date, key, chat.adminId]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -72,30 +73,31 @@ class ChatService {
     /**
      * Add member to chat
      * 
+     * @param {number} adminId
      * @param {number} userId 
      * @param {string} key 
-     * @returns {Answer} If member added to chat, then Answer contains status SUCCESS, othewise status FAILURE
+     * @returns {Answer} If member added to chat, then Answer contains status SUCCESS, othewise status NOT_CHAT_ADMIN
      */
-    async addMember(userId, key) {
+    async addMember(adminId, userId, key) {
         let chat = (await this.getByKey(key)).getData();
-        const chatId = chat.id;
-        if (chatId) {
-            await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [userId, chatId]);
+        if (adminId === chat.admin_id) {
+            await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [userId, chat.id]);
             return new Answer(SUCCESS);
         }
-        return new Answer(FAILURE);
+        return new Answer(NOT_CHAT_ADMIN);
     }
 
     /**
      * Delete member form chat
      * 
+     * @param {number} adminId
      * @param {number} userId 
      * @param {string} key
      * @return {Answer} If member deleted, then Answer contains status SUCCESS, otherwise status FAILURE 
      */
-    async deleteMember(userId, key) {
+    async deleteMember(adminId, userId, key) {
         const chat = (await this.getByKey(key)).getData();
-        if (chat) {
+        if (adminId === chat.admin_id || adminId === userId) {
             const chatId = chat.id;
             await query('DELETE FROM Users_Chats WHERE `user_id`=? AND `chat_id`=?', [userId, chatId]);
             return new Answer(SUCCESS);

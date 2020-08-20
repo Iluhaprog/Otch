@@ -13,7 +13,7 @@ class UserService {
      */
     async loginIsUnique(login) {
         const answer = await this.getByLogin(login); 
-        return !(answer.getStatus());
+        return answer.getStatus() === RECORD_NF;
     }
 
     /**
@@ -23,7 +23,7 @@ class UserService {
      */
     async emailIsUnique(email) {
         const answer = await this.getByEmail(email); 
-        return !(answer.getStatus());
+        return answer.getStatus() === RECORD_NF;
     }
 
     /**
@@ -103,9 +103,9 @@ class UserService {
         const loginIsUnique = await this.loginIsUnique(user.login);
         const result = new Answer(SUCCESS);
         if (user && emailIsUnique && loginIsUnique) {
-            await query(`INSERT INTO Users(\`email\`, \`login\`, \`name\`, \`age\`, \`creation_date\`, \`password\`, \`salt\`) 
-                            VALUE (?, ?, ?, ?, ?, ?, ?);`,
-                        [user.email, user.login, user.name, user.age, creationDate, passHash.hash, passHash.salt]);
+            await query(`INSERT INTO Users(\`email\`, \`login\`, \`name\`, \`age\`, \`creation_date\`, \`password\`, \`salt\`, \`role_id\`) 
+                            VALUE (?, ?, ?, ?, ?, ?, ?, ?);`,
+                        [user.email, user.login, user.name, user.age, creationDate, passHash.hash, passHash.salt, 2]);
             return result;
         }
 
