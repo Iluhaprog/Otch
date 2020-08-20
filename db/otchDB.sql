@@ -30,6 +30,7 @@ CREATE TABLE Chats(
     `admin_id` INT NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`admin_id`) REFERENCES Users(`id`)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE Messages(

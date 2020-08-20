@@ -42,9 +42,10 @@ class ChatService {
                 JOIN Users_Chats
                     ON Users_Chats.chat_id = Chats.id
                 JOIN Users
-                    ON Users.id = Users_Chats.user_id WHERE Users.id = ?;
+                    ON Users.id = Users_Chats.user_id WHERE Users.id=?;
             `, 
             [userId]);
+            console.log(userId);
         return chats.length ? new Answer(SUCCESS, chats) : new Answer(FAILURE);
     }
 

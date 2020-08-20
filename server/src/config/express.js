@@ -37,12 +37,13 @@ const options = {
     ca: ca
 };
 
+const server = https.createServer(options, app);
+
 module.exports = {
     app: app,
     express: express,
     logger: logger,
     wsInstance: expressWs,
     passport: passport,
-    https: https,
-    options: options
+    server: server
 };
