@@ -2,6 +2,12 @@ DROP DATABASE IF EXISTS OtchDB;
 CREATE DATABASE OtchDB;
 USE OtchDB;
 
+CREATE TABLE Roles(
+    `id` INT UNIQUE NOT NULL AUTO_INCREMENT,
+    `role` VARCHAR(20) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
 CREATE TABLE Users(
     `id` INT UNIQUE NOT NULL AUTO_INCREMENT,
     `email` VARCHAR(254) NOT NULL,
@@ -11,7 +17,9 @@ CREATE TABLE Users(
     `password` TEXT NOT NULL,
     `salt` TEXT NOT NULL,
     `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
+    `role_id` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`role_id`) REFERENCES Roles(`id`)
 );
 
 CREATE TABLE Chats(
@@ -19,7 +27,9 @@ CREATE TABLE Chats(
     `name` VARCHAR(100) NOT NULL,
     `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `key` VARCHAR(100) NOT NULL UNIQUE,
-    PRIMARY KEY (`id`)
+    `admin_id` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`admin_id`) REFERENCES Users(`id`)
 );
 
 CREATE TABLE Messages(
@@ -45,3 +55,7 @@ CREATE TABLE Users_Chats(
     FOREIGN KEY (`chat_id`) REFERENCES Chats(`id`)
         ON DELETE CASCADE
 );
+
+INSERT INTO Roles(`role`) VALUES
+    ('ADMIN'),
+    ('USER')
