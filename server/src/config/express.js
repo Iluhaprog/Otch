@@ -5,7 +5,7 @@ const app = express();
 const https = require('https');
 const fs = require('fs');
 
-const expressWs = require('express-ws')(app);
+const expressWs = require('express-ws');
 const expressSession = require('express-session');
 
 const pino = require('pino');
@@ -37,13 +37,16 @@ const options = {
     ca: ca
 };
 
+
 const server = https.createServer(options, app);
+
+expressWs(app, server);
 
 module.exports = {
     app: app,
     express: express,
     logger: logger,
-    wsInstance: expressWs,
+    server: server,
+    expressWs: expressWs,
     passport: passport,
-    server: server
 };

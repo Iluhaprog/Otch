@@ -1,5 +1,6 @@
 const { port, env } = require('./config/vars');
-const { app, express, passport, server, wsInstance } = require('./config/express');
+const { app, express, passport, server } = require('./config/express');
+
 
 const MessagesRouter = require('./routes/MessagesRoutes'); 
 const UsersRoutes = require('./routes/UsersRoutes');
