@@ -11,6 +11,8 @@ const expressSession = require('express-session');
 const pino = require('pino');
 const expressPino = require('express-pino-logger');
 
+const fileUpload = require('express-fileupload');
+
 const logger = pino({ level: logLevel });
 const expressLogger = expressPino({ logger });
 
@@ -27,6 +29,13 @@ app.use(expressSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(fileUpload({
+    createParentPath: true, 
+    limits: {
+        fileSize: 5 * 1024 * 1024 * 1024
+    }
+}));
 
 const key = fs.readFileSync('/home/ilya/Documents/projects/otch/selfsigned.key');
 const cert = fs.readFileSync('/home/ilya/Documents/projects/otch/selfsigned.crt');
@@ -48,5 +57,5 @@ module.exports = {
     logger: logger,
     server: server,
     expressWs: expressWs,
-    passport: passport,
+    passport: passport
 };
