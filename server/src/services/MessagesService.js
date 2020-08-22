@@ -102,14 +102,12 @@ class MessagesService {
      */
     async createFile(buffer) {
         if (buffer) {
-            console.log(__dirname + '/../');
             const fileName = token() + '.jpg';
             const filePath = path.join(__dirname, '/../public/', fileName);
             fs.writeFile(filePath, buffer, 'binary', (err) => {
                 if (err) throw err;
-                console.log('ok');
             });
-            return new Answer(SUCCESS);
+            return new Answer(SUCCESS, {path: fileName});
         }
         return new Answer(FAILURE);
     }
