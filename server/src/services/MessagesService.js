@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const FileType = require('file-type');
 const { token } = require('../libs/crypt');
 const query = require('../libs/connection');
 const formatDate = require('../libs/formatDate');
@@ -102,7 +103,8 @@ class MessagesService {
      */
     async createFile(buffer) {
         if (buffer) {
-            const fileName = token() + '.jpg';
+            const ext = (await FileType.fromBuffer(buffer)).ext;
+            const fileName = `${token()}.${ext}`;
             const filePath = path.join(__dirname, '/../public/', fileName);
             fs.writeFile(filePath, buffer, 'binary', (err) => {
                 if (err) throw err;
