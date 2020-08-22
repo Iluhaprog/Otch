@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+const { token } = require('../libs/crypt');
 const query = require('../libs/connection');
 const formatDate = require('../libs/formatDate');
 const Answer = require('../libs/Answer');
@@ -91,6 +94,25 @@ class MessagesService {
         return new Answer(FAILURE);
     }
 
+    /**
+     * Create image from buffer
+     * 
+     * @param {Buffer} buffer
+     * @returns {Answer} 
+     */
+    async createFile(buffer) {
+        if (buffer) {
+            console.log(__dirname + '/../');
+            const fileName = token() + '.jpg';
+            const filePath = path.join(__dirname, '/../public/', fileName);
+            fs.writeFile(filePath, buffer, 'binary', (err) => {
+                if (err) throw err;
+                console.log('ok');
+            });
+            return new Answer(SUCCESS);
+        }
+        return new Answer(FAILURE);
+    }
 }
 
 module.exports = new MessagesService();

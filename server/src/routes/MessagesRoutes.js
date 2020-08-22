@@ -34,6 +34,31 @@ const send = (message, key) => {
     });
 }
 
+/**
+ * Run action
+ * 
+ * @param {string} action 
+ * @param {*} data 
+ */
+const runAction = async (action, data) => {
+    let result = new Answer(FAILURE);
+    switch(action) {
+        case 'c':
+            result = await MessagesController.create(data);
+            break;
+        case 'u':
+            result = await MessagesController.update(data);
+            break;
+        case 'd':
+            result = await MessagesController.deleteById(data);
+            break;
+        case 'i':
+            result = await MessagesController.createFile(data);
+            break;
+    }
+    return result;
+};
+
 router.ws('/send', (ws, req) => {
     const key = req.query.key;
     addConnect(ws, key);
@@ -41,21 +66,18 @@ router.ws('/send', (ws, req) => {
     ws.on('message', async message => {
         const action = req.query.a;
         let result = new Answer(FAILURE);
-        message = JSON.parse(message);
-        switch(action) {
-            case 'c':
-                result = await MessagesController.create(message);
-                break;
-            case 'u':
-                result = await MessagesController.update(message);
-                break;
-            case 'd':
-                result = await MessagesController.deleteById(message);
-                break;
+        if (message instanceof Buffer) {
+            result = await runAction(action, message);
+            send(result, key);
+        } else if (typeof message === 'string') {
+            result = await runAction(action, message);
+            message.action = action;
+            result.setData(message);
+            send(result, key);
+        } else {
+            result.setData({message: 'type of loaded is data not supported'});
+            ws.send(JSON.stringify(result));
         }
-        message.action = action
-        result.setData(message);
-        send(result, key);
     });
 
     ws.on('close', () => {

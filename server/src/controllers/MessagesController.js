@@ -34,6 +34,11 @@ class MessagesController {
         const result = await MessagesService.deleteById(message.id);
         return result;
     }
+
+    async createFile(buffer) {
+        const result = await MessagesService.createFile(buffer);
+        return result;
+    }
 }
 
 module.exports = new MessagesController();
