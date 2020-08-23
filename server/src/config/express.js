@@ -1,6 +1,7 @@
 const { logLevel } = require('./vars');
 const express = require('express');
 const app = express();
+const path = require('path');
 
 const https = require('https');
 const fs = require('fs');
@@ -11,16 +12,28 @@ const expressSession = require('express-session');
 const pino = require('pino');
 const expressPino = require('express-pino-logger');
 
-const fileUpload = require('express-fileupload');
-
+const bodyParser = require('body-parser');
 const logger = pino({ level: logLevel });
 const expressLogger = expressPino({ logger });
 
 const { passport, session } = require('./passport');
 
+const multer  = require('multer');
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null,  path.join(__dirname, '/../public/'));
+    },
+    filename: (req, file, cb) => {
+        const extArr = file.mimetype.split('/');
+        const extension = extArr[extArr.length - 1];
+        cb(null, `${file.originalname.split('.')[0]}-${Date.now()}.${extension}`);
+    }
+});
+var upload = multer({ storage: storage });
+
 app.use(expressLogger);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(expressSession({
     secret: 'secret',
@@ -30,12 +43,6 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(fileUpload({
-    createParentPath: true, 
-    limits: {
-        fileSize: 5 * 1024 * 1024 * 1024
-    }
-}));
 
 const key = fs.readFileSync('/home/ilya/Documents/projects/otch/selfsigned.key');
 const cert = fs.readFileSync('/home/ilya/Documents/projects/otch/selfsigned.crt');
@@ -57,5 +64,6 @@ module.exports = {
     logger: logger,
     server: server,
     expressWs: expressWs,
-    passport: passport
+    passport: passport,
+    upload: upload
 };

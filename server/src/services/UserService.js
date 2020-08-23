@@ -3,6 +3,7 @@ const { hash } = require('../libs/crypt');
 const formatDate = require('../libs/formatDate');
 const { SUCCESS, EMAIL_E, LOGIN_E, FAILURE, RECORD_NF } = require('../libs/statuses');
 const Answer = require('../libs/Answer');
+const MessagesService = require('./MessagesService');
 
 class UserService {
 
@@ -148,6 +149,23 @@ class UserService {
         if (oldUser.getStatus()) {
             await query('UPDATE Users SET name=?, age=? WHERE id=?', [user.name, user.age, user.id]);
             return new Answer(SUCCESS);
+        }
+        return new Answer(FAILURE);
+    }
+
+    /**
+     * Update avatar image of user
+     * 
+     * @param {Object} user
+     * @param {number} user.id
+     * @param {string} user.avatarName
+     * @returns {Answer} If avatar updated Answer status contains SUCCESS and data contains path to avatar image, otherwise status FAILURE
+     */
+    async updateAvatar(user) {
+        console.log(user);
+        if (user.avatarName) {
+            await query('UPDATE Users SET `avatar_image`=? WHERE `id`=?', [user.avatarName, user.id]);
+            return new Answer(SUCCESS, {path: user.avatarName});
         }
         return new Answer(FAILURE);
     }

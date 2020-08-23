@@ -115,6 +115,22 @@ class MessagesService {
     }
 
     /**
+     * Create file in file system
+     * 
+     * @param {Buffer} buffer 
+     * @returns {string} Name of created file
+     */
+    async createFileInFS(buffer) {
+        const ext = (await FileType.fromBuffer(buffer)).ext;
+        const fileName = `${token()}.${ext}`;
+        const filePath = path.join(__dirname, '/../public/', fileName);
+        fs.writeFile(filePath, buffer, 'binary', (err) => {
+            if (err) throw err;
+        });
+        return fileName;
+    }
+
+    /**
      * Create file
      * 
      * @param {Object} data
@@ -125,12 +141,7 @@ class MessagesService {
      */
     async createFile(data) {
         if (data.message) {
-            const ext = (await FileType.fromBuffer(data.message)).ext;
-            const fileName = `${token()}.${ext}`;
-            const filePath = path.join(__dirname, '/../public/', fileName);
-            fs.writeFile(filePath, data.message, 'binary', (err) => {
-                if (err) throw err;
-            });
+            const fileName = await this.createFileInFS(data.message);
             const result = await this.createFileInDB({
                 name: fileName,
                 userId: data.userId,

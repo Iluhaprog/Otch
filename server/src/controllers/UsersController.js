@@ -20,6 +20,15 @@ class UsersController {
         res.json({logout: true});
     }
 
+    async updateAvatar(req, res) {
+        const user = {
+            id: req.query.id,
+            avatarName: req.file.filename
+        };
+        const result = await UsersService.updateAvatar(user);
+        res.json(result);
+    }
+
     async update(req, res) {
         const user = req.body.user;
         const result = await UsersService.update(user);
