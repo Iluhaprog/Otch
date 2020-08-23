@@ -162,10 +162,9 @@ class UserService {
      * @returns {Answer} If avatar updated Answer status contains SUCCESS and data contains path to avatar image, otherwise status FAILURE
      */
     async updateAvatar(user) {
-        console.log(user);
         if (user.avatarName) {
-            await query('UPDATE Users SET `avatar_image`=? WHERE `id`=?', [user.avatarName, user.id]);
-            return new Answer(SUCCESS, {path: user.avatarName});
+            await query('UPDATE Users SET `avatar_image`=? WHERE `id`=?', ['/avatars/' + user.avatarName, user.id]);
+            return new Answer(SUCCESS, {path: '/avatars/' + user.avatarName});
         }
         return new Answer(FAILURE);
     }
