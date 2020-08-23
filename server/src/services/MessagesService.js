@@ -96,20 +96,48 @@ class MessagesService {
     }
 
     /**
-     * Create image from buffer
+     * Create file data in database
      * 
-     * @param {Buffer} buffer
-     * @returns {Answer} 
+     * @param {Object} file 
+     * @param {string} file.name
+     * @param {number} file.userId
+     * @param {number} file.chatId
+     * @param {string} file.creationDate
+     * @returns {Answer} If file created, then Answer status SUCCESS, otherwise status FAILURE
      */
-    async createFile(buffer) {
-        if (buffer) {
-            const ext = (await FileType.fromBuffer(buffer)).ext;
+    async createFileInDB(file) {
+        if (file) {
+            await query(`INSERT INTO Files(\`name\`, \`user_id\`, \`chat_id\`, \`creation_date\`) VALUES (?, ?, ?, ?)`,
+                    [file.name, file.userId, file.chatId, file.creationDate]);
+            return new Answer(SUCCESS);
+        }
+        return new Answer(FAILURE);
+    }
+
+    /**
+     * Create file
+     * 
+     * @param {Object} data
+     * @param {number} data.userId
+     * @param {number} data.chatId
+     * @param {Buffer} data.message
+     * @returns {Answer}  If file created, then Answer status SUCCESS and data contains path to file, otherwise status FAILURE
+     */
+    async createFile(data) {
+        if (data.message) {
+            const ext = (await FileType.fromBuffer(data.message)).ext;
             const fileName = `${token()}.${ext}`;
             const filePath = path.join(__dirname, '/../public/', fileName);
-            fs.writeFile(filePath, buffer, 'binary', (err) => {
+            fs.writeFile(filePath, data.message, 'binary', (err) => {
                 if (err) throw err;
             });
-            return new Answer(SUCCESS, {path: fileName});
+            const result = await this.createFileInDB({
+                name: fileName,
+                userId: data.userId,
+                chatId: data.chatId,
+                creationDate: formatDate(new Date())
+            });
+            return result.status ? new Answer(SUCCESS, {path: fileName}) : new Answer(FAILURE);
         }
         return new Answer(FAILURE);
     }

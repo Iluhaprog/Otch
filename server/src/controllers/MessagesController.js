@@ -35,8 +35,8 @@ class MessagesController {
         return result;
     }
 
-    async createFile(buffer) {
-        const result = await MessagesService.createFile(buffer);
+    async createFile(data) {
+        const result = await MessagesService.createFile(data);
         return result;
     }
 }

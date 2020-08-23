@@ -67,7 +67,12 @@ router.ws('/send', (ws, req) => {
         const action = req.query.a;
         let result = new Answer(FAILURE);
         if (message instanceof Buffer) {
-            result = await runAction(action, message);
+            const data = {
+                chatId: req.query.ci,
+                userId: req.query.ui,
+                message: message
+            };            
+            result = await runAction(action, data);
             send(result, key);
         } else if (typeof message === 'string') {
             result = await runAction(action, message);
