@@ -18,6 +18,7 @@ CREATE TABLE Users(
     `salt` TEXT NOT NULL,
     `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `role_id` INT NOT NULL,
+    `avatar_image` VARCHAR(150) DEFAULT '',
     PRIMARY KEY (`id`),
     FOREIGN KEY (`role_id`) REFERENCES Roles(`id`)
 );
