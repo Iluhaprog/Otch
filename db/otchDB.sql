@@ -57,6 +57,19 @@ CREATE TABLE Users_Chats(
         ON DELETE CASCADE
 );
 
+CREATE TABLE Files(
+    `id` INT UNIQUE NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(150) NOT NULL UNIQUE,
+    `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `chat_id` INT NOT NULL,
+    `user_id` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`chat_id`) REFERENCES Chats(`id`)
+        ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES Users(`id`)
+        ON DELETE CASCADE
+);
+
 INSERT INTO Roles(`role`) VALUES
     ('ADMIN'),
     ('USER')
