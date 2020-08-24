@@ -6,6 +6,8 @@ const path = require('path');
 const https = require('https');
 const fs = require('fs');
 
+const paths = require('./paths');
+
 const expressWs = require('express-ws');
 const expressSession = require('express-session');
 
@@ -21,7 +23,7 @@ const { passport, session } = require('./passport');
 const multer  = require('multer');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null,  path.join(__dirname, '/../public/avatars/'));
+        cb(null,  paths.files.avatars);
     },
     filename: (req, file, cb) => {
         const extArr = file.mimetype.split('/');
@@ -44,9 +46,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-const key = fs.readFileSync('/home/ilya/Documents/projects/otch/selfsigned.key');
-const cert = fs.readFileSync('/home/ilya/Documents/projects/otch/selfsigned.crt');
-const ca = fs.readFileSync('/home/ilya/Documents/projects/otch/ca.key')
+const key = fs.readFileSync(paths.ssl.key);
+const cert = fs.readFileSync(paths.ssl.cert);
+const ca = fs.readFileSync(paths.ssl.ca);
 const options = {
     key: key,
     cert: cert,

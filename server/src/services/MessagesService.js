@@ -6,6 +6,7 @@ const query = require('../libs/connection');
 const formatDate = require('../libs/formatDate');
 const Answer = require('../libs/Answer');
 const { SUCCESS, FAILURE } = require('../libs/statuses');
+const paths = require('../config/paths');
 
 class MessagesService {
 
@@ -123,7 +124,7 @@ class MessagesService {
     async createFileInFS(buffer) {
         const ext = (await FileType.fromBuffer(buffer)).ext;
         const fileName = `${token()}.${ext}`;
-        const filePath = path.join(__dirname, '/../public/', fileName);
+        const filePath = path.join(paths.files.chats, fileName);
         fs.writeFile(filePath, buffer, 'binary', (err) => {
             if (err) throw err;
         });
