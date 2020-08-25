@@ -71,6 +71,17 @@ CREATE TABLE Files(
         ON DELETE CASCADE
 );
 
+CREATE TABLE Notifications(
+    `id` INT UNIQUE NOT NULL AUTO_INCREMENT,
+    `messge` VARCHAR(120) NOT NULL,
+    `viewed` INT DEFAULT 0,
+    `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `user_id` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES Users(`id`)
+        ON DELETE CASCADE
+);
+
 INSERT INTO Roles(`role`) VALUES
     ('ADMIN'),
     ('USER')
