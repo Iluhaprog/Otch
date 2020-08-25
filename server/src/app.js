@@ -12,7 +12,7 @@ app.use(express.static(__dirname + '/public'));
 
 app.use('/messages', MessagesRouter);
 app.use('/users', UsersRoutes);
-app.use('/chats', passport.authenticate('local'), ChatsRoutes);
+app.use('/chats', ChatsRoutes);
 
 app.use(ErrorsController.error404);
 app.use(ErrorsController.error500);

@@ -1,10 +1,10 @@
 class ErrorsController {
     async error404(req, res) {
-        res.send('Error 404', 404);
+        res.status(404).send('Error 404');
     }
 
     async error500(err, req, res, next) {
-        res.send('500: Internal Server Error', 500);
+        res.status(500).send('500: Internal Server Error');
     }
 }
 
