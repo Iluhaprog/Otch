@@ -2,9 +2,9 @@ const { express } = require('../config/express');
 const router = express.Router();
 const ChatsController = require('../controllers/ChatsController');
 const ChatsService = require('../services/ChatService');
+const NotificationsService = require('../services/NotificationsService');
 const Answer = require('../libs/Answer');
 const { FAILURE } = require('../libs/statuses');
-const { addMember } = require('../services/ChatService');
 
 const usersChats = new Map();
 
@@ -23,7 +23,7 @@ const deleteMember = async data => {
     if (adminId && userId && chatKey) {
         const result = await ChatsService.deleteMember(adminId, userId, chatKey);
         result.setData({message: 'You deleted from this chat'});
-        return result.getStatus() ? {key: userId + chatKey, data: result} : null;
+        return result.getStatus() ? {key: userId + '.' + chatKey, data: result} : null;
     }
     return null;
 };
@@ -34,13 +34,26 @@ const deleteMember = async data => {
  * @param {string} key 
  * @param {string} message 
  */
-const send = (key, message) => {
+const send = async (key, message) => {
     const member = usersChats.get(key);
-    member.send(message);
+    if (member) {
+        member.send(message);
+    } else {
+        const userId = key.split('.')[0];
+        const data = JSON.parse(message).data;
+        const notification = {
+            "message": data.message,
+            "viewed": 0,
+            "creationDate": new Date(),
+            "userId": parseInt(userId)
+        };
+        await NotificationsService.create(notification);
+    }
 }
 
 router.ws('/deleteMember', (ws, req) => {
-    const key = req.query.ui + req.query.ck;
+    // ui - whose user can be deleted, ck - chat key
+    const key = req.query.ui + '.' + req.query.ck;
     usersChats.set(key, ws);
 
     ws.on('message', async message => {
@@ -48,9 +61,9 @@ router.ws('/deleteMember', (ws, req) => {
         let msg = JSON.stringify(new Answer(FAILURE, {message: 'You have not authority'}));
         if (result) {
             msg = JSON.stringify(result.data);
-            send(result.key, msg);
+            await send(result.key, msg);
         } else {
-            send(key, msg);
+            await send(key, msg);
         }
     });
     
