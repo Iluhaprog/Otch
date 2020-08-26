@@ -26,7 +26,7 @@ class NotificationsService {
      */
     async getByUserId(userId) {
         const [notifications] = await query('SELECT * FROM Notifications WHERE `user_id`=?;', [userId]);
-        return notifications ? new Answer(SUCCESS, notifications) : new Answer(FAILURE);
+        return notifications.length ? new Answer(SUCCESS, notifications) : new Answer(RECORD_NF);
     }
 
     /**
@@ -42,7 +42,7 @@ class NotificationsService {
     async create(notification) {
         if (notification) {
             const creationDate = notification.creationDate || new Date();
-            await query('INSER INTO Notifications(`message`, `viewed`, `creation_date`, `user_id`) VALUE (?, ?, ?, ?);',
+            await query('INSERT INTO Notifications(`message`, `viewed`, `creation_date`, `user_id`) VALUE (?, ?, ?, ?);',
                         [
                             notification.message, 
                             notification.viewed, 
@@ -78,7 +78,7 @@ class NotificationsService {
      * @returns {Answer} If notification deleted, then Answer contains status SUCCESS, otherwise status FAILURE
      */
     async deleteById(id) {
-        const answer = await this.getById(notification.id);
+        const answer = await this.getById(id);
         if (answer.getStatus()) {
             await query('DELETE FROM Notifications WHERE `id`=?', [id]);
             return new Answer(SUCCESS);

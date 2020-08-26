@@ -73,7 +73,7 @@ CREATE TABLE Files(
 
 CREATE TABLE Notifications(
     `id` INT UNIQUE NOT NULL AUTO_INCREMENT,
-    `messge` VARCHAR(120) NOT NULL,
+    `message` VARCHAR(120) NOT NULL,
     `viewed` INT DEFAULT 0,
     `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `user_id` INT NOT NULL,
