@@ -19,6 +19,7 @@ CREATE TABLE Users(
     `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `role_id` INT NOT NULL,
     `avatar_image` VARCHAR(150) DEFAULT '',
+    `verefied` INT NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`role_id`) REFERENCES Roles(`id`)
 );
