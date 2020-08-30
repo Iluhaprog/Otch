@@ -82,6 +82,15 @@ CREATE TABLE Notifications(
         ON DELETE CASCADE
 );
 
+CREATE TABLE VerificationCodes(
+    `id` INT UNIQUE NOT NULL AUTO_INCREMENT,
+    `code` VARCHAR(6) NOT NULL UNIQUE,
+    `user_id` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES Users(`id`)
+        ON DELETE CASCADE
+);
+
 INSERT INTO Roles(`role`) VALUES
     ('ADMIN'),
     ('USER')
