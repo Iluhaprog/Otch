@@ -154,6 +154,20 @@ class UserService {
     }
 
     /**
+     * Update verified field of user
+     * 
+     * @param {number} id 
+     * @returns {Answer} If verified updated, then Answer contains status SUCCESS, otherwise status FAILURE
+     */
+    async updateVerification(id) {
+        if (id) {
+            await query('UPDATE Users SET `verified`=? WHERE `id`=?', [1, id]);
+            return new Answer(SUCCESS);
+        }
+        return new Answer(FAILURE);
+    }
+
+    /**
      * Update avatar image of user
      * 
      * @param {Object} user
