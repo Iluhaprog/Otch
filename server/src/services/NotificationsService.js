@@ -1,6 +1,6 @@
 const query = require('../libs/connection');
 const Answer = require('../libs/Answer');
-const formatDate = require('../libs/formatDate');
+const { formatDate } = require('../libs/format');
 const { SUCCESS, FAILURE, RECORD_NF } = require('../libs/statuses');
 
 class NotificationsService {

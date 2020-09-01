@@ -1,5 +1,5 @@
 const query = require('../libs/connection');
-const formatDate = require('../libs/formatDate');
+const { formatDate } = require('../libs/format');
 const { token } = require('../libs/crypt');
 const Answer = require('../libs/Answer');
 const { SUCCESS, FAILURE, NOT_CHAT_ADMIN, USER_E } = require('../libs/statuses');

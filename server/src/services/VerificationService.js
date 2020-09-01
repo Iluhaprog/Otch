@@ -2,6 +2,9 @@ const query = require('../libs/connection');
 const Answer = require('../libs/Answer');
 const { token } = require('../libs/crypt');
 const { SUCCESS, FAILURE, RECORD_NF } = require('../libs/statuses');
+const nodemailer = require('nodemailer');
+const mailUser = require('../config/mailUser');
+const { formatMailHTML } = require('../libs/format');
 
 class VerificationService {
 
@@ -86,6 +89,37 @@ class VerificationService {
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
+    }
+
+
+    /**
+     * Send mail to user with address userAddress
+     * @param {*} userAddress 
+     * @param {*} code 
+     */
+    async sendMail(userAddress, code) {
+        let account = mailUser;
+        
+        if (!mailUser.user) {
+            account = await nodemailer.createTestAccount();
+        }
+
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com' ,
+            port: 465,
+            secure: true,
+            auth: {
+                user: account.user,
+                pass: account.pass,
+            },
+        });
+
+        let info = await transporter.sendMail({
+            from: '"Fred Foo 👻" ' + account.user,
+            subject: 'Verification code for otch account',
+            to: userAddress,
+            html: formatMailHTML(code),
+        });
     }
 }
 

@@ -1,9 +1,10 @@
 const query = require('../libs/connection');
 const { hash } = require('../libs/crypt');
-const formatDate = require('../libs/formatDate');
+const { formatDate } = require('../libs/format');
 const { SUCCESS, EMAIL_E, LOGIN_E, FAILURE, RECORD_NF } = require('../libs/statuses');
 const Answer = require('../libs/Answer');
 const MessagesService = require('./MessagesService');
+const { sendMail, create } = require('../services/VerificationService');
 
 class UserService {
 
@@ -107,7 +108,12 @@ class UserService {
             await query(`INSERT INTO Users(\`email\`, \`login\`, \`name\`, \`age\`, \`creation_date\`, \`password\`, \`salt\`, \`role_id\`) 
                             VALUE (?, ?, ?, ?, ?, ?, ?, ?);`,
                         [user.email, user.login, user.name, user.age, creationDate, passHash.hash, passHash.salt, 2]);
+                        
             const newUser = (await this.getByEmail(user.email)).getData();
+            
+            const { code } = (await create(newUser.id)).getData();
+            sendMail(user.email, code); 
+
             result.setData({userId: newUser.id});
             return result;
         }
