@@ -107,6 +107,8 @@ class UserService {
             await query(`INSERT INTO Users(\`email\`, \`login\`, \`name\`, \`age\`, \`creation_date\`, \`password\`, \`salt\`, \`role_id\`) 
                             VALUE (?, ?, ?, ?, ?, ?, ?, ?);`,
                         [user.email, user.login, user.name, user.age, creationDate, passHash.hash, passHash.salt, 2]);
+            const newUser = (await this.getByEmail(user.email)).getData();
+            result.setData({userId: newUser.id});
             return result;
         }
 
