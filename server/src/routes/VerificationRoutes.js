@@ -5,6 +5,7 @@ const VerificationController = require('../controllers/VerificationController');
 router
     .get('/getById', VerificationController.getById)
     .get('/getByUserId', VerificationController.getByUserId)
+    .get('/compare', VerificationController.compareCodes)
     .post('/create', VerificationController.create)
     .put('/update', VerificationController.update)
     .delete('/deleteById', VerificationController.update);
