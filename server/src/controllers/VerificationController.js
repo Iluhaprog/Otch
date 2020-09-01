@@ -10,7 +10,7 @@ class VerificationController {
     
     async getByUserId(req, res) {
         const userId = req.body.userId;
-        const result = await VerificationService.getById(userId);
+        const result = await VerificationService.getByUserId(userId);
         res.json(result);
     }
 

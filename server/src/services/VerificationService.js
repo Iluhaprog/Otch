@@ -1,6 +1,6 @@
 const query = require('../libs/connection');
 const Answer = require('../libs/Answer');
-const token = require('../libs/crypt');
+const { token } = require('../libs/crypt');
 const { SUCCESS, FAILURE, RECORD_NF } = require('../libs/statuses');
 
 class VerificationService {
