@@ -3,6 +3,13 @@ const BasicStrategy = require('passport-http').BasicStrategy;
 const UsersService = require('../services/UserService');
 const { compare } = require('../libs/crypt');
 
+const isEmpty = obj => {
+    for (let key in obj) {
+        return false;
+    }
+    return true;
+}
+
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
@@ -14,17 +21,21 @@ passport.deserializeUser(async (id, done) => {
 
 passport.use(new BasicStrategy(
     async (username, password, done) => {
-        console.log(username, ' --- ', password);
-        let user = '';
+        let user;
         if (username.includes('@')) {
             user = (await UsersService.getByEmail(username)).getData();
         } else {
             user = (await UsersService.getByLogin(username)).getData();
         }
-        if (compare(password, user.password)) {
-            return done(null, user);
+        
+        if (!isEmpty(user)) {
+            if (compare(password, user.password)) {
+                return done(null, user);
+            } else {
+                return done(null, false);
+            }
         } else {
-            return done(null, false, {message: 'Invalid password'});
+            done(null, false, {message: 'User not exist'});
         }
     }
 ));

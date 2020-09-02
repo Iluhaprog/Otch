@@ -1,4 +1,6 @@
 const UsersService = require('../services/UserService');
+const Answer = require('../libs/Answer');
+const { SUCCESS } = require('../libs/statuses');
 
 class UsersController {
 
@@ -12,7 +14,7 @@ class UsersController {
     }
 
     async login(req, res) {
-        res.send('login');
+        res.json(new Answer(SUCCESS, {userId: req.user.id}));
     }
 
     async logout(req, res)  {
