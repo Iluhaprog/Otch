@@ -3,7 +3,6 @@ const { hash } = require('../libs/crypt');
 const { formatDate } = require('../libs/format');
 const { SUCCESS, EMAIL_E, LOGIN_E, FAILURE, RECORD_NF } = require('../libs/statuses');
 const Answer = require('../libs/Answer');
-const MessagesService = require('./MessagesService');
 const { sendMail, create } = require('../services/VerificationService');
 
 class UserService {

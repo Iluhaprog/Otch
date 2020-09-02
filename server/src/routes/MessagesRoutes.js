@@ -2,7 +2,7 @@ const { express } = require('../config/express');
 const router = express.Router();
 const MessagesController = require('../controllers/MessagesController');
 const Answer = require('../libs/Answer');
-const { SUCCESS, FAILURE } = require('../libs/statuses');
+const { FAILURE } = require('../libs/statuses');
 
 const roomsConnects = new Map();
 

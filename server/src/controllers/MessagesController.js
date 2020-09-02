@@ -3,21 +3,39 @@ const MessagesService = require('../services/MessagesService');
 class MessagesController {
 
     async getById(req, res) {
-        const id = req.body.id;
-        const message = await MessagesService.getById(id);
-        res.json(message);
+        try {
+            const id = req.body.id;
+            const message = await MessagesService.getById(id);
+            res.json(message);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async getByChatId(req, res) {
-        const chatId = req.body.chatId;
-        const messages = await MessagesService.getByChatId(chatId);
-        res.json(messages);
+        try {
+            const chatId = req.body.chatId;
+            const messages = await MessagesService.getByChatId(chatId);
+            res.json(messages);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async getByUserIdAndChatId(req, res) {
-        const { userId, chatId } = req.body;
-        const messages = await MessagesService.getByUserIdAndChatId(userId, chatId);
-        res.json(messages);
+        try {
+            const { userId, chatId } = req.body;
+            const messages = await MessagesService.getByUserIdAndChatId(userId, chatId);
+            res.json(messages);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async create(message) {

@@ -6,44 +6,80 @@ const { updateVerification } = require('../services/UserService');
 class VerificationController {
 
     async getById(req, res) {
-        const id = req.body.id;
-        const result = await VerificationService.getById(id);
-        res.json(result);
+        try {
+            const id = req.body.id;
+            const result = await VerificationService.getById(id);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
     
     async getByUserId(req, res) {
-        const userId = req.body.userId;
-        const result = await VerificationService.getByUserId(userId);
-        res.json(result);
+        try {
+            const userId = req.body.userId;
+            const result = await VerificationService.getByUserId(userId);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async create(req, res) {
-        const userId = req.body.userId;
-        const result = await VerificationService.create(userId);
-        res.json(result);
+        try {
+            const userId = req.body.userId;
+            const result = await VerificationService.create(userId);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
     
     async update(req, res) {
-        const id = req.body.id;
-        const result = await VerificationService.update(id);
-        res.json(result);
+        try {
+            const id = req.body.id;
+            const result = await VerificationService.update(id);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
     
     async deleteById(req, res) {
-        const id = req.body.id;
-        const result = await VerificationService.deleteById(id);
-        res.json(result);
+        try {
+            const id = req.body.id;
+            const result = await VerificationService.deleteById(id);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async compareCodes(req, res) {
-        const { userId, code } = req.body;
-        const comparisionCode = (await VerificationService.getByUserId(userId)).getData();
-        const result = await VerificationService.compareCodes(code, comparisionCode.code);
-        if (result) {
-            await updateVerification(userId);
-            res.json(new Answer(SUCCESS));
-        } else {
-            res.json(new Answer(FAILURE));
+        try {
+            const { userId, code } = req.body;
+            const comparisionCode = (await VerificationService.getByUserId(userId)).getData();
+            const result = await VerificationService.compareCodes(code, comparisionCode.code);
+            if (result) {
+                await updateVerification(userId);
+                res.json(new Answer(SUCCESS));
+            } else {
+                res.json(new Answer(FAILURE));
+            }
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
         }
     }
 }

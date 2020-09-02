@@ -5,48 +5,90 @@ const { SUCCESS } = require('../libs/statuses');
 class UsersController {
 
     async registration(req, res) {
-        const user = req.body.user;
-        const result = await UsersService.create(user);
+        try {
+            const user = req.body.user;
+            const result = await UsersService.create(user);
 
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(result);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async login(req, res) {
-        res.json(new Answer(SUCCESS, {userId: req.user.id}));
+        try {
+            res.json(new Answer(SUCCESS, {userId: req.user.id}));
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async logout(req, res)  {
-        req.logout();
-        res.json({logout: true});
+        try {
+            req.logout();
+            res.json({logout: true});
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async updateAvatar(req, res) {
-        const user = {
-            id: req.query.id,
-            avatarName: req.file.filename
-        };
-        const result = await UsersService.updateAvatar(user);
-        res.json(result);
+        try {
+            const user = {
+                id: req.query.id,
+                avatarName: req.file.filename
+            };
+            const result = await UsersService.updateAvatar(user);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async update(req, res) {
-        const user = req.body.user;
-        const result = await UsersService.update(user);
-        res.json(result);
+        try {
+            const user = req.body.user;
+            const result = await UsersService.update(user);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async getById(req, res) {
-        const id = req.body.id;
-        const result = await UsersService.getById(id);
-        res.json(result);
+        try {
+            const id = req.body.id;
+            const result = await UsersService.getById(id);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async deleteById(req, res) {
-        const id = req.body.id;
-        const result = await UsersService.deleteById(id);
-        res.json(result);
+        try {
+            const id = req.body.id;
+            const result = await UsersService.deleteById(id);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
 }

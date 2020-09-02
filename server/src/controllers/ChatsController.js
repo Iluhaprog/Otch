@@ -3,45 +3,87 @@ const ChatsService = require('../services/ChatService');
 class ChatsController {
 
     async getById(req, res) {
-        const id = req.body.id;
-        const result = await ChatsService.getById(id);
-        res.json(result);
+        try {
+            const id = req.body.id;
+            const result = await ChatsService.getById(id);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async getByKey(req, res) {
-        const key = req.body.key;
-        const result = await ChatsService.getByKey(key);
-        res.json(result);
+        try {
+            const key = req.body.key;
+            const result = await ChatsService.getByKey(key);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async getByUserId(req, res) {
-        const userId = req.body.userId;
-        const result = await ChatsService.getByUserId(userId);
-        res.json(result);
+        try {
+            const userId = req.body.userId;
+            const result = await ChatsService.getByUserId(userId);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async create(req, res) {
-        const chat = req.body.chat;
-        const result = await ChatsService.create(chat);
-        res.json(result);
+        try {
+            const chat = req.body.chat;
+            const result = await ChatsService.create(chat);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async addMember(req, res) {
-        const { adminId, memberId, key } = req.body;
-        const result = await ChatsService.addMember(adminId, memberId, key);
-        res.json(result);
+        try {
+            const { adminId, memberId, key } = req.body;
+            const result = await ChatsService.addMember(adminId, memberId, key);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async deleteMember(req, res) {
-        const { adminId, memberId, key } = req.body;
-        const result = await ChatsService.deleteMember(adminId, memberId, key);
-        res.json(result);
+        try {
+            const { adminId, memberId, key } = req.body;
+            const result = await ChatsService.deleteMember(adminId, memberId, key);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
     async deleteById(req, res) {
-        const id = req.body.id;
-        const result = await ChatsService.deleteById(id);
-        res.json(result);
+        try {
+            const id = req.body.id;
+            const result = await ChatsService.deleteById(id);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
     }
 
 }

@@ -94,8 +94,9 @@ class VerificationService {
 
     /**
      * Send mail to user with address userAddress
-     * @param {*} userAddress 
-     * @param {*} code 
+     * 
+     * @param {string} userAddress 
+     * @param {string} code 
      */
     async sendMail(userAddress, code) {
         let account = mailUser;

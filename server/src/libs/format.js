@@ -8,6 +8,12 @@ const formatDate = date => {
     return date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
 };
 
+/**
+ * The function format the verification code with html for send by email
+ * 
+ * @param {string} code
+ * @returns {string} html
+ */
 const formatMailHTML = (code) => {
     return `
         <html>
