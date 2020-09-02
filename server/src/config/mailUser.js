@@ -1,6 +1,6 @@
 const mailUser = {
     user: 'otchchat@gmail.com', // username
-    pass: '#afSd$E12', // password
+    pass: '********', // password
 }
 
 module.exports = mailUser;
