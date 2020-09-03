@@ -5,3 +5,4 @@ db/queries.sql
 server/package-lock.json
 server/src/public
 .vscode/
+config/mailUser.js
