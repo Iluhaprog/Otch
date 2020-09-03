@@ -1,30 +1,15 @@
 const { express, passport, upload } = require('../config/express');
 const router = express.Router();
 const UsersController = require('../controllers/UsersController');
-const Answer = require('../libs/Answer');
-const { FAILURE } = require('../libs/statuses');
-
-const checkUser = async (req, res, next) => {
-    try {
-        const user = req.user;
-        const reqId = req.body.id || req.query.id || req.body.user.id;
-        if (parseInt(user.id) === parseInt(reqId)) {
-            next();
-        } else {
-            res.json(new Answer(FAILURE, {message: 'Unauthorized'}));
-        }
-    } catch (err) {
-        res.status(500).send('');
-    }
-};
+const { checkUser } = require('../filters/UserFilter');
 
 router
     .get('/logout', UsersController.logout)
-    .get('/getById', [ passport.authenticate('basic'), checkUser ], UsersController.getById)
+    .get('/getById', [ passport.authenticate('basic'), checkUser('id') ], UsersController.getById)
     .post('/registration', UsersController.registration)
     .post('/login', passport.authenticate('basic') , UsersController.login)
-    .put('/update', [ passport.authenticate('basic'), checkUser ], UsersController.update)
-    .post('/updateAvatar', [ upload.single('avatar'), passport.authenticate('basic'), checkUser ], UsersController.updateAvatar)
-    .delete('/delete', [ passport.authenticate('basic'), checkUser ], UsersController.deleteById);
+    .put('/update', [ passport.authenticate('basic'), checkUser('id') ], UsersController.update)
+    .post('/updateAvatar', [ upload.single('avatar'), passport.authenticate('basic'), checkUser('id') ], UsersController.updateAvatar)
+    .delete('/delete', [ passport.authenticate('basic'), checkUser('id') ], UsersController.deleteById);
 
 module.exports = router; 
