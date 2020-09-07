@@ -75,7 +75,7 @@ router.ws('/deleteMember', (ws, req) => {
 router
     .get('/getById', ChatsController.getById)
     .get('/getByKey', ChatsController.getByKey)
-    .get('/getByUserId', ChatsController.getByUserId)
+    .get('/getByUserId', checkUser('userId'), ChatsController.getByUserId)
     .post('/create', ChatsController.create)
     .put('/addMember', ChatsController.addMember)
     .delete('/deleteById', ChatsController.deleteById);
