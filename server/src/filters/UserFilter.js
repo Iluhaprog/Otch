@@ -1,6 +1,12 @@
 const Answer = require('../libs/Answer');
 const { FAILURE } = require('../libs/statuses');
 
+/**
+ * Сheck for an authorized request
+ * 
+ * @param {string} userIdField 
+ * @returns {Function} middleware function
+ */
 const checkUser = (userIdField) => {
     return async (req, res, next) => {
         try {
