@@ -5,7 +5,7 @@ const ChatsService = require('../services/ChatService');
 const NotificationsService = require('../services/NotificationsService');
 const Answer = require('../libs/Answer');
 const { FAILURE } = require('../libs/statuses');
-
+const { checkUser } = require('../filters/UserFilter');
 const usersChats = new Map();
 
 /**

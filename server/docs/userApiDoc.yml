@@ -1,0 +1,262 @@
+openapi: 3.0.0
+info:
+  title: Otch API
+  description: Description of Otch API
+  version: 0.0.1
+servers:
+  - url: https://api.otch.xyz/
+    description: Main (production) server
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Status:
+      type: number
+      description: '<h4>This field can be contains follow statuses:</h4>
+                      <ol>
+                        <li> 0 - failure; </li>
+                        <li> 1 - success;</li>
+                        <li> 2 - email exist</li>
+                        <li> 3 - login exist</li>
+                        <li> 4 - record not found</li>
+                        <li> 5 - not a chat admin</li>
+                        <li> 6 - user exist </li>
+                      <ol>'
+    Answer:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          type: object
+          description: 'Data all is empty'
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        login:
+          type: string
+        age: 
+          type: number
+        creation_date:
+          type: string
+        role_id:
+          type: number
+        avatar_image:
+          type: string
+        verified:
+          type: number
+
+    UserAnswer:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          $ref: '#/components/schemas/User'
+
+    LoginAnswer:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          type: object
+          properties:
+            userId:
+              type: number
+    
+    UpdateAvatar:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          type: object
+          properties:
+            path: 
+              type: string
+        
+    PostUser:
+      type: object
+      properties:
+        email: 
+          type: string
+        login:
+          type: string
+        name:
+          type: string
+        age:
+          type: number
+        password:
+          type: string
+
+    Logout:
+      type: object
+      properties:
+        logout: 
+          type: boolean
+
+security:
+  - basicAuth: []
+
+paths:
+  /users/getById:
+    get:
+      summary: Return user by id.
+      description: Return user by id.
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: id
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: number
+
+      responses:
+        '200':
+          description: A JSON object with data about user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAnswer'
+  
+  /users/logout:
+    get:
+      summary: logout user
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Logout'
+
+
+                
+  /users/registration:
+    post:
+      summary: Create new user
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          properties:
+            user:
+              $ref: '#/components/schemas/PostUser'
+
+      responses:
+        '200':
+          description: User created
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/UserAnswer'
+  /users/login:
+    post:
+      summary: loggined user
+      security:
+        - BasicAuth: []
+
+      responses:
+        '200':
+          description: user loggined
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginAnswer'
+
+        '401':
+          description: user don't loggined
+  
+  /users/updateAvatar:
+    post:
+      summary: Update avatar of user
+      description: Update avatar of user by him id
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+          description: id of user
+        - name: avatar
+          in: formData
+          type: file
+          required: true
+          description: image *.jpeg, *.png
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAvatar'
+          
+
+  /users/update:
+    put:
+      summary: Update user
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          properties:
+            user:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: number
+                name: 
+                  type: string
+                age:
+                  type: number
+                  
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
+
+  /users/delete:
+    delete:
+      summary: Delete user
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          properties:
+            id:
+              type: number
+      responses:
+        '200':
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
