@@ -1,0 +1,210 @@
+openapi: 3.0.0
+info:
+  title: Otch API
+  description: Description of Otch API
+  version: 0.0.1
+servers:
+  - url: https://api.otch.xyz/
+    description: Main (production) server
+
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Status:
+      type: number
+      description: '<h4>This field can be contains follow statuses:</h4>
+                      <ol>
+                        <li> 0 - failure; </li>
+                        <li> 1 - success;</li>
+                        <li> 2 - email exist</li>
+                        <li> 3 - login exist</li>
+                        <li> 4 - record not found</li>
+                        <li> 5 - not a chat admin</li>
+                        <li> 6 - user exist </li>
+                      <ol>'
+    Notification: 
+      type: object
+      properties:
+        id:
+          type: number
+        message:
+          type: string
+        viewed:
+          type: number
+        creation_date:
+          type: string
+        user_id:
+          type: number
+
+    Answer:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          type: object
+          description: 'Data all is empty'
+    
+    NotificationAnswer:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          $ref: '#/components/schemas/Notification'
+
+    NotificationsArrayAnswer:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+
+security:
+  - basicAuth: []
+
+paths:
+  /notifications/getById:
+    get:
+      summary: Return notification by id
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: id
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: number
+      responses:
+        '200':
+          description: A JSON object with data about notification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationAnswer'
+
+  /notifications/getByUserId:
+    get:
+      summary: Return notification by id
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: userId
+          schema:
+            type: object
+            required:
+              - userId
+            properties:
+              userId:
+                type: number
+      responses:
+        '200':
+          description: A JSON object with an array of notifications of user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationsArrayAnswer'
+                
+  /notifications/create:
+    post:
+      summary: Create notification for user with userId
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: notification
+          schema:
+            type: object
+            required:
+              - notification
+            properties:
+              notification:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  viewed:
+                    type: number
+                  userId:
+                    type: number
+      responses:
+        '200':
+          description: Info about creation notification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
+  
+  /notifications/update:
+    put:
+      summary: Make notification viewed
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: notification
+          schema:
+            type: object
+            required:
+              - notification
+            properties:
+              notification:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  viewed:
+                    type: number
+      responses:
+        '200':
+          description: Info about updating notification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
+  
+  /notifications/deleteById:
+    delete:
+      summary: Make notification viewed
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: id
+          description: id of notification
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: number
+      responses:
+        '200':
+          description: Info about deleting notification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
