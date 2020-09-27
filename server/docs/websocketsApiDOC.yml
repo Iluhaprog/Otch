@@ -1,0 +1,57 @@
+asyncapi: '2.0.0'
+info:
+  title: Documention for WebSocketAPI of otch
+  version: '0.0.1'
+servers:
+  production:
+    url: www.otch.xyz
+    protocol: wss
+    description: This is documentation for WebSocketAPI of otch
+    security:
+      - basic: []
+channels:
+  messages/send?key={key}&a={a}&ci={ci}&ui={ui}:
+    description: Send message for users in chat with key
+    parameters:
+      key: 
+        schema:
+          description: key of chat, when sending a message.
+          type: string
+      a:
+        schema:
+          description: action(c - create; u - update, d - delete, i        - file).
+          type: string
+      ui:
+        schema:
+          description: UserId Use when you send file in Blob.
+          type: number
+      ci:
+        schema:
+          description: ChatId Use when you send file in Blob.
+          type: number
+    publish:
+      message:
+        $ref: '#/components/messages/sended-message'
+components:
+  messages:
+    sended-message:
+      description: Data that should be in the request body 
+      payload:
+        type: object
+        properties:
+          userId:
+            description: Id of user
+            type: number
+          chatId:
+            description: Id of chat
+            type: number
+          message:
+            description: Message that user write
+            type: string
+          creationDate:
+            description: Date of creation this message
+            type: string
+
+  securitySchemes:
+    basic:
+      type: userPassword
