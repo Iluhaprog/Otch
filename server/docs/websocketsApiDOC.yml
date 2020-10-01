@@ -31,6 +31,20 @@ channels:
           type: number
     publish:
       message:
+        $ref: '#/components/messages/sended-message' 
+  messages/deleteMember?ui={ui}:
+    description: Delete member from chat
+    parameters: 
+      ui:
+        schema: 
+          description: id of user, that connected
+          type: number
+      ck:
+        schema:
+          description: Chat key to connect to
+          type: string
+    publish:
+      message:
         $ref: '#/components/messages/sended-message'
 components:
   messages:
@@ -51,7 +65,11 @@ components:
           creationDate:
             description: Date of creation this message
             type: string
-
+    delete-message:
+      description: Message with info about deleted member, chat admin and key of chat
+      payload:
+        type: object
+          
   securitySchemes:
     basic:
       type: userPassword
