@@ -32,12 +32,12 @@ channels:
     publish:
       message:
         $ref: '#/components/messages/sended-message' 
-  messages/deleteMember?ui={ui}:
+  chats/deleteMember?ui={ui}&ck={ck}:
     description: Delete member from chat
     parameters: 
       ui:
         schema: 
-          description: id of user, that connected
+          description: Id of user, that connected
           type: number
       ck:
         schema:
@@ -45,7 +45,7 @@ channels:
           type: string
     publish:
       message:
-        $ref: '#/components/messages/sended-message'
+        $ref: '#/components/messages/delete-message'
 components:
   messages:
     sended-message:
@@ -69,7 +69,16 @@ components:
       description: Message with info about deleted member, chat admin and key of chat
       payload:
         type: object
-          
+        properties:
+          adminId:
+            description: Id of admin
+            type: number
+          memberId:
+            description: Id of member who should delete
+            type: number
+          chatKey:
+            description: Key of chat in that make deleting
+            type: string
   securitySchemes:
     basic:
       type: userPassword
