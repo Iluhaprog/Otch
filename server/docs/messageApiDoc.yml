@@ -1,0 +1,94 @@
+openapi: 3.0.0
+info:
+  title: Otch API
+  description: Description of Otch API
+  version: 0.0.1
+servers:
+  - url: https://api.otch.xyz/
+    description: Main (production) server
+
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Status:
+      type: number
+      description: '<h4>This field can be contains follow statuses:</h4>
+                      <ol>
+                        <li> 0 - failure; </li>
+                        <li> 1 - success;</li>
+                        <li> 2 - email exist</li>
+                        <li> 3 - login exist</li>
+                        <li> 4 - record not found</li>
+                        <li> 5 - not a chat admin</li>
+                        <li> 6 - user exist </li>
+                      <ol>'
+    Answer:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          type: object
+          description: 'Data all is empty'
+    
+    Message:
+      type: object
+      properties:
+        id:
+          type: number
+        user_id:
+          type: number
+        chat_id:
+          type: number
+        creation_date:
+          type: string
+        message:
+          type: string
+    
+    MessageAnswer:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          $ref: '#/components/schemas/Message'
+
+security:
+  - basicAuth: []
+
+paths:
+  /messages/byId:
+    get:
+      summary: Return message by id
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: id
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: number
+      responses:
+        '200':
+          description:  A JSON object with data about message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageAnswer'
+  /messages/byChat:
+    get:
+      summary: Return array of messages
+      
+      responses:
+        '200':
+          description: A JSON object with data about messages of chat

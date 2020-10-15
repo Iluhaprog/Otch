@@ -1,0 +1,120 @@
+openapi: 3.0.0
+info:
+  title: Otch API
+  description: Description of Otch API
+  version: 0.0.1
+servers:
+  - url: https://api.otch.xyz/
+    description: Main (production) server
+
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Status:
+      type: number
+      description: '<h4>This field can be contains follow statuses:</h4>
+                      <ol>
+                        <li> 0 - failure; </li>
+                        <li> 1 - success;</li>
+                        <li> 2 - email exist</li>
+                        <li> 3 - login exist</li>
+                        <li> 4 - record not found</li>
+                        <li> 5 - not a chat admin</li>
+                        <li> 6 - user exist </li>
+                      <ol>'
+    Verification:
+      type: object
+      properties:
+        id:
+          type: number
+        code:
+          type: string
+        user_id:
+          type: number
+
+    CompareAnswer:
+      type: object
+      properties:
+        status: 
+          $ref: '#/components/schemas/Status'
+        data:
+          type: object
+    
+    VerificationAnswer:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          $ref: '#/components/schemas/Verification'
+
+
+security:
+  - basicAuth: []
+
+paths:
+  /verification/getByUserId:
+    get: 
+      summary: Return verification code of user
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          schema:
+            type: object
+            properties:
+              userId:
+                type: number
+      responses:
+        '200':
+          description: A JSON object with data about verification of user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationAnswer'
+  
+  /verification/getById:
+    get: 
+      summary: Return verification code
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+      responses:
+        '200':
+          description: A JSON object with data about verification 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationAnswer'
+
+  /verification/compare:
+    get: 
+      summary: Compare verification codes
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          schema:
+            type: object
+            properties:
+              userId:
+                type: number
+              code:
+                type: string
+      responses:
+        '200':
+          description: A JSON object with data about success verification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompareAnswer'
