@@ -46,6 +46,11 @@ channels:
     publish:
       message:
         $ref: '#/components/messages/delete-message'
+  chats/updateChatList:
+    description: Notifying users about adding to chat
+    publish:
+      message:
+        $ref: '#/components/messages/notifying-message'
 components:
   messages:
     sended-message:
@@ -79,6 +84,15 @@ components:
           chatKey:
             description: Key of chat in that make deleting
             type: string
+    notifying-message:
+      description: Message with id of user, that should update self the chat list
+      payload:
+        type: object
+        properties:
+          userId:
+            description: Id of user
+            type: number
+            
   securitySchemes:
     basic:
       type: userPassword
