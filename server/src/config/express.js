@@ -2,6 +2,7 @@ const { logLevel } = require('./vars');
 const express = require('express');
 const app = express();
 const path = require('path');
+const { morgan, accessLogStream } = require('./log');
 
 const https = require('https');
 const fs = require('fs');
@@ -44,6 +45,7 @@ app.use(expressSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(morgan('combined', {stream: accessLogStream}));
 
 
 const key = fs.readFileSync(paths.ssl.key);
