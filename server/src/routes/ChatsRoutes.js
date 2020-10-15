@@ -4,9 +4,11 @@ const ChatsController = require('../controllers/ChatsController');
 const ChatsService = require('../services/ChatService');
 const NotificationsService = require('../services/NotificationsService');
 const Answer = require('../libs/Answer');
-const { FAILURE } = require('../libs/statuses');
+const { FAILURE, SUCCESS } = require('../libs/statuses');
 const { checkUser } = require('../filters/UserFilter');
+
 const usersChats = new Map();
+const connections = new Array();
 
 /**
  * Delete member from chat
@@ -67,6 +69,30 @@ router.ws('/deleteMember', (ws, req) => {
         }
     });
     
+    ws.on('error', err => {
+        console.log(err);
+    });
+});
+
+router.ws('/updateChatList', (ws, req) => {
+    connections.push(ws);
+    ws.on('message', message => {
+        const msgObject = JSON.parse(message);
+        if (msgObject['userId']) {
+            connections.forEach( connection => {
+                connection.send(
+                    JSON.stringify(
+                        new Answer(SUCCESS, {
+                            userId: msgObject['userId']
+                        })
+                    )
+                );
+            });
+        } else {
+            ws.send(JSON.stringify(new Answer(FAILURE, {message: 'User id is undefined'})))
+        }
+    });
+
     ws.on('error', err => {
         console.log(err);
     });
