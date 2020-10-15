@@ -1,3 +1,5 @@
+const Answer = require('../libs/Answer');
+const { FAILURE } = require('../libs/statuses');
 const MessagesService = require('../services/MessagesService');
 
 class MessagesController {
@@ -39,23 +41,39 @@ class MessagesController {
     }
 
     async create(message) {
-        const result = await MessagesService.create(message);
-        return result;
+        try {
+            const result = await MessagesService.create(message);
+            return result;
+        } catch (err) {
+            return new Answer(FAILURE, {message: 'Error'})
+        }
     }
 
     async update(message) {
-        const result = await MessagesService.updateById(message.id, message.message);
-        return result;
+        try {
+            const result = await MessagesService.updateById(message.id, message.message);
+            return result;
+        } catch (err) {
+            return new Answer(FAILURE, {message: 'Error'})
+        }
     }
 
     async deleteById(message) {
-        const result = await MessagesService.deleteById(message.id);
-        return result;
+        try { 
+            const result = await MessagesService.deleteById(message.id);
+            return result;
+        } catch (err) {
+            return new Answer(FAILURE, {message: 'Error'})
+        }
     }
 
     async createFile(data) {
-        const result = await MessagesService.createFile(data);
-        return result;
+        try {
+            const result = await MessagesService.createFile(data);
+            return result;
+        } catch (err) {
+            return new Answer(FAILURE, {message: 'Error'})
+        }
     }
 }
 
