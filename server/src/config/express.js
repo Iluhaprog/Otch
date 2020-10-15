@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const { morgan, accessLogStream } = require('./log');
+const { cors } = require('./cors');
 
 const https = require('https');
 const fs = require('fs');
@@ -45,6 +46,7 @@ app.use(expressSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cors);
 app.use(morgan('combined', {stream: accessLogStream}));
 
 
