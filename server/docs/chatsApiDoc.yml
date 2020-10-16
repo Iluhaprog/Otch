@@ -1,0 +1,213 @@
+openapi: 3.0.0
+info:
+  title: Otch API
+  description: Description of Otch API
+  version: 0.0.1
+servers:
+  - url: https://api.otch.xyz/
+    description: Main (production) server
+
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Status:
+      type: number
+      description: '<h4>This field can be contains follow statuses:</h4>
+                      <ol>
+                        <li> 0 - failure; </li>
+                        <li> 1 - success;</li>
+                        <li> 2 - email exist</li>
+                        <li> 3 - login exist</li>
+                        <li> 4 - record not found</li>
+                        <li> 5 - not a chat admin</li>
+                        <li> 6 - user exist </li>
+                      <ol>'
+    Chat:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        creation_date:
+          type: string
+        key:
+          type: string
+        admin_id:
+          type: number
+
+    ChatAnswer:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          $ref: '#/components/schemas/Chat'
+    ChatsAnswer:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chat'
+            
+
+
+security:
+  - basicAuth: []
+
+paths:
+  /chats/getById:
+    get:
+      summary: Return chat by id
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+      responses:
+          '200':
+            description: Return data about chat width id
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChatAnswer'
+  /chats/getByUserId:
+    get:
+      summary: Return chat by userId
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          schema:
+            type: object
+            properties:
+              userId:
+                type: number
+      responses:
+          '200':
+            description: Return data about chat width userId
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChatsAnswer'
+  /chats/getByKey:
+    get:
+      summary: Return chat by key
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          schema:
+            type: object
+            properties:
+              key:
+                type: string
+      responses:
+          '200':
+            description: Return data about chat width id
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChatAnswer'
+  /chats/create:
+    post:
+      summary: Create chat
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: chat
+          schema:
+            type: object
+            required:
+              - chat
+            properties:
+              chat:
+                type: object
+                properties:
+                  adminId:
+                    type: number
+                  name:
+                    type: string
+      responses:
+        '200':
+          description: Chat created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    $ref: '#/components/schemas/Status'
+                  data:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+  /chats/addMember:
+    put:
+      summary: Add user to chat members
+      security:
+        - BasicAuth: []
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          schema:
+            type: object
+            properties:
+              adminId:
+                type: number
+              memberId:
+                type: number
+              key:
+                type: string
+      responses:
+        '200':
+          description: Return status about addin user to members
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/Status'
+                  data:
+                    type: object
+  /chats/deleteById:
+    delete:
+      summary: Delete chat by id
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+      responses:
+          '200':
+            description: Return data about chat width id
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      $ref: '#/components/schemas/Status'
+                    data:
+                      type: object

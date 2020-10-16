@@ -66,7 +66,7 @@ class ChatService {
                 INSERT INTO Chats(\`name\`, \`creation_date\`, \`key\`, \`admin_id\`) VALUES (?, ?, ?, ?);
                 `, 
                 [chat.name, creation_date, key, chat.adminId]);
-            return new Answer(SUCCESS);
+            return new Answer(SUCCESS, {key: key});
         }
         return new Answer(FAILURE);
     }
