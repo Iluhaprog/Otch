@@ -1,5 +1,6 @@
 import React from 'react';
 import base64 from 'base-64';
+import { handleChange } from './../util/forms';
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -8,15 +9,6 @@ class SignIn extends React.Component {
             login: '',
             password: '',
         };
-    }
-
-    handleChange(e) {
-        const target = e.target;
-        const name = target.name;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        this.setState({
-            [name] : value 
-        });
     }
 
     handleSubmit(e) {
@@ -45,7 +37,7 @@ class SignIn extends React.Component {
                         name="login" 
                         className="form-box__item" 
                         placeholder="Email or Login..." 
-                        onChange={(e) => this.handleChange(e)} 
+                        onChange={(e) => handleChange(e, this)} 
                         value={this.state.login} 
                         required
                     />
@@ -56,7 +48,7 @@ class SignIn extends React.Component {
                         name="password" 
                         className="form-box__item" 
                         placeholder="Password..." 
-                        onChange={(e) => this.handleChange(e)} 
+                        onChange={(e) => handleChange(e, this)} 
                         value={this.state.password} 
                         required
                     />
