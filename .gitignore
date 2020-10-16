@@ -2,7 +2,7 @@
 db/insert.sql
 db/reset.sql
 db/queries.sql
-server/package-lock.json
+**/package-lock.json
 server/src/public
 .vscode/
 server/src/config/mailUser.js
