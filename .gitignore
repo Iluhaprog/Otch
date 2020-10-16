@@ -6,3 +6,4 @@ db/queries.sql
 server/src/public
 .vscode/
 server/src/config/mailUser.js
+server/logs
