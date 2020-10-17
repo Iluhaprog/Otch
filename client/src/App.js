@@ -1,6 +1,7 @@
 import React from 'react';
-import { SignIn } from './SignIn/SignIn';
-import { SignUp} from './SignUp/SignUp';
+import { Verification } from './Verification/Verification';
+// import { SignIn } from './SignIn/SignIn';
+// import { SignUp} from './SignUp/SignUp';
 
 class App extends React.Component {
     constructor(props) {
@@ -14,7 +15,8 @@ class App extends React.Component {
         return (
             <div className='app'>
                 {/* <SignIn /> */}
-                <SignUp />
+                {/* <SignUp /> */}
+                <Verification />
             </div>
         );
     }

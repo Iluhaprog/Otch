@@ -46,6 +46,7 @@ class SignUp extends React.Component {
                         className="form-box__item" 
                         placeholder="Name..."
                         onChange={(e) => handleChange(e, this)}
+                        autoComplete='new-password'
                         required
                     />
                 </label>
@@ -56,6 +57,7 @@ class SignUp extends React.Component {
                         className="form-box__item" 
                         placeholder="Login..."
                         onChange={(e) => handleChange(e, this)}
+                        autoComplete='new-password'
                         required
                     />
                 </label>
@@ -66,6 +68,7 @@ class SignUp extends React.Component {
                         className="form-box__item" 
                         placeholder="Email..."
                         onChange={(e) => handleChange(e, this)}
+                        autoComplete='new-password'
                         required
                     />
                 </label>
@@ -76,6 +79,7 @@ class SignUp extends React.Component {
                         className="form-box__item" 
                         placeholder="Age..."
                         onChange={(e) => handleChange(e, this)}
+                        autoComplete='new-password'
                         required
                     />
                 </label>
@@ -86,6 +90,7 @@ class SignUp extends React.Component {
                         className="form-box__item" 
                         placeholder="Password..."
                         onChange={(e) => handleChange(e, this)}
+                        autoComplete='new-password'
                         required
                     />
                 </label>
@@ -96,6 +101,7 @@ class SignUp extends React.Component {
                         className="form-box__item" 
                         placeholder="Confrim password..."
                         onChange={(e) => handleChange(e, this)}
+                        autoComplete='new-password'
                         required
                     />
                 </label>
