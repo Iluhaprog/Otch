@@ -1,6 +1,7 @@
 import React from 'react';
 import base64 from 'base-64';
-import { handleChange } from './../util/forms';
+import { handleChange } from '../../util/forms';
+import { POST } from '../../util/api';
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -13,19 +14,6 @@ class SignIn extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        fetch('https://localhost:3000/users/login',
-            {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Basic ${base64.encode(`${this.state.login}:${this.state.password}`)}`,
-                },
-                body: {
-                    'grant_type': 'password'
-                },
-            })
-            .then(response => response.json())
-            .then(result => console.log(result))
-            .catch(err => console.error(err));
     }
 
     render() {

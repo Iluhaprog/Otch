@@ -1,5 +1,6 @@
 import React from 'react';
-import { handleChange } from './../util/forms';
+import { GET } from '../../util/api';
+import { handleChange } from '../../util/forms';
 
 class Verification extends React.Component {
     constructor(props) {
@@ -11,21 +12,6 @@ class Verification extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const body = {
-            'userId': '18',
-            'code': this.state.code,
-        };
-        fetch('https://localhost:3000/verification/compare', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body),
-        })
-        .then(response => response.json())
-        .then(result => console.log(result))
-        .catch(err => console.error(err))
     }
 
     render() {

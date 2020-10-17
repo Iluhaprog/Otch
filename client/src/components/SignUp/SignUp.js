@@ -1,5 +1,6 @@
 import React from 'react';
-import { handleChange } from './../util/forms';
+import { POST } from '../../util/api';
+import { handleChange } from '../../util/forms';
 
 class SignUp extends React.Component {
     constructor(props) {
@@ -16,24 +17,6 @@ class SignUp extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const password = this.state.password,
-              confrimPassword = this.state.confrimPassword;
-        const age = this.state.age;
-        const user = JSON.stringify({user: this.state});
-        console.log(user);
-        if (password === confrimPassword && !Number.isNaN(parseInt(age))) {
-            fetch('https://localhost:3000/users/registration', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: user,
-            })
-            .then(response => response.json())
-            .then(result => console.log(result))
-            .catch(err => console.error(err));
-        }
     }
 
     render() {

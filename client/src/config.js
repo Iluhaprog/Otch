@@ -1,3 +1,3 @@
-export default {
-    apiUrl: 'https://localhost:3000',
-};
+const apiUrl = 'https://localhost:3000';
+
+export { apiUrl };
