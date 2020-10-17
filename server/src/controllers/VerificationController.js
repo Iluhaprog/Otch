@@ -7,7 +7,7 @@ class VerificationController {
 
     async getById(req, res) {
         try {
-            const id = req.body.id;
+            const id = req.query.id;
             const result = await VerificationService.getById(id);
             res.json(result);
         } catch (err) {
@@ -19,7 +19,7 @@ class VerificationController {
     
     async getByUserId(req, res) {
         try {
-            const userId = req.body.userId;
+            const userId = req.query.userId;
             const result = await VerificationService.getByUserId(userId);
             res.json(result);
         } catch (err) {
@@ -67,7 +67,7 @@ class VerificationController {
 
     async compareCodes(req, res) {
         try {
-            const { userId, code } = req.body;
+            const { userId, code } = req.query;
             const comparisionCode = (await VerificationService.getByUserId(userId)).getData();
             const result = await VerificationService.compareCodes(code, comparisionCode.code);
             if (result) {
