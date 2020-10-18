@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { compare } from '../../api/verification.api';
 import { handleChange } from '../../util/forms';
+import SendButton from '../buttons/SendButton';
 
 class Verification extends React.Component {
     state = { 
@@ -41,9 +42,7 @@ class Verification extends React.Component {
                         placeholder="Code..."
                         required />
                 </label>
-                <button className="button button_send">
-                    Send
-                </button>
+                <SendButton text="Send" />
             </form>
         );
     }

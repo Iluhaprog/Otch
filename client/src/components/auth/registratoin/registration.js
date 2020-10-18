@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { registration } from '../../../api/user.api';
 import { handleChange } from '../../../util/forms';
+import SendButton from '../../buttons/SendButton';
 
 class Registration extends React.Component {
     state = { 
@@ -110,9 +111,7 @@ class Registration extends React.Component {
                         autoComplete='new-password'
                         required />
                 </label>
-                <button className="button button_send">
-                    Sign Up
-                </button>
+                <SendButton text="SignUp"/>
             </form>
         );
     }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { login } from '../../../api/user.api';
 import { handleChange } from '../../../util/forms';
+import SendButton from '../../buttons/SendButton';
 
 class Login extends React.Component {
     state = {
@@ -39,9 +40,7 @@ class Login extends React.Component {
                         autoComplete='new-password'
                         required />
                 </label>
-                <button className="button button_send">
-                    Sign In
-                </button>
+                <SendButton text="SingIn" />
                 <a href="#" className='link'>
                     Forgot password
                 </a>
