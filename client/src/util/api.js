@@ -1,6 +1,6 @@
 import { apiUrl } from './../config';
 
-const toParams = obj => obj ? Object.keys(obj).map(([key, value]) => `${key}=${value}`).join('&') : '';
+const toParams = obj => obj ? Object.keys(obj).map(key => `${key}=${obj[key]}`).join('&') : '';
 
 const request = method => {
     return ({url, body, params, headers}) => {
