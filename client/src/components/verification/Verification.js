@@ -1,0 +1,52 @@
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+import { compare } from '../../api/verification.api';
+import { handleChange } from '../../util/forms';
+
+class Verification extends React.Component {
+    state = { 
+        code: '',
+        success: false,
+    }
+
+    handleSuccess() {
+        this.setState({
+            success: true,
+        });
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        compare({ userId: this.props.userId, code: this.state.code })
+            .then(result => {
+                if (result.status) this.handleSuccess();
+            })
+            .catch(err => console.error(err));
+    }
+
+    render() {
+        if (this.state.success) return <Redirect from='/verification' to='/auth' />;
+        
+        const failMessage = !this.state.success && 'Wrong code';
+
+        return (
+            <form name='verification' className='form-box' onSubmit={e => this.handleSubmit(e)}>
+                <h1>{failMessage}</h1>
+                <label htmlFor="code">
+                    <input
+                        type="text"
+                        name="code"
+                        className="form-box__item"
+                        onChange={e => handleChange(e, this)}
+                        placeholder="Code..."
+                        required />
+                </label>
+                <button className="button button_send">
+                    Send
+                </button>
+            </form>
+        );
+    }
+}
+
+export default Verification;
