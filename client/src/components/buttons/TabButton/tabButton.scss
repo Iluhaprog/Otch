@@ -23,7 +23,7 @@
         transition: .3s ease-in-out;
     }
     &:hover span,
-    &-selected {
+    &-selected span {
         background-position: -250px 0;
     }
 }

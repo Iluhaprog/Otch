@@ -82,6 +82,10 @@ input {
 }
 
 .error {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 20px;
     color: $invalid-input;
     font-weight: 300;
     text-align: center;
@@ -115,6 +119,7 @@ input {
 
     .form-box {
         padding: 30px;
+        padding-top: 10px;
     }
 
     .form-box label {

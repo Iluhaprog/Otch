@@ -31,8 +31,8 @@ class Auth extends React.Component {
                 <Route path='/auth'>
                     <div className="tabs-box">
                         <nav className='tabs-nav row row_jc-sb'>
-                            <TabButton text='SignIn' click={() => this.changeVisibleTab(1)} />
-                            <TabButton text='SingUp' bl={true} click={() => this.changeVisibleTab(2)} />
+                            <TabButton text='SignIn' selected={visibleTab === 1} click={() => this.changeVisibleTab(1)} />
+                            <TabButton text='SingUp' selected={visibleTab === 2} bl={true} click={() => this.changeVisibleTab(2)} />
                         </nav>
                         <div className="tabs">
                             <Login visible={visibleTab === 1} />
