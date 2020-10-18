@@ -33,16 +33,21 @@ class Registration extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        registration(this.state)
-            .then(result => {
-                if (result.status === 1) {
-                    this.handleSuccess();
-                    this.props.changeUserId(result.data.userId);
-                } else {
-                    this.handleFail(result.status);
-                }
-            })
-            .catch(err => console.error(err));
+        const { password, confrimPassword, age } = this.state;
+        if (password === confrimPassword) {
+            registration(this.state)
+                .then(result => {
+                    if (result.status === 1) {
+                        this.handleSuccess();
+                        this.props.changeUserId(result.data.userId);
+                    } else {
+                        this.handleFail(result.status);
+                    }
+                })
+                .catch(err => console.error(err));
+        } else {
+            this.setState({failMessage: 'Passwords do not match'})
+        }
     }
 
     render() { 
