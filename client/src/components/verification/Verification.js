@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { compare } from '../../api/verification.api';
 import { handleChange } from '../../util/forms';
-import SendButton from '../buttons/SendButton';
+import SendButton from '../buttons/SendButton/SendButton';
 
 class Verification extends React.Component {
     state = { 
@@ -31,8 +31,8 @@ class Verification extends React.Component {
         const failMessage = !this.state.success && 'Wrong code';
 
         return (
-            <form name='verification' className='form-box' onSubmit={e => this.handleSubmit(e)}>
-                <h1>{failMessage}</h1>
+            <form name='verification' className='form-box form-box__visible' onSubmit={e => this.handleSubmit(e)}>
+                <h4 className='error'>{failMessage}</h4>
                 <label htmlFor="code">
                     <input
                         type="text"

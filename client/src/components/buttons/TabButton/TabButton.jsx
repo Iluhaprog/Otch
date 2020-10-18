@@ -1,4 +1,5 @@
 import React from 'react';
+import './tabButton.scss';
 
 export default props => {
     const borderLeft = props.bl ? 'button_tab-bl' : '';

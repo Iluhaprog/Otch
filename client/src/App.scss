@@ -1,0 +1,132 @@
+@import './vars.scss';
+@import './assets/fonts/stylesheet.css';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: $bg-1;
+    overflow-x: hidden;
+}
+
+.wrapper, .App {
+    width: 100vw;
+    height: 100vh;
+}
+
+@mixin direction($direction) {
+    .#{$direction} {
+        display: flex;
+        flex-direction: $direction;
+
+        &_fw-w {
+            flex-wrap: wrap;
+        }
+
+        &_jc-c {
+            justify-content: center;
+        }
+
+        &_jc-sb {
+            justify-content: space-between;
+        }
+
+        &_jc-sa {
+            justify-content: space-around;
+        }
+
+        &_ai-c {
+            align-items: center;
+        }
+        
+        &_jc-fe {
+            justify-content: flex-end;
+        }
+    }
+}
+
+@include direction(row);
+@include direction(column);
+
+h1 {
+    font-size: 36px;
+}
+
+h2 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 13px;
+}
+
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    border-radius: 0 10px 10px 0;
+    border-left: 1px solid var(--bg-1);
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-1);
+    border-radius: 0 10px 0px 0;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--bg-1);
+}
+
+@media screen and (max-width: 415px) {
+    h1 {
+        font-size: 36px;
+    }
+    
+    h2 {
+        font-size: 18px;
+    }
+
+    h3 {
+        font-size: 14px;
+    }
+
+    h4 {
+        font-size: 11px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
+    
+    /* Track */
+    
+    ::-webkit-scrollbar-track {
+        border-radius: 0 10px 10px 0;
+        border-left: 1px solid var(--bg-1);
+    
+    }
+    
+    /* Handle */
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--bg-1);
+        border-radius: 0 10px 0px 0;
+    }
+    
+    /* Handle on hover */
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--bg-1);
+    }
+}

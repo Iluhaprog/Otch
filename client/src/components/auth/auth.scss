@@ -1,0 +1,134 @@
+@import './../../vars.scss';
+
+input {
+    border: none;
+    background-color: none;
+}
+
+.tabs-box {
+    max-width: 500px;
+    width: 100%;
+    background-color: $bg-2;
+    border: 2px solid $bg-4;
+    border-radius: 10px;
+    box-shadow: 0 10px 10px $shadow;
+}
+
+.tabs-nav {
+    border-bottom: 2px solid $bg-4;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    position: relative;
+    height: 80vh;
+    max-height: 550px;
+}
+
+.form-box {
+    padding: 40px;
+    flex: 0 0 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: -100%;
+    transition: .3s ease-in-out;
+
+    & .column {
+        height: 100%;
+    }
+
+    &__visible {
+        left: 0;
+    }
+
+    & label {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    &__item {
+        width: 100%;
+        background-color: transparent;
+        border-bottom: 1px solid $color-2;
+        font-size: 20px;
+        padding: 15px;
+        background: $gradient;
+        background-position: 0px 0;
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+        transition: .3s ease-in-out;
+
+
+        &:placeholder-shown {
+            background: $color-2;
+            background-position: 0px 0;
+            -webkit-background-clip: text;
+            -moz-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -moz-text-fill-color: transparent;
+            transition: .3s ease-in-out;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.error {
+    color: $invalid-input;
+    font-weight: 300;
+    text-align: center;
+}
+
+/* Smartphones (portrait and landscape) ---------- */
+@media screen and (min-width: 320px) and (max-width: 480px) {
+    .tabs {
+        max-height: 500px;
+    }
+
+    .tabs-box {
+        max-width: 315px;
+    }
+    .form-box {
+        padding: 10px;
+    }
+    .form-box label {
+        margin-bottom: 15px;
+    }
+    .link {
+        margin-top: 10px;
+    }
+}
+
+/* Desktops and laptops ---------- */
+@media screen and (min-width: 1224px) {
+    .tabs-box{
+        max-width: 400px;
+    }
+
+    .form-box {
+        padding: 30px;
+    }
+
+    .form-box label {
+        margin-bottom: 20px;
+    }
+}
+
+/* Large screens ---------- */
+@media screen and (min-width: 1824px) {
+    .form-box {
+        padding: 40px;
+    }
+
+    .form-box label {
+        margin-bottom: 40px;
+    }
+}

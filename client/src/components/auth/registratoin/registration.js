@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { registration } from '../../../api/user.api';
 import { handleChange } from '../../../util/forms';
-import SendButton from '../../buttons/SendButton';
+import SendButton from '../../buttons/SendButton/SendButton';
 
 class Registration extends React.Component {
     state = { 
@@ -53,7 +53,7 @@ class Registration extends React.Component {
         
         return ( 
             <form name='registration' className={`form-box ${visible}`} onSubmit={e => this.handleSubmit(e)}>
-                <h1>{failMessage}</h1>
+                <h4 className='error'>{failMessage}</h4>
                 <label htmlFor="name">
                     <input 
                         type="text"

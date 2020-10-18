@@ -1,0 +1,39 @@
+@import '../vars.scss';
+@import '../buttons.scss';
+
+.button_tab {
+    padding: 17px 0;
+    text-align: center;
+    color: $color-btn-2;
+    font-size: 36px;
+    font-weight: 300;
+
+    &-bl {
+        border-left: 2px solid $bg-btn-2 !important;
+    }
+
+    span {
+        background: $gradient-btn-1;
+        background-size: 500px 400px;
+        background-position: 0px 0;
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        -webkit-text-fill-color: transparent; 
+        -moz-text-fill-color: transparent;
+        transition: .3s ease-in-out;
+    }
+    &:hover span,
+    &-selected {
+        background-position: -250px 0;
+    }
+}
+
+@media screen and (max-width: 415px) {
+    .button_tab {
+        font-size: 18px;
+        padding: 10px 0;
+    }
+}
+
+
+

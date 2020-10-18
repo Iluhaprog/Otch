@@ -1,9 +1,10 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import TabButton from '../buttons/TabButton';
+import TabButton from '../buttons/TabButton/TabButton';
 import Verification from '../verification/Verification';
 import Login from './login/login';
 import Registration from './registratoin/registration';
+import './auth.scss';
 
 class Auth extends React.Component {
     state = {
@@ -35,12 +36,16 @@ class Auth extends React.Component {
                         </nav>
                         <div className="tabs">
                             <Login visible={visibleTab === 1} />
-                            <Registration visible={visibleTab === 2} changeUserId={(id) => this.changeUserId(id)}/>
+                            <Registration visible={visibleTab === 2} changeUserId={(id) => this.changeUserId(id)} />
                         </div>
                     </div>
                 </Route>
                 <Route path='/verification'>
-                    <Verification userId={this.state.userId} />
+                    <div className="tabs-box">
+                        <div className="tabs">
+                            <Verification userId={this.state.userId} />
+                        </div>
+                    </div>
                 </Route>
             </div>
         );

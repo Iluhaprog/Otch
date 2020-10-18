@@ -1,0 +1,28 @@
+.button {
+    max-width: 500px;
+    width: 100%;
+    display: block;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    outline: none;
+    transition: .5s ease-in-out;
+
+    &_i {
+        max-width: 48px;
+        background-color: transparent;
+        font-size: 20px;
+    }
+    
+    &_i-b {
+        color: $bg-btn-1;
+    }
+    
+    &_i-gr i {
+        background-image: $gradient-btn-2;
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        -webkit-text-fill-color: transparent; 
+        -moz-text-fill-color: transparent;
+    }
+}
