@@ -58,8 +58,7 @@ input {
         padding: 15px;
         background: $gradient;
         background-position: 0px 0;
-        -webkit-background-clip: text;
-        -moz-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent;
         -moz-text-fill-color: transparent;
         transition: .3s ease-in-out;
@@ -68,8 +67,7 @@ input {
         &:placeholder-shown {
             background: $color-2;
             background-position: 0px 0;
-            -webkit-background-clip: text;
-            -moz-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             -moz-text-fill-color: transparent;
             transition: .3s ease-in-out;

@@ -16,8 +16,7 @@
         background: $gradient-btn-1;
         background-size: 500px 400px;
         background-position: 0px 0;
-        -webkit-background-clip: text;
-        -moz-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent; 
         -moz-text-fill-color: transparent;
         transition: .3s ease-in-out;
