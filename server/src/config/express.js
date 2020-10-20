@@ -12,6 +12,9 @@ const paths = require('./paths');
 
 const expressWs = require('express-ws');
 const expressSession = require('express-session');
+const redis = require('redis');
+const RedisStore = require('connect-redis')(expressSession);
+const redisClient = redis.createClient();
 
 const pino = require('pino');
 const expressPino = require('express-pino-logger');
@@ -20,7 +23,7 @@ const bodyParser = require('body-parser');
 const logger = pino({ level: logLevel });
 const expressLogger = expressPino({ logger });
 
-const { passport, session } = require('./passport');
+const { passport } = require('./passport');
 
 const multer  = require('multer');
 const storage = multer.diskStorage({
@@ -42,7 +45,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressSession({
     secret: 'secret',
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: new RedisStore({client: redisClient}),
 }));
 app.use(passport.initialize());
 app.use(passport.session());
