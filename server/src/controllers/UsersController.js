@@ -69,7 +69,7 @@ class UsersController {
 
     async getById(req, res) {
         try {
-            const id = req.body.id;
+            const { id } = req.query;
             const result = await UsersService.getById(id);
             res.json(result);
         } catch (err) {
