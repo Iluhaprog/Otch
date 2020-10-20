@@ -10,7 +10,7 @@ const { FAILURE } = require('../libs/statuses');
 const checkUser = (userIdField) => {
     return async (req, res, next) => {
         try {
-            const user = req.user;
+            const user = req.user.data;
             const reqId = req.body[userIdField] || req.query[userIdField] || req.body.user[userIdField];
             if (parseInt(user.id) === parseInt(reqId)) {
                 next();

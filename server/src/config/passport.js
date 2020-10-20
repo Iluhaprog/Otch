@@ -19,7 +19,9 @@ passport.deserializeUser(async (id, done) => {
     done(null, user);
 });
 
-passport.use(new BasicStrategy(
+passport.use(new BasicStrategy({
+        realm: 'Fuuuuuuuk you!',
+    },
     async (username, password, done) => {
         let user;
         if (username.includes('@')) {
