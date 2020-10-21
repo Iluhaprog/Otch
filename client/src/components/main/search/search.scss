@@ -1,0 +1,33 @@
+@import '../../../vars.scss';
+
+.form {
+    &_search {
+        max-width: 585px;
+        width: 100%;
+        border-radius: 10px;
+        background-image: $gradient;
+        position: relative;
+        padding: 1px;
+        margin: 0 10px;
+    }
+
+    &-inner {
+        background-color: $bg-1;
+        border-radius: 10px;
+    }
+
+    input {
+        padding: 14px;
+        width: 100%;
+        border: none;
+        color: $color-4;
+        background: transparent;
+        font-size: 24px;
+        font-weight: 300;
+        outline: none;
+
+        &::placeholder {
+            color: $bg-2;
+        }
+    }
+}
