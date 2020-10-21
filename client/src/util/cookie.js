@@ -12,4 +12,16 @@ function getCookie(name) {
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-export { getCookie }
+
+/**
+ * Set cookies from object
+ * 
+ * @param {Object} obj 
+ */
+function setCookie(obj) {
+    Object.keys(obj).forEach(key => {
+        document.cookie = `${key}=${obj[key]}`;
+    });
+}
+
+export { setCookie, getCookie };
