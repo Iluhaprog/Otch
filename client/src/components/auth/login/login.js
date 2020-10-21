@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { login } from '../../../api/user.api';
 import { handleChange } from '../../../util/forms';
 import SendButton from '../../buttons/SendButton/SendButton';
@@ -13,7 +14,12 @@ class Login extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         login({ login: this.state.login, password: this.state.password })
-            .then(result => console.dir(result))
+            .then(result => {
+                if (result.status === 1) {
+                    console.log(result);
+                    this.props.changeAuth(true, result.data.userId);
+                }
+            })
             .catch(err => console.error(err));
     }
 
