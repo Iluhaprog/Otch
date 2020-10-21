@@ -1,6 +1,16 @@
 import { GET, POST, PUT, DELETE } from './../util/api';
 import base64 from 'base-64';
 
+const getById = id => {
+    return GET({
+        url: '/users/getById',
+        params: {
+            id: id
+        },
+        credentials: 'include',
+    }).then(response => response.json());
+}
+
 const login = ({login, password}) => {
     return POST({
         url: '/users/login',
@@ -10,6 +20,7 @@ const login = ({login, password}) => {
         body: {
             'grant_type': 'password'
         },
+        credentials: 'include',
     }).then(response => response.json());
 };
 
@@ -27,4 +38,5 @@ const registration = (data) => {
 export {
     login,
     registration,
+    getById,
 };
