@@ -1,0 +1,39 @@
+@import '../../../vars.scss';
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    background-color: $bg-1;
+    border-radius: 100%;
+    box-shadow: inset 0px 0px 10px $shadow;
+    overflow: hidden;
+    
+    img {
+        display: block;
+        width: 30px;
+        height: 30px;
+        margin: 10px auto;
+    }
+}
+
+
+.user-name {
+    font-size: 24px;
+    color: $color-4;
+    font-weight: 300;
+    margin-left: 25px;
+}
+
+/* Large screens ---------- */
+@media screen and (min-width: 1824px) {
+    .avatar {
+        width: 85px;
+        height: 85px;  
+     
+        img {
+            width: 45px;
+            height: 45px;
+            margin: 17px auto;
+        }
+    }
+}
