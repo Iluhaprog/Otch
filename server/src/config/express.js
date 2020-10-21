@@ -25,10 +25,10 @@ const expressLogger = expressPino({ logger });
 
 const { passport } = require('./passport');
 
-const multer  = require('multer');
+const multer = require('multer');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null,  paths.files.avatars);
+        cb(null, paths.files.avatars);
     },
     filename: (req, file, cb) => {
         const extArr = file.mimetype.split('/');
@@ -44,14 +44,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(expressSession({
     secret: 'secret',
-    resave: true,
-    saveUninitialized: true,
-    store: new RedisStore({client: redisClient}),
+    resave: false,
+    saveUninitialized: false,
+    store: new RedisStore({ client: redisClient }),
+    cookie: {
+        maxAge: 30 * 10000,
+        httpOnly: true,
+        secure: true
+    },
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors);
-app.use(morgan('combined', {stream: accessLogStream}));
+app.use(morgan('combined', { stream: accessLogStream }));
 
 
 const key = fs.readFileSync(paths.ssl.key);
