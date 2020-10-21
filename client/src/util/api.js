@@ -3,10 +3,12 @@ import { apiUrl } from './../config';
 const toParams = obj => obj ? Object.keys(obj).map(key => `${key}=${obj[key]}`).join('&') : '';
 
 const request = method => {
-    return ({url, body, params, headers}) => {
+    return ({url, body, params, headers, credentials, mode}) => {
         return  fetch(`${apiUrl}${url}${params ? '?' + toParams(params) : ''}`,{
                     method: method,
                     headers: headers,
+                    credentials: credentials,
+                    mode: mode,
                     body: JSON.stringify(body),
                 });
     }
