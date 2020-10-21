@@ -1,34 +1,25 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-
+import { getCookie, setCookie } from './util/cookie';
 import './App.scss';
 
 import Auth from './components/auth/auth';
 import Main from './components/main/main';
 
 
-function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-  }
-
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isAuthenticate: false,
-            userId: getCookie('userId') || -1,
-        }
+    state = {
+        isAuth: getCookie('isAuth') === 'true' || false,
+        userId: getCookie('userId') || -1,
     }
 
-    changeAuthStatus(userId, isAuthenticate) {
-        document.cookie = `userId=${userId}`;
-        this.setState({
+    handleAuth(isAuth, userId) {
+        const obj = {
+            isAuth: isAuth,
             userId: userId,
-            isAuthenticate: isAuthenticate,
-        });
+        };
+        this.setState(obj);
+        setCookie(obj);
     }
 
     render() {
@@ -36,10 +27,10 @@ class App extends React.Component {
             <Router>
                 <div className='app'>
                     <Route path='/auth'>
-                        <Auth changeAuthStatus={(userId, isAuthenticate) => this.changeAuthStatus(userId, isAuthenticate)} />
+                        <Auth isAuth={this.state.isAuth} changeAuth={this.handleAuth.bind(this)} />
                     </Route>
                     <Route exec path='/'>
-                        <Main isAuthenticate={this.state.isAuthenticate} userId={this.state.userId} />
+                        <Main isAuth={this.state.isAuth} userId={this.state.userId}/>
                     </Route>
                 </div>
             </Router>
