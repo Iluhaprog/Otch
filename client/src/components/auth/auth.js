@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import TabButton from '../buttons/TabButton/TabButton';
 import Verification from '../verification/Verification';
 import Login from './login/login';
@@ -26,6 +26,9 @@ class Auth extends React.Component {
 
     render() {
         const visibleTab = this.state.visibleTab;
+
+        if (this.props.isAuth) return <Redirect to='/'/>;
+
         return (
             <div className="wrapper row row_jc-c row_ai-c">
                 <Route path='/auth'>
@@ -35,7 +38,7 @@ class Auth extends React.Component {
                             <TabButton text='SingUp' selected={visibleTab === 2} bl={true} click={() => this.changeVisibleTab(2)} />
                         </nav>
                         <div className="tabs">
-                            <Login visible={visibleTab === 1} />
+                            <Login visible={visibleTab === 1} changeAuth={this.props.changeAuth}/>
                             <Registration visible={visibleTab === 2} changeUserId={(id) => this.changeUserId(id)} />
                         </div>
                     </div>
