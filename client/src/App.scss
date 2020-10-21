@@ -88,6 +88,63 @@ h4 {
     background: var(--bg-1);
 }
 
+.wrapper {
+    display: grid;
+    grid-template-areas: 
+        'header header'
+        'chats-list main';
+    grid-template-columns: 400px auto;
+    grid-template-rows: 12vh 86vh;
+    min-height: 600px;
+}
+
+.header {
+    grid-area: header;
+}
+
+.chats-list {
+    grid-area: chats-list;
+}
+
+.main {
+    grid-area: main;
+}
+
+.mobile-nav {
+    display: none;
+    grid-area: 'mobile-nav';
+}
+
+.top-bar {
+    display: none;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+    .wrapper {
+        grid-template-columns: 100vw;
+        grid-template-rows: 90vh 10vh;
+        /* grid-template-rows: 100vh; */
+        grid-template-areas: 
+            'main'
+            'mobile-nav';
+    }
+
+    .chats-list,
+    .header {
+        display: none;
+    }
+
+    .mobile-nav {
+        display: block;
+    }
+
+
+    .top-bar {
+        display: block;
+    }
+}
+
+
 @media screen and (max-width: 415px) {
     h1 {
         font-size: 36px;
