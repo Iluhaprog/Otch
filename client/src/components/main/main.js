@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import Header from './header/header';
+import Settings from './settings/settings';
 
 class Main extends React.Component {
     state = {
@@ -23,6 +24,8 @@ class Main extends React.Component {
                     onSearch={this.setSearchResults.bind(this)}
                     onLogout={this.props.onLogout}
                     />
+                <div></div>
+                <Settings userId={this.props.userId}/>
             </div>
         )
     }

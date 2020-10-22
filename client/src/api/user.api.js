@@ -41,9 +41,21 @@ const registration = (data) => {
     }).then(response => response.json());
 };
 
+const updateAvatar = ({id, formData}) => {
+    return POST({
+        url: '/users/updateAvatar',
+        params: {
+            id: id,
+        },
+        body: formData,
+        credentials: 'include',
+    }).then(response => response.json());
+}
+
 export {
     login,
     logout,
     registration,
     getById,
+    updateAvatar
 };

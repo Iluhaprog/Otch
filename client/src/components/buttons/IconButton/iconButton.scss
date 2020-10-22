@@ -11,11 +11,8 @@
     }
 
     &-gr{
-         i {
-            background-image: $gradient-btn-2;
-            background-clip: text;
-            -webkit-text-fill-color: transparent; 
-            -moz-text-fill-color: transparent;
+        .icon * {
+            fill: #159957;
         }
     }
 }
