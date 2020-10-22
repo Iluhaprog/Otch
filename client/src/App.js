@@ -5,6 +5,7 @@ import './App.scss';
 
 import Auth from './components/auth/auth';
 import Main from './components/main/main';
+import { logout, getById } from './api/user.api';
 
 
 class App extends React.Component {
@@ -22,6 +23,15 @@ class App extends React.Component {
         setCookie(obj);
     }
 
+    logout() {
+        logout()
+            .then(result => {
+                if (result.logout) {
+                    this.handleAuth(false, -1);
+                }
+            });
+    }
+
     render() {
         return (
             <Router>
@@ -33,7 +43,7 @@ class App extends React.Component {
                         <Main 
                             isAuth={this.state.isAuth} 
                             userId={this.state.userId} 
-                            onLogout={() => this.handleAuth(false, -1)}/>
+                            onLogout={() => this.logout()}/>
                     </Route>
                 </div>
             </Router>

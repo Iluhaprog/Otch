@@ -27,7 +27,6 @@ const login = ({login, password}) => {
 const logout = () => {
     return GET({
         url: '/users/logout',
-        credentials: 'include',
     }).then(response => response.json());
 }
 
