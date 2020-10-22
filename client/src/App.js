@@ -30,7 +30,10 @@ class App extends React.Component {
                         <Auth isAuth={this.state.isAuth} changeAuth={this.handleAuth.bind(this)} />
                     </Route>
                     <Route exec path='/'>
-                        <Main isAuth={this.state.isAuth} userId={this.state.userId}/>
+                        <Main 
+                            isAuth={this.state.isAuth} 
+                            userId={this.state.userId} 
+                            onLogout={() => this.handleAuth(false, -1)}/>
                     </Route>
                 </div>
             </Router>

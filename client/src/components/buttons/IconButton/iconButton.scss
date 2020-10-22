@@ -1,0 +1,21 @@
+@import '../vars.scss';
+@import '../buttons.scss';
+
+.button_i {
+    max-width: 48px;
+    background-color: transparent;
+    font-size: 20px;
+
+    &_i-b {
+        color: $bg-btn-1;
+    }
+
+    &-gr{
+         i {
+            background-image: $gradient-btn-2;
+            background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            -moz-text-fill-color: transparent;
+        }
+    }
+}

@@ -24,6 +24,13 @@ const login = ({login, password}) => {
     }).then(response => response.json());
 };
 
+const logout = () => {
+    return GET({
+        url: '/users/logout',
+        credentials: 'include',
+    }).then(response => response.json());
+}
+
 const registration = (data) => {
     return POST({
         url: '/users/registration',
@@ -37,6 +44,7 @@ const registration = (data) => {
 
 export {
     login,
+    logout,
     registration,
     getById,
 };
