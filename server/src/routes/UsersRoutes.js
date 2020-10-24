@@ -26,7 +26,7 @@ router
     .post('/registration', UsersController.registration)
     .post('/login', passport.authenticate('basic') , UsersController.login)
     .put('/update', [ passport.authenticate('basic'), checkUser('id') ], UsersController.update)
-    .post('/updateAvatar', [ upload.single('avatar'), passport.authenticate('basic'), checkUser('id') ], UsersController.updateAvatar)
+    .post('/updateAvatar', [ upload.single('avatar'), authenticateMd(), checkUser('id') ], UsersController.updateAvatar)
     .delete('/delete', [ passport.authenticate('basic'), checkUser('id') ], UsersController.deleteById);
 
 module.exports = router; 

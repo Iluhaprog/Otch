@@ -44,7 +44,7 @@ class UsersController {
         try {
             const user = {
                 id: req.query.id,
-                avatarName: req.file.filename
+                avatarName: req.file && req.file.filename
             };
             const result = await UsersService.updateAvatar(user);
             res.json(result);
