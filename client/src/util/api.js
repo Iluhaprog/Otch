@@ -14,9 +14,24 @@ const request = method => {
     }
 }
 
+const xhrRequest = method => {
+    return ({host, url, body, params, credentials, success, error}) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, `${host || apiUrl}${url}${params ? '?' + toParams(params) : ''}`, true);
+        xhr.withCredentials = credentials;
+        xhr.addEventListener('load', success);
+        xhr.addEventListener('error', error);
+        xhr.send(body);
+    }
+}
+
 const GET = request('GET');
+const GET_X = xhrRequest('GET');
+
 const POST = request('POST');
+const POST_X = xhrRequest('POST');
+
 const PUT = request('PUT');
 const DELETE = request('DELETE');
 
-export { GET, POST, PUT, DELETE };
+export { GET, GET_X, POST, POST_X, PUT, DELETE };

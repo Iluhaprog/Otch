@@ -1,4 +1,4 @@
-import { GET, POST, PUT, DELETE } from './../util/api';
+import { GET, POST, PUT, DELETE, POST_X } from './../util/api';
 import base64 from 'base-64';
 
 const getById = id => {
@@ -41,15 +41,19 @@ const registration = (data) => {
     }).then(response => response.json());
 };
 
-const updateAvatar = ({id, formData}) => {
-    return POST({
+const updateAvatar = ({id, formData, success}) => {
+    POST_X({
         url: '/users/updateAvatar',
         params: {
             id: id,
         },
         body: formData,
-        credentials: 'include',
-    }).then(response => response.json());
+        credentials: true,
+        success: success,
+        error: function(e) {
+            console.log(this.statusText);
+        } 
+    });
 }
 
 export {
