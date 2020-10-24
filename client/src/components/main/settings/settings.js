@@ -10,15 +10,16 @@ class Settings extends React.Component {
         e.preventDefault();
     }
 
-    handleImageChange(result) {
+    handleImageChange(result, formData) {
         this.setState({
             image: result,
         });
 
         updateAvatar({
             id: this.props.userId,
-            formData: this.state.image
-        }).then(response => console.log(response));
+            formData: formData,
+        });
+        //.then(response => console.log(response));
     }
 
     render() { 
