@@ -58,6 +58,21 @@ const update = ({id, name, age}) => {
     }).then(response => response.json());
 }
 
+const updatePassword = ({id, oldPassword, newPassword}) => {
+    return PUT({
+        url: '/users/updatePassword',
+        headers: { 
+            'Content-type': 'application/json'
+        },
+        body: {
+            id: id,
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+        },
+        credentials: 'include',
+    }).then(response => response.json());
+}
+
 
 const updateAvatar = ({id, formData, success}) => {
     POST_X({
@@ -81,4 +96,5 @@ export {
     getById,
     updateAvatar,
     update,
+    updatePassword
 };

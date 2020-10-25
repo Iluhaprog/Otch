@@ -17,7 +17,7 @@ app.use('/messages', MessagesRouter);
 app.use('/users', cors, UsersRoutes);
 app.use('/chats', passport.authenticate('basic'), ChatsRoutes);
 app.use('/notifications', passport.authenticate('basic'), NotificationsRoutes);
-app.use('/verification', VerificationsRoutes);
+app.use('/verification', cors, VerificationsRoutes);
 
 app.use(ErrorsController.error404);
 app.use(ErrorsController.error500);

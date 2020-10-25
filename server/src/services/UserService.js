@@ -1,5 +1,5 @@
 const query = require('../libs/connection');
-const { hash } = require('../libs/crypt');
+const { hash, compare } = require('../libs/crypt');
 const { formatDate } = require('../libs/format');
 const { SUCCESS, EMAIL_E, LOGIN_E, FAILURE, RECORD_NF } = require('../libs/statuses');
 const Answer = require('../libs/Answer');
@@ -128,14 +128,14 @@ class UserService {
     /**
      * Update password
      * 
-     * @param {string} email 
+     * @param {number} id 
      * @param {string} oldPassword 
      * @param {string} newPassword 
      * @returns {Answer} If password updated, then Answer contains status SUCCESS, otherwise status FAILURE
      */
-    async updatePassword(id, newPassword) {
+    async updatePassword(id, oldPassword, newPassword) {
         const user = await this.getById(id);
-        if (user.getStatus()) {
+        if (user.getStatus() && compare(oldPassword, user.data.password)) {
             newPassword = hash(newPassword);
             await query('UPDATE Users SET `password`=?, `salt`=? WHERE `id`=?', [newPassword.hash, newPassword.salt, id]);
             return new Answer(SUCCESS);

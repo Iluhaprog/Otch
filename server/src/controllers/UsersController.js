@@ -67,6 +67,18 @@ class UsersController {
         }
     }
 
+    async updatePassword(req, res) {
+        try {
+            const {id, oldPassword, newPassword} = req.body;
+            const result = await UsersService.updatePassword(id, oldPassword, newPassword);
+            res.json(result);
+        } catch (err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
+    }
+
     async getById(req, res) {
         try {
             const { id } = req.query;

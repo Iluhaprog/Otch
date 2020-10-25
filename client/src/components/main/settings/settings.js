@@ -1,5 +1,5 @@
 import React from 'react';
-import { updateAvatar, update } from '../../../api/user.api';
+import { updateAvatar, update, updatePassword } from '../../../api/user.api';
 import { dropHandler, handleDragOver } from '../../../util/dragAndDrop';
 import { handleChange } from '../../../util/forms';
 
@@ -9,17 +9,27 @@ class Settings extends React.Component {
     state = { 
         name: this.props.name,
         age: this.props.age,
+        oldPassword: '',
+        newPassword: '',
+        cnewPassword: '',
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        update({
-            id: this.props.userId,
-            name: this.state.name,
-            age: this.state.age,
-        }).then(result => {
-            this.props.onUpdate();
-        })
+        if (this.state.newPassword === this.state.cnewPassword) {
+            update({
+                id: this.props.userId,
+                name: this.state.name,
+                age: this.state.age,
+            }).then(result => {
+                this.props.onUpdate();
+            });
+            updatePassword({
+                id: this.props.userId,
+                oldPassword: this.state.oldPassword,
+                newPassword: this.state.newPassword,
+            }).then(result => console.log(result));
+        }
     }
 
     handleImageChange(result, formData) {
@@ -66,9 +76,24 @@ class Settings extends React.Component {
                             <div className="settings-form-box">
                                 <div className="column column_jc-c column_ai-c">
                                     <h2>Change password</h2>
-                                    {/* <input type="password" placeholder="Old password" name="op"/>
-                                    <input type="password" placeholder="New password" name="np"/>
-                                    <input type="password" placeholder="Confrim new password" name="cnp"/> */}
+                                    <input 
+                                        type="password" 
+                                        placeholder="Old password"
+                                        value={this.state.oldPassword}
+                                        onChange={e => handleChange(e, this)} 
+                                        name="oldPassword"/>
+                                    <input 
+                                        type="password" 
+                                        placeholder="New password"
+                                        value={this.state.newPassword}
+                                        onChange={e => handleChange(e, this)} 
+                                        name="newPassword"/>
+                                    <input 
+                                        type="password" 
+                                        placeholder="Confrim new password"
+                                        value={this.state.cnewPassword}
+                                        onChange={e => handleChange(e, this)} 
+                                        name="cnewPassword"/>
                                 </div>
                             </div>
                         </div>
