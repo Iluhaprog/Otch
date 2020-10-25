@@ -2,68 +2,76 @@
 
 .settings {
     height: 100%;
-}
 
-.settings-form {
-    height: 100%;
-    overflow-y: scroll;
-    padding-top: 30px;
-    padding-bottom: 10px;
-}
+    &-form {
+        height: 100%;
+        overflow-y: scroll;
+        padding-top: 30px;
+        padding-bottom: 10px;
+        
+        .button {
+            max-width: 300px;
+        }
 
-.settings-form .button {
-    max-width: 300px;
-}
+        &-box {
+            position: relative;
+            max-width: 300px;
+            max-height: 300px;
+            width: 100%;
+            height: 300px;
+            padding: 40px;
+            background-color: $bg-2;
+            border-radius: 10px;
+            margin: 20px;
 
-.settings .column {
-    height: auto;
-}
+            &::after {
+                content: '';
+                position: absolute;
+                width: calc(100% + 4px);
+                height: calc(100% + 4px);
+                left: -2px;
+                top: -2px;
+                border-radius: 10px;
+                background-image: $gradient;
+                z-index: -1;
+            }
 
-.settings-form-box {
-    position: relative;
-    max-width: 300px;
-    max-height: 300px;
-    width: 100%;
-    height: 300px;
-    padding: 40px;
-    background-color: $bg-2;
-    border-radius: 10px;
-    margin: 20px;
-}
+            input {
+                padding: 10px;
+                border-radius: 10px;
+                background-color: $bg-1;
+                border: 0;
+                margin-bottom: 10px;
+                font-size: 18px;
+                box-shadow: 0 5px 5px $shadow;
+                outline: none;
+                color: $color-1;
+                font-weight: 300;
+                border: 1px solid $bg-4;
 
-.settings-form-box::after {
-    content: '';
-    position: absolute;
-    width: calc(100% + 4px);
-    height: calc(100% + 4px);
-    left: -2px;
-    top: -2px;
-    border-radius: 10px;
-    background-image: $gradient;
-    z-index: -1;
-}
+                &::placeholder {
+                    color: $bg-2;
+                }
+            }
 
-.settings-form-box input {
-    padding: 10px;
-    border-radius: 10px;
-    background-color: $bg-1;
-    border: 0;
-    margin-bottom: 10px;
-    font-size: 18px;
-    box-shadow: 0 5px 5px $shadow;
-    outline: none;
-    border: 1px solid $bg-4;
-}
+            h2 {
+                margin-bottom: 20px;
+                font-size: 24px;
+                font-weight: 300;
+                color: $color-3;
+            }
+        }
+    }
 
-.settings-form-box input::placeholder {
-    color: $bg-2;
-}
+    .sc {
+        height: 100%;
+    }
 
-.settings-form-box h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: 300;
-    color: $color-3;
+    .sr {
+        width: 100%;
+        height: 100%;
+        padding-top: 50px;
+    }    
 }
 
 .file {
@@ -75,13 +83,13 @@
     border-radius: 10px;
     box-shadow: 0 5px 5px $shadow;
     overflow: hidden;
-}
 
-.file img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    object-position: center;
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; 
+        object-position: center;
+    }
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {

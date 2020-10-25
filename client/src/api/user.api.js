@@ -41,6 +41,24 @@ const registration = (data) => {
     }).then(response => response.json());
 };
 
+const update = ({id, name, age}) => {
+    return PUT({
+        url: '/users/update',
+        headers: { 
+            'Content-type': 'application/json'
+        },
+        body: {
+            user: {
+                id: id,
+                name: name,
+                age: age,
+            }
+        },
+        credentials: 'include',
+    }).then(response => response.json());
+}
+
+
 const updateAvatar = ({id, formData, success}) => {
     POST_X({
         url: '/users/updateAvatar',
@@ -61,5 +79,6 @@ export {
     logout,
     registration,
     getById,
-    updateAvatar
+    updateAvatar,
+    update,
 };
