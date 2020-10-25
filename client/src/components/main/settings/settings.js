@@ -19,7 +19,6 @@ class Settings extends React.Component {
             id: this.props.userId,
             formData: formData,
         });
-        //.then(response => console.log(response));
     }
 
     render() { 

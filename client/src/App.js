@@ -36,10 +36,10 @@ class App extends React.Component {
         return (
             <Router>
                 <div className='app'>
-                    <Route path='/auth'>
+                    <Route path='/'>
                         <Auth isAuth={this.state.isAuth} changeAuth={this.handleAuth.bind(this)} />
                     </Route>
-                    <Route exec path='/'>
+                    <Route path='/'>
                         <Main 
                             isAuth={this.state.isAuth} 
                             userId={this.state.userId} 

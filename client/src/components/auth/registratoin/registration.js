@@ -38,8 +38,8 @@ class Registration extends React.Component {
             registration(this.state)
                 .then(result => {
                     if (result.status === 1) {
-                        this.handleSuccess();
                         this.props.changeUserId(result.data.userId);
+                        this.handleSuccess();
                     } else {
                         this.handleFail(result.status);
                     }

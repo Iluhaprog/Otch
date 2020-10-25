@@ -7,6 +7,8 @@ const compare = ({userId, code}) => {
             userId: userId,
             code: code,
         },
+        credentials: 'include',
+        mode: 'cors',
     }).then(response => response.json());
 };
 

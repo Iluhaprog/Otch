@@ -19,7 +19,7 @@ class UserInfo extends React.Component {
             .then(result => {
                 this.setState({
                     userName: result.data.name,
-                    image: apiUrl + result.data.avatar_image,
+                    image: result.data.avatar_image && (apiUrl + result.data.avatar_image),
                 })
             })
             .catch(err => {
