@@ -24,11 +24,13 @@ class Settings extends React.Component {
             }).then(result => {
                 this.props.onUpdate();
             });
-            updatePassword({
-                id: this.props.userId,
-                oldPassword: this.state.oldPassword,
-                newPassword: this.state.newPassword,
-            }).then(result => console.log(result));
+            if(this.state.oldPassword && this.state.cnewPassword) {
+                updatePassword({
+                    id: this.props.userId,
+                    oldPassword: this.state.oldPassword,
+                    newPassword: this.state.newPassword,
+                }).then(result => console.log(result));
+            }
         }
     }
 
