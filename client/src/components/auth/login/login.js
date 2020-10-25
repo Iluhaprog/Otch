@@ -16,7 +16,6 @@ class Login extends React.Component {
         login({ login: this.state.login, password: this.state.password })
             .then(result => {
                 if (result.status === 1) {
-                    console.log(result);
                     this.props.changeAuth(true, result.data.userId);
                 }
             })

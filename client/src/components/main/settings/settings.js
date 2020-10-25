@@ -7,8 +7,8 @@ import './settings.scss'
 
 class Settings extends React.Component {
     state = { 
-        name: '',
-        age: ''
+        name: this.props.name,
+        age: this.props.age,
     }
 
     handleSubmit(e) {
@@ -18,7 +18,7 @@ class Settings extends React.Component {
             name: this.state.name,
             age: this.state.age,
         }).then(result => {
-            console.log(result);
+            this.props.onUpdate();
         })
     }
 

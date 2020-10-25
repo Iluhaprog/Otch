@@ -8,33 +8,8 @@ import { apiUrl } from '../../../config';
 import './userInfo.scss';
 
 class UserInfo extends React.Component {
-    state = {
-        userName: '',
-        image: '',
-        failure: false,
-    }
-
-    componentDidMount() {
-        getById(this.props.userId)
-            .then(result => {
-                this.setState({
-                    userName: result.data.name,
-                    image: result.data.avatar_image && (apiUrl + result.data.avatar_image),
-                })
-            })
-            .catch(err => {
-                this.setState({failure: true})
-                setCookie({
-                    isAuth: false,
-                    userId: -1,
-                });
-                console.error(err);
-            });
-    }
-
     render() {
-        if (this.state.failure) return <Redirect to='/auth' />;
-        const userAvatar = this.state.image;
+        const userAvatar = this.props.image;
 
         return (
             <div className="user-info">
@@ -49,7 +24,7 @@ class UserInfo extends React.Component {
                         </div>
                     </div>
                     <h1 className="user-name">
-                        {this.state.userName}
+                        {this.props.userName}
                     </h1>
                 </div>
             </div>

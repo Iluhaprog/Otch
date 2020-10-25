@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Header from './header/header';
 import Settings from './settings/settings';
 
@@ -15,17 +15,28 @@ class Main extends React.Component {
     }
 
     render() {
-        if (!this.props.isAuth) return <Redirect to='/auth'/>
-        console.log(this.state);
+        if (!this.props.isAuth) return <Redirect to='/auth' />
+
         return (
             <div className='wrapper wrapper_main'>
-                <Header 
+                <Header
                     userId={this.props.userId}
+                    userName={this.props.userData.userName}
+                    image={this.props.userData.image}
                     onSearch={this.setSearchResults.bind(this)}
                     onLogout={this.props.onLogout}
-                    />
+                />
                 <div></div>
-                <Settings userId={this.props.userId}/>
+                <Switch>
+                    <Route path='/settings'>
+                        <Settings
+                            userId={this.props.userId}
+                            onUpdate={this.props.updateUser}
+                            name={this.props.userData.userName}
+                            age={this.props.userData.age}
+                        />
+                    </Route>
+                </Switch>
             </div>
         )
     }
