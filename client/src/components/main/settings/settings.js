@@ -2,6 +2,7 @@ import React from 'react';
 import { updateAvatar, update, updatePassword } from '../../../api/user.api';
 import { dropHandler, handleDragOver } from '../../../util/dragAndDrop';
 import { handleChange } from '../../../util/forms';
+import DragAndDrop from '../DragAndDrop/DragAndDrop';
 
 import './settings.scss'
 
@@ -53,12 +54,11 @@ class Settings extends React.Component {
                         <div className="row row_jc-c row_ai-c row_fw-w sr">
                             <div className="settings-form-box">
                                 <div className="column column_ai-c">
-                                    <div 
-                                        className="file" 
+                                    <DragAndDrop
                                         onDrop={e => dropHandler(e, this.handleImageChange.bind(this))} 
-                                        onDragOver={e => handleDragOver(e)}>
-                                            {this.state.image && <img src={this.state.image} alt='user-img' />}
-                                    </div>
+                                        onDragOver={e => handleDragOver(e)}
+                                        image={this.state.image}
+                                        />
                                     <div className="column">
                                         <input 
                                             type="text" 
