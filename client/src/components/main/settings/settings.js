@@ -3,6 +3,7 @@ import { updateAvatar, update, updatePassword } from '../../../api/user.api';
 import { dropHandler, handleDragOver } from '../../../util/dragAndDrop';
 import { handleChange } from '../../../util/forms';
 import DragAndDrop from '../DragAndDrop/DragAndDrop';
+import FormBox from '../FormBox/FormBox';
 
 import './settings.scss'
 
@@ -52,52 +53,48 @@ class Settings extends React.Component {
                 <form name="settings" onSubmit={e => this.handleSubmit(e)} className="settings-form">
                     <div className="column column_jc-c column_ai-c sc">
                         <div className="row row_jc-c row_ai-c row_fw-w sr">
-                            <div className="settings-form-box">
-                                <div className="column column_ai-c">
-                                    <DragAndDrop
-                                        onDrop={e => dropHandler(e, this.handleImageChange.bind(this))} 
-                                        onDragOver={e => handleDragOver(e)}
-                                        image={this.state.image}
-                                        />
-                                    <div className="column">
-                                        <input 
-                                            type="text" 
-                                            name="name" 
-                                            value={this.state.name} 
-                                            onChange={e => handleChange(e, this)}
-                                            placeholder="Name..."/>
-                                        <input 
-                                            type="text" 
-                                            name="age" 
-                                            value={this.state.age} 
-                                            onChange={e => handleChange(e, this)}
-                                            placeholder="Age..."/>
-                                    </div>
+                            <FormBox>
+                                <DragAndDrop
+                                    onDrop={e => dropHandler(e, this.handleImageChange.bind(this))} 
+                                    onDragOver={e => handleDragOver(e)}
+                                    image={this.state.image}
+                                    />
+                                <div className="column">
+                                    <input 
+                                        type="text" 
+                                        name="name" 
+                                        value={this.state.name} 
+                                        onChange={e => handleChange(e, this)}
+                                        placeholder="Name..."/>
+                                    <input 
+                                        type="text" 
+                                        name="age" 
+                                        value={this.state.age} 
+                                        onChange={e => handleChange(e, this)}
+                                        placeholder="Age..."/>
                                 </div>
-                            </div>
-                            <div className="settings-form-box">
-                                <div className="column column_jc-c column_ai-c">
-                                    <h2>Change password</h2>
-                                    <input 
-                                        type="password" 
-                                        placeholder="Old password"
-                                        value={this.state.oldPassword}
-                                        onChange={e => handleChange(e, this)} 
-                                        name="oldPassword"/>
-                                    <input 
-                                        type="password" 
-                                        placeholder="New password"
-                                        value={this.state.newPassword}
-                                        onChange={e => handleChange(e, this)} 
-                                        name="newPassword"/>
-                                    <input 
-                                        type="password" 
-                                        placeholder="Confrim new password"
-                                        value={this.state.cnewPassword}
-                                        onChange={e => handleChange(e, this)} 
-                                        name="cnewPassword"/>
-                                </div>
-                            </div>
+                            </FormBox>
+                            <FormBox>
+                                <h2>Change password</h2>
+                                <input 
+                                    type="password" 
+                                    placeholder="Old password"
+                                    value={this.state.oldPassword}
+                                    onChange={e => handleChange(e, this)} 
+                                    name="oldPassword"/>
+                                <input 
+                                    type="password" 
+                                    placeholder="New password"
+                                    value={this.state.newPassword}
+                                    onChange={e => handleChange(e, this)} 
+                                    name="newPassword"/>
+                                <input 
+                                    type="password" 
+                                    placeholder="Confrim new password"
+                                    value={this.state.cnewPassword}
+                                    onChange={e => handleChange(e, this)} 
+                                    name="cnewPassword"/>
+                            </FormBox>
                         </div>
                         <button className="button button_send">
                             Save
