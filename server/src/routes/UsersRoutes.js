@@ -1,23 +1,8 @@
-const { authenticate } = require('passport');
 const { express, passport, upload } = require('../config/express');
 const router = express.Router();
 const UsersController = require('../controllers/UsersController');
 const { checkUser } = require('../filters/UserFilter');
-
-const authenticateMd = () => {
-    return (req, res, next) => {
-        passport.authenticate('basic', function(err, user, info){
-            if(err) return console.log(err);
-
-            if(!user){
-                res.set('WWW-Authenticate', 'x'+info);
-                return res.status(401).json({});
-            }
-            
-        });
-        next();
-    }
-}
+const { authenticateMd } = require('../filters/Authenticate');
 
 
 router

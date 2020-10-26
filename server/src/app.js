@@ -15,7 +15,7 @@ app.use(express.static(__dirname + '/public'));
 
 app.use('/messages', MessagesRouter);
 app.use('/users', cors, UsersRoutes);
-app.use('/chats', passport.authenticate('basic'), ChatsRoutes);
+app.use('/chats', cors, ChatsRoutes);
 app.use('/notifications', passport.authenticate('basic'), NotificationsRoutes);
 app.use('/verification', cors, VerificationsRoutes);
 
