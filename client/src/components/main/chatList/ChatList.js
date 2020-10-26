@@ -1,6 +1,7 @@
 import React from 'react';
 import IconButton from '../../buttons/IconButton/IconButton';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 import ChatListItem from './ChatListItem/ChatListItem';
 
 import './chatList.scss';
@@ -20,7 +21,9 @@ class ChatList extends React.Component {
                             </ul>
                         </div>
                         <div className="bottom row row_jc-c">
-                            <IconButton icon={faPlusSquare} onClick={e => console.log('ok') }/>
+                            <Link to='/create-chat'>
+                                <IconButton icon={faPlusSquare} onClick={e => console.log('ok') }/>
+                            </Link>
                         </div>
                     </div>
                 </div>

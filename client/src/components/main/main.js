@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import ChatList from './chatList/ChatList';
+import CreateChat from './CreateChat/CreateChat';
 import Header from './header/header';
 import Settings from './settings/settings';
 
@@ -36,6 +37,9 @@ class Main extends React.Component {
                             name={this.props.userData.userName}
                             age={this.props.userData.age}
                         />
+                    </Route>
+                    <Route path='/create-chat'>
+                        <CreateChat userId={this.props.userId}/>
                     </Route>
                 </Switch>
             </div>

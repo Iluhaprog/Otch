@@ -46,6 +46,11 @@
         height: 100%;
         object-fit: cover;
         object-position: center;
+
+        &.empty {
+            object-fit: contain;
+            object-position: center;
+        }
     }
 }
 
