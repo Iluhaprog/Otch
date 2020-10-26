@@ -43,7 +43,7 @@ class ChatsController {
             const chat = {
                 adminId: req.body.adminId,
                 name: req.body.name,
-                avatar: req.file.filename,
+                avatar: req.file && req.file.filename,
             }
             const result = await ChatsService.create(chat);
             res.json(result);

@@ -66,7 +66,7 @@ class ChatService {
             await query(`
                 INSERT INTO Chats(\`name\`, \`avatar\`, \`creation_date\`, \`key\`, \`admin_id\`) VALUES (?, ?, ?, ?, ?);
                 `, 
-                [chat.name, `/avatars/${chat.avatar}`, creation_date, key, chat.adminId]);
+                [chat.name, chat.avatar ? `/avatars/${chat.avatar}` : '', creation_date, key, chat.adminId]);
             return new Answer(SUCCESS, {key: key});
         }
         return new Answer(FAILURE);
