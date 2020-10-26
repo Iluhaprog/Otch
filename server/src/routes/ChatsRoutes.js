@@ -1,4 +1,4 @@
-const { express } = require('../config/express');
+const { express, upload } = require('../config/express');
 const router = express.Router();
 const ChatsController = require('../controllers/ChatsController');
 const ChatsService = require('../services/ChatService');
@@ -6,6 +6,7 @@ const NotificationsService = require('../services/NotificationsService');
 const Answer = require('../libs/Answer');
 const { FAILURE, SUCCESS } = require('../libs/statuses');
 const { checkUser } = require('../filters/UserFilter');
+const { authenticateMd } = require('../filters/Authenticate');
 
 const usersChats = new Map();
 const connections = new Array();
@@ -101,8 +102,8 @@ router.ws('/updateChatList', (ws, req) => {
 router
     .get('/getById', ChatsController.getById)
     .get('/getByKey', ChatsController.getByKey)
-    .get('/getByUserId', checkUser('userId'), ChatsController.getByUserId)
-    .post('/create', ChatsController.create)
+    .get('/getByUserId', authenticateMd(), checkUser('userId'), ChatsController.getByUserId)
+    .post('/create', upload.single('avatar'), ChatsController.create)
     .put('/addMember', ChatsController.addMember)
     .delete('/deleteById', ChatsController.deleteById);
 

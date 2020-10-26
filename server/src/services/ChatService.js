@@ -55,6 +55,7 @@ class ChatService {
      * @param {Object} chat
      * @param {number} chat.adminId
      * @param {string} chat.name name of chat
+     * @param {string} chat.avatar avatar image of chat
      * @param {Date} chat.creation_date
      * @returns {Answer} If chat created, then Answer contains status SUCCESS, otherwise status FAILURE
      */
@@ -63,9 +64,9 @@ class ChatService {
             const key = token();
             const creation_date = formatDate(chat.creation_date || new Date());
             await query(`
-                INSERT INTO Chats(\`name\`, \`creation_date\`, \`key\`, \`admin_id\`) VALUES (?, ?, ?, ?);
+                INSERT INTO Chats(\`name\`, \`avatar\`, \`creation_date\`, \`key\`, \`admin_id\`) VALUES (?, ?, ?, ?, ?);
                 `, 
-                [chat.name, creation_date, key, chat.adminId]);
+                [chat.name, `/avatars/${chat.avatar}`, creation_date, key, chat.adminId]);
             return new Answer(SUCCESS, {key: key});
         }
         return new Answer(FAILURE);

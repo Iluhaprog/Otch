@@ -28,7 +28,7 @@ class ChatsController {
 
     async getByUserId(req, res) {
         try {
-            const userId = req.body.userId;
+            const userId = req.query.userId;
             const result = await ChatsService.getByUserId(userId);
             res.json(result);
         } catch (err) {
@@ -40,7 +40,11 @@ class ChatsController {
 
     async create(req, res) {
         try {
-            const chat = req.body.chat;
+            const chat = {
+                adminId: req.body.adminId,
+                name: req.body.name,
+                avatar: req.file.filename,
+            }
             const result = await ChatsService.create(chat);
             res.json(result);
         } catch (err) {
