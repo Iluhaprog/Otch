@@ -37,7 +37,7 @@ class ChatService {
      */
     async getByUserId(userId) {
         const [chats] = await query(`
-            SELECT Chats.id, Chats.name, Chats.creation_date, Chats.key  
+            SELECT Chats.id, Chats.name, Chats.creation_date, Chats.key, Chats.avatar
                 FROM Chats
                 JOIN Users_Chats
                     ON Users_Chats.chat_id = Chats.id
