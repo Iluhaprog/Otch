@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import ChatList from './chatList/ChatList';
 import Header from './header/header';
 import Settings from './settings/settings';
 
@@ -26,7 +27,7 @@ class Main extends React.Component {
                     onSearch={this.setSearchResults.bind(this)}
                     onLogout={this.props.onLogout}
                 />
-                <div></div>
+                <ChatList chatList={this.props.chatList}/>
                 <Switch>
                     <Route path='/settings'>
                         <Settings

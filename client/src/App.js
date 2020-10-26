@@ -7,6 +7,7 @@ import { logout, getById } from './api/user.api';
 import { apiUrl } from './config';
 
 import './App.scss';
+import { getByUserId } from './api/chat.api';
 
 
 class App extends React.Component {
@@ -16,6 +17,7 @@ class App extends React.Component {
         userName: '',
         image: '',
         age: 0,
+        chatList: [],
     }
 
     handleAuth(isAuth, userId) {
@@ -26,12 +28,25 @@ class App extends React.Component {
         this.setState(obj);
         setCookie(obj);
         this.updateUser();
+        this.initChatList();
     }
 
     componentDidMount() {
         if(this.state.isAuth) {
             this.updateUser();
+            this.initChatList();
         }
+    }
+
+    initChatList() {
+        getByUserId(this.state.userId)
+            .then(result => {
+                if (result.status === 1) {
+                    this.setState({
+                        chatList: result.data,
+                    });
+                }
+            })
     }
 
     updateUser() {
@@ -71,6 +86,7 @@ class App extends React.Component {
                             userData={user}
                             isAuth={this.state.isAuth} 
                             userId={this.state.userId} 
+                            chatList={this.state.chatList}
                             updateUser={this.updateUser.bind(this)}
                             onLogout={() => this.logout()}/>
                     </Route>
