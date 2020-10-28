@@ -12,6 +12,7 @@ class CreateChat extends React.Component {
     state = { 
         name: '',
         image: '',
+        data: new FormData(),
     }
 
     changeImageHandler(result, formData) {
@@ -23,7 +24,7 @@ class CreateChat extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const data = this.state.data || new FormData();
+        const data = this.state.data;
         const userId = this.props.userId;
         data.append('name', this.state.name);
         data.append('adminId', this.props.userId);
@@ -31,14 +32,20 @@ class CreateChat extends React.Component {
             formData: data,
             success: function(e) {
                 const response = JSON.parse(e.target.response);
-                addMember({
+                const req = {
                     adminId: userId,
                     memberId: userId,
                     key: response.data.key,
-                }).then(result => {
+                };
+                addMember(req).then(result => {
                     console.log(result);
-                })
+                });
             },
+        });
+        this.setState({
+            image: '',
+            name: '',
+            data: new FormData(),
         });
     }
 
