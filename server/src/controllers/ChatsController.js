@@ -57,6 +57,7 @@ class ChatsController {
     async addMember(req, res) {
         try {
             const { adminId, memberId, key } = req.body;
+            console.log(req.body);
             const result = await ChatsService.addMember(adminId, memberId, key);
             res.json(result);
         } catch (err) {

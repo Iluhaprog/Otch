@@ -2,5 +2,6 @@ module.exports = {
     host: 'localhost',
     user: 'root',
     password: 'root',
-    database: 'OtchDB'
+    database: 'OtchDB',
+    connectionLimit : 30,
 }

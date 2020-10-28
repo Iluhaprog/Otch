@@ -63,10 +63,11 @@ class ChatService {
         if (chat) {
             const key = token();
             const creation_date = formatDate(chat.creation_date || new Date());
+            const chatAvatar = chat.avatar ? `/avatars/${chat.avatar}` : '';
             await query(`
                 INSERT INTO Chats(\`name\`, \`avatar\`, \`creation_date\`, \`key\`, \`admin_id\`) VALUES (?, ?, ?, ?, ?);
                 `, 
-                [chat.name, chat.avatar ? `/avatars/${chat.avatar}` : '', creation_date, key, chat.adminId]);
+                [chat.name, chatAvatar, creation_date, key, chat.adminId]);
             return new Answer(SUCCESS, {key: key});
         }
         return new Answer(FAILURE);
@@ -89,9 +90,8 @@ class ChatService {
                                     JOIN Users
                                         on Users.id = Users_Chats.user_id
                                     where Users.id=? and Chats.id=?;`, [userId, chat.id]);
-                                    console.log(user);
         if (!user.length){
-            if (adminId === chat.admin_id) {
+            if (parseInt(adminId) === parseInt(chat.admin_id)) {
                 await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [userId, chat.id]);
                 return new Answer(SUCCESS);
             } else {
