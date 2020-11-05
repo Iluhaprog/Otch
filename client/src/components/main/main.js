@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import ChatList from './chatList/ChatList';
+import ChatList from './ChatList/ChatList';
 import CreateChat from './CreateChat/CreateChat';
 import Header from './header/header';
 import Settings from './settings/settings';
@@ -39,7 +39,7 @@ class Main extends React.Component {
                         />
                     </Route>
                     <Route path='/create-chat'>
-                        <CreateChat userId={this.props.userId}/>
+                        <CreateChat userId={this.props.userId} webSocket={this.props.webSocket}/>
                     </Route>
                 </Switch>
             </div>

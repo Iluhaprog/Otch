@@ -7,7 +7,7 @@ import { logout, getById } from './api/user.api';
 import { apiUrl } from './config';
 
 import './App.scss';
-import { getByUserId } from './api/chat.api';
+import { getByUserId, updateChatList } from './api/chat.api';
 
 
 class App extends React.Component {
@@ -19,6 +19,15 @@ class App extends React.Component {
         age: 0,
         chatList: [],
     }
+
+    wss = updateChatList({
+        userId: this.state.userId,
+        onopen: e => console.log('open App'),
+        onmessage: e => {
+            this.initChatList();
+            console.log(JSON.parse(e.data));
+        },
+    })
 
     handleAuth(isAuth, userId) {
         const obj = {
@@ -88,7 +97,9 @@ class App extends React.Component {
                             userId={this.state.userId} 
                             chatList={this.state.chatList}
                             updateUser={this.updateUser.bind(this)}
-                            onLogout={() => this.logout()}/>
+                            onLogout={() => this.logout()}
+                            webSocket={this.wss}
+                            />
                     </Route>
                 </div>
             </Router>

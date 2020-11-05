@@ -1,5 +1,5 @@
 import React from 'react';
-import { addMember, create } from '../../../api/chat.api';
+import { addMember, create, updateChatList } from '../../../api/chat.api';
 import { dropHandler, handleDragOver } from '../../../util/dragAndDrop';
 import DragAndDrop from '../DragAndDrop/DragAndDrop';
 import FormBox from '../FormBox/FormBox';
@@ -26,6 +26,7 @@ class CreateChat extends React.Component {
         e.preventDefault();
         const data = this.state.data;
         const userId = this.props.userId;
+        const wss = this.props.webSocket;
         data.append('name', this.state.name);
         data.append('adminId', this.props.userId);
         create({
@@ -39,6 +40,7 @@ class CreateChat extends React.Component {
                 };
                 addMember(req).then(result => {
                     console.log(result);
+                    wss.send(JSON.stringify({userId: userId}));
                 });
             },
         });

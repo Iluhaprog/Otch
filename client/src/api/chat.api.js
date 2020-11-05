@@ -1,4 +1,4 @@
-import { GET, POST_X, PUT, DELETE } from './../util/api';
+import { GET, POST_X, PUT, DELETE, WS } from './../util/api';
 
 const getByUserId = userId => {
     return GET({
@@ -38,8 +38,20 @@ const addMember = ({adminId, memberId, key}) => {
     }).then(response => response.json());
 }
 
+const updateChatList = ({onopen, onmessage, userId}) => {
+    return WS({
+        url: '/chats/updateChatList',
+        params: {
+            ui: userId
+        },
+        onopen: onopen,
+        onmessage: onmessage,
+    });
+};
+
 export {
     getByUserId,
     create,
-    addMember
+    addMember,
+    updateChatList
 };
