@@ -9,7 +9,7 @@ const { checkUser } = require('../filters/UserFilter');
 const { authenticateMd } = require('../filters/Authenticate');
 
 const usersChats = new Map();
-const connections = new Array();
+const connections = new Map();
 
 /**
  * Delete member from chat
@@ -76,19 +76,22 @@ router.ws('/deleteMember', (ws, req) => {
 });
 
 router.ws('/updateChatList', (ws, req) => {
-    connections.push(ws);
+    if(req.query.ui) {
+        connections.set(req.query.ui, ws);
+    }
     ws.on('message', message => {
         const msgObject = JSON.parse(message);
         if (msgObject['userId']) {
-            connections.forEach( connection => {
+            if (connections.has(msgObject['userId'])) {
+                const connection  = connections.get(msgObject['userId']);
                 connection.send(
                     JSON.stringify(
                         new Answer(SUCCESS, {
-                            userId: msgObject['userId']
+                            userId: msgObject['userId'],
                         })
                     )
                 );
-            });
+            }
         } else {
             ws.send(JSON.stringify(new Answer(FAILURE, {message: 'User id is undefined'})))
         }
