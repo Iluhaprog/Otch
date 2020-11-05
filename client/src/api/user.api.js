@@ -89,6 +89,17 @@ const updateAvatar = ({id, formData, success}) => {
     });
 }
 
+const search = name => {
+    return GET({
+        url: '/users/search',
+        params: {
+            q: name,
+            l: 20,
+            o: 0,
+        }
+    }).then(response => response.json());
+}
+
 export {
     login,
     logout,
@@ -96,5 +107,6 @@ export {
     getById,
     updateAvatar,
     update,
-    updatePassword
+    updatePassword,
+    search
 };

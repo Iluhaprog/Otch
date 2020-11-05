@@ -18,6 +18,10 @@ body {
     height: 100vh;
 }
 
+a:visited {
+    color: inherit;
+}
+
 @mixin direction($direction) {
     .#{$direction} {
         display: flex;

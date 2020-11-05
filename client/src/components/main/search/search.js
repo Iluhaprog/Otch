@@ -2,17 +2,27 @@ import React from 'react';
 import { handleChange } from './../../../util/forms';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { search } from '../../../api/user.api';
+import { withRouter } from 'react-router-dom';
 
 import './search.scss';
 
 
 class SearchForm extends React.Component {
-    state = {}
+    state = {
+        searchQ: ''
+    }
 
+    
     handleSubmit(e) {
         e.preventDefault();
-        //need write request to api
-        this.props.onSearch(['res1']);
+        search(this.state.searchQ)
+        .then(result => {
+            if (result.data) {
+                    this.props.history.push('/search')
+                    this.props.onSearch(result.data);
+                }
+            });
     }
 
     render() {
@@ -35,4 +45,4 @@ class SearchForm extends React.Component {
     }
 }
  
-export default SearchForm;
+export default withRouter(SearchForm);
