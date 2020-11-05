@@ -204,6 +204,27 @@ class UserService {
         }
         return new Answer(FAILURE);
     }
+
+    /**
+     * Search users by name
+     * 
+     * @param {string} string 
+     * @param {number} limit
+     * @param {number} offset
+     * @returns {Answer} If users exist, then return Answer contains data with array of users, otherwise data equals empty array
+     */
+    async searchByName(string, limit = 10, offset = 0) {
+        const regEx = `%${string.split('').join('%')}%`;
+        if (limit > 30) limit = 30;
+        const [users] = await query(`
+            SELECT 
+                Users.id, 
+                Users.name, 
+                Users.avatar_image 
+            FROM Users WHERE name LIKE ?
+            LIMIT ? OFFSET ?`, [regEx, parseInt(limit), parseInt(offset)]);
+        return new Answer(SUCCESS, users);
+    }
 }
 
 module.exports = new UserService();

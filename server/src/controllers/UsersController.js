@@ -103,6 +103,18 @@ class UsersController {
         }
     }
 
+    async search(req, res) {
+        try {
+            const { q, l, o } = req.query;
+            const result = await UsersService.searchByName(q, l, o);
+            res.json(result);
+        } catch(err) {
+            console.log(err);
+            res.setStatus(500);
+            res.end();
+        }
+    }
+
 }
 
 module.exports = new UsersController();

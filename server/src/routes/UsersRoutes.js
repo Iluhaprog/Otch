@@ -7,6 +7,7 @@ const { authenticateMd } = require('../filters/Authenticate');
 
 router
     .get('/logout', UsersController.logout)
+    .get('/search', UsersController.search)
     .get('/getById', [ authenticateMd(), checkUser('id') ], UsersController.getById)
     .post('/registration', UsersController.registration)
     .post('/login', passport.authenticate('basic') , UsersController.login)
