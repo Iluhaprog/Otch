@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import { AddToChatForm } from './AddToChat/AddToChat';
 import ChatList from './ChatList/ChatList';
 import CreateChat from './CreateChat/CreateChat';
 import Header from './header/header';
@@ -9,6 +10,20 @@ import Settings from './settings/settings';
 class Main extends React.Component {
     state = {
         searchResults: [],
+        isVisibleAddToChatForm: false,
+        memberId: -1,
+    }
+
+    changeAddToChatFormVisibility(value) {
+        this.setState({
+            isVisibleAddToChatForm: value
+        });
+    }
+
+    changeMemberId(id) {
+        this.setState({
+            memberId: id
+        });
     }
 
     setSearchResults(results) {
@@ -30,6 +45,14 @@ class Main extends React.Component {
                     onLogout={this.props.onLogout}
                 />
                 <ChatList chatList={this.props.chatList}/>
+                <AddToChatForm 
+                    chats={this.props.chatList} 
+                    visible={this.state.isVisibleAddToChatForm}
+                    adminId={this.props.userId}
+                    memberId={this.state.memberId}
+                    changeVisibility={this.changeAddToChatFormVisibility.bind(this)} 
+                    webSocket={this.props.webSocket}
+                    />
                 <Switch>
                     <Route path='/settings'>
                         <Settings
@@ -46,7 +69,10 @@ class Main extends React.Component {
                         <SearchResults 
                             results={this.state.searchResults} 
                             adminId={this.props.userId}
-                            webSocket={this.props.webSocket} />
+                            webSocket={this.props.webSocket}
+                            changeMemberId={this.changeMemberId.bind(this)}
+                            changeVisibility={this.changeAddToChatFormVisibility.bind(this)}
+                        />
                     </Route>
                 </Switch>
             </div>

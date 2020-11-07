@@ -14,7 +14,7 @@ const createChat = (name, adminId, userId, wss) => {
         formData: data,
         success: function(e) {
             const response = JSON.parse(e.target.response);
-            
+
             addMember({
                 adminId: adminId,
                 memberId: adminId,
@@ -32,6 +32,11 @@ const createChat = (name, adminId, userId, wss) => {
             });
         }
     })
+}
+
+const addToChat = (memberId, changeMemberId, changeVisibility) => {
+    changeMemberId(memberId);
+    changeVisibility(true);
 }
 
 export default props => {
@@ -52,7 +57,10 @@ export default props => {
                         </div>
                     </div>
                     <div className='buttons-box row'>
-                        <button className="button button_send">
+                        <button 
+                            className="button button_send" 
+                            onClick={() => addToChat(props.userId, props.changeMemberId, props.changeVisibility)}
+                        >
                             Add to
                         </button>
                         <button className="button button_i-b fsz-24">

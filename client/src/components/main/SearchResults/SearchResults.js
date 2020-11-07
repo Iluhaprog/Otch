@@ -16,6 +16,8 @@ export default props => {
                                     name={result.name} 
                                     avatar={result.avatar_image} 
                                     webSocket={props.webSocket}
+                                    changeMemberId={props.changeMemberId}
+                                    changeVisibility={props.changeVisibility}
                                     />
                     })
                 }
