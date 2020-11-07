@@ -18,32 +18,47 @@ class App extends React.Component {
         image: '',
         age: 0,
         chatList: [],
+        wss: {},
     }
 
-    wss = updateChatList({
-        userId: this.state.userId,
-        onopen: e => console.log('open App'),
-        onmessage: e => {
-            this.initChatList();
-            console.log(JSON.parse(e.data));
-        },
-    })
+    initWss() {
+        const userId = this.state.userId;
+        this.setState({
+            wss: updateChatList({
+                userId: userId,
+                onopen: e => console.log(e),
+                onmessage: e => {
+                    this.initChatList();
+                    console.log(JSON.parse(e.data));
+                },
+            })
+        });
+    }    
 
     handleAuth(isAuth, userId) {
         const obj = {
             isAuth: isAuth,
             userId: userId,
+            userName: '',
+            image: '',
+            age: 0,
+            chatList: [],
+            wss: {},
         };
         this.setState(obj);
         setCookie(obj);
-        this.updateUser();
-        this.initChatList();
+        if (isAuth) {
+            this.updateUser();
+            this.initChatList();
+            this.initWss();
+        }
     }
 
     componentDidMount() {
-        if(this.state.isAuth) {
+        if (this.state.isAuth) {
             this.updateUser();
             this.initChatList();
+            this.initWss();
         }
     }
 
@@ -84,6 +99,7 @@ class App extends React.Component {
             image: this.state.image,
             age: this.state.age,
         };
+
         return (
             <Router>
                 <div className='app'>
@@ -91,15 +107,15 @@ class App extends React.Component {
                         <Auth isAuth={this.state.isAuth} changeAuth={this.handleAuth.bind(this)} />
                     </Route>
                     <Route path='/'>
-                        <Main 
+                        <Main
                             userData={user}
-                            isAuth={this.state.isAuth} 
-                            userId={this.state.userId} 
+                            isAuth={this.state.isAuth}
+                            userId={this.state.userId}
                             chatList={this.state.chatList}
                             updateUser={this.updateUser.bind(this)}
                             onLogout={() => this.logout()}
-                            webSocket={this.wss}
-                            />
+                            webSocket={this.state.wss}
+                        />
                     </Route>
                 </div>
             </Router>

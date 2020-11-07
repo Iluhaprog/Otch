@@ -9,7 +9,14 @@ export default props => {
             <ul className="results-list">
                 {
                     props.results.map(result => {
-                        return <Result key={result.id} name={result.name} avatar={result.avatar_image} />
+                        return <Result 
+                                    key={result.id} 
+                                    adminId={props.adminId}
+                                    userId={result.id}
+                                    name={result.name} 
+                                    avatar={result.avatar_image} 
+                                    webSocket={props.webSocket}
+                                    />
                     })
                 }
             </ul>

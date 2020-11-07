@@ -43,7 +43,10 @@ class Main extends React.Component {
                         <CreateChat userId={this.props.userId} webSocket={this.props.webSocket}/>
                     </Route>
                     <Route path='/search'>
-                        <SearchResults results={this.state.searchResults} />
+                        <SearchResults 
+                            results={this.state.searchResults} 
+                            adminId={this.props.userId}
+                            webSocket={this.props.webSocket} />
                     </Route>
                 </Switch>
             </div>
