@@ -22,11 +22,11 @@ const connections = new Map();
  *                   then returns data about deleted member and result for him. Otherwise returns null.
  */
 const deleteMember = async data => {
-    const {adminId, userId, chatKey} = data;
+    const { adminId, userId, chatKey } = data;
     if (adminId && userId && chatKey) {
         const result = await ChatsService.deleteMember(adminId, userId, chatKey);
-        result.setData({message: 'You deleted from this chat'});
-        return result.getStatus() ? {key: userId + '.' + chatKey, data: result} : null;
+        result.setData({ message: 'You deleted from this chat' });
+        return result.getStatus() ? { key: userId + '.' + chatKey, data: result } : null;
     }
     return null;
 };
@@ -61,7 +61,7 @@ router.ws('/deleteMember', (ws, req) => {
 
     ws.on('message', async message => {
         const result = await deleteMember(JSON.parse(message));
-        let msg = JSON.stringify(new Answer(FAILURE, {message: 'You have not authority'}));
+        let msg = JSON.stringify(new Answer(FAILURE, { message: 'You have not authority' }));
         if (result) {
             msg = JSON.stringify(result.data);
             await send(result.key, msg);
@@ -69,33 +69,44 @@ router.ws('/deleteMember', (ws, req) => {
             await send(key, msg);
         }
     });
-    
+
     ws.on('error', err => {
         console.log(err);
     });
 });
 
 router.ws('/updateChatList', (ws, req) => {
-    if(req.query.ui) {
-        connections.set(req.query.ui, ws);
+    if (req.query.ui) {
+        const wsArrayOld = connections.has(req.query.ui) ? connections.get(req.query.ui) : [];
+        const wsArrayNew = [ws, ...wsArrayOld];
+        connections.set(parseInt(req.query.ui), wsArrayNew);
     }
     ws.on('message', message => {
         const msgObject = JSON.parse(message);
-        if (msgObject['userId']) {
-            if (connections.has(msgObject['userId'])) {
-                const connection  = connections.get(msgObject['userId']);
-                connection.send(
-                    JSON.stringify(
-                        new Answer(SUCCESS, {
-                            userId: msgObject['userId'],
-                        })
-                    )
-                );
+        if (msgObject.userId) {
+            if (connections.has(parseInt(msgObject.userId))) {
+                const wssArr = connections.get(parseInt(msgObject.userId));
+                wssArr.forEach(connection => {
+                    connection.send(
+                        JSON.stringify(
+                            new Answer(SUCCESS, {
+                                userId: msgObject.userId,
+                            })
+                        )
+                    );
+                })
             }
         } else {
-            ws.send(JSON.stringify(new Answer(FAILURE, {message: 'User id is undefined'})))
+            ws.send(JSON.stringify(new Answer(FAILURE, { message: 'User id is undefined' })))
         }
     });
+
+    ws.on('close', () => {
+        const connects = connections.get(parseInt(req.query.ui)).filter(connect => {
+            return !(connect === ws);
+        });
+        connections.set(req.query.ui, connects);
+    })
 
     ws.on('error', err => {
         console.log(err);
