@@ -48,7 +48,7 @@ app.use(expressSession({
     store: new RedisStore({ client: redisClient }),
     unset: 'destroy',
     cookie: {
-        maxAge: 30 * 10000,
+        maxAge: 60*60*24*365,
         httpOnly: true,
         secure: true
     },
