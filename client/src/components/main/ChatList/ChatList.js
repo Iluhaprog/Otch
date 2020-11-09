@@ -11,10 +11,11 @@ class ChatList extends React.Component {
         selectedChat: -1,
     }
 
-    handleChatSelection(id) {
+    handleChatSelection(chat) {
         this.setState({
-            selectedChat: id,
+            selectedChat: chat.id,
         });
+        this.props.changeChat(chat);
     }
 
     render() {
@@ -31,7 +32,7 @@ class ChatList extends React.Component {
                                             chatData={chat} 
                                             key={chat.id} 
                                             selected={selected} 
-                                            onClick={this.handleChatSelection.bind(this, chat.id)}
+                                            onClick={this.handleChatSelection.bind(this)}
                                         />
                                     )
                                 })}                                

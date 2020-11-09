@@ -12,7 +12,7 @@ export default props => {
             <NavLink 
                 to={`/chat/${subPath}`}
                 className={`chat-box ${selectedSelector}`} 
-                onClick={props.onClick}>
+                onClick={e => props.onClick(props.chatData)}>
                 <div className="row row_ai-c row_jc-fs">
                     <div>
                         <div className="avatar avatar_chat ">
