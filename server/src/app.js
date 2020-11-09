@@ -13,7 +13,7 @@ const ErrorsController = require('./controllers/ErrorsController');
 
 app.use(express.static(__dirname + '/public'));
 
-app.use('/messages', MessagesRouter);
+app.use('/messages', cors, MessagesRouter);
 app.use('/users', cors, UsersRoutes);
 app.use('/chats', cors, ChatsRoutes);
 app.use('/notifications', passport.authenticate('basic'), NotificationsRoutes);
