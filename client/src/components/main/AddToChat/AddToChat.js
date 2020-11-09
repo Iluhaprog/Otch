@@ -58,7 +58,7 @@ class AddToChatForm extends React.Component {
             <div className={`add-member-to-chat-box ${visible}`}>
                 <div className='row row_jc-c row_ai-c'>
                     <FormBox>
-                        <div class='errors'>
+                        <div className='errors'>
                             {
                                 this.state.errorsMessages.length 
                                     ? this.state.errorsMessages.map(error => <p>{error}</p>)
@@ -71,6 +71,7 @@ class AddToChatForm extends React.Component {
                                     this.props.chats.map(chat => {
                                         return (
                                             <AddToChatItem
+                                                key={chat.id}
                                                 chatData={chat}
                                                 onChange={(e, chatName) => this.handleChange(e, chatName)}
                                             />
