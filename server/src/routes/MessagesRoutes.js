@@ -75,9 +75,10 @@ router.ws('/send', (ws, req) => {
             result = await runAction(action, data);
             send(result, key);
         } else if (typeof message === 'string') {
+            message = JSON.parse(message);
             result = await runAction(action, message);
             message.action = action;
-            result.setData(message);
+            result.setData(JSON.stringify(message));
             send(result, key);
         } else {
             result.setData({message: 'type of loaded is data not supported'});
