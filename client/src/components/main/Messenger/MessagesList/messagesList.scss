@@ -1,0 +1,62 @@
+@import '../../../../vars.scss';
+
+.messages-list {
+    height: 88%;
+    overflow-y: scroll;
+    padding: 10px;
+    border-bottom: 1px solid $bg-1;
+    scrollbar-width: 5px;          
+    scrollbar-color: $bg-1 $bg-2;
+    border-radius: 10px;
+
+    ul {
+        list-style: none;
+    }
+    .message-box {
+        max-width: 460px;
+        margin-bottom: 20px;
+        
+        &.r {
+            margin-left: auto;
+
+            & .sender-name {
+                margin-left: auto;
+            }
+        }
+    }
+    
+    .sender-name {
+        max-width: 150px;
+        background-image: $gradient;
+        padding: 10px;
+        border-radius: 10px 10px 0  0;
+        margin-bottom: 15px;
+
+        p {
+            text-align: center;
+            font-weight: 300;
+            font-size: 18px;
+            color: $color-1;
+        }
+    }
+    
+    .message-text {
+        width: 100%;
+        background-image: $gradient;
+        padding: 1px;
+        border-radius: 0 10px 10px 10px;
+        
+        p {
+            background-color: $bg-1;
+            border-radius: 0 10px 10px 10px;
+            padding: 20px;
+            color: $color-3;
+            font-weight: 300;
+        }
+    }
+    
+    .message-box.r .message-text,
+    .message-box.r .message-text p {
+        border-radius: 10px 0 10px 10px;
+    }
+}
