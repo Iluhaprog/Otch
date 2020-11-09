@@ -4,6 +4,7 @@ import { AddToChatForm } from './AddToChat/AddToChat';
 import ChatList from './ChatList/ChatList';
 import CreateChat from './CreateChat/CreateChat';
 import Header from './header/header';
+import Messenger from './Messenger/Messenger';
 import SearchResults from './SearchResults/SearchResults';
 import Settings from './settings/settings';
 
@@ -73,6 +74,9 @@ class Main extends React.Component {
                             changeMemberId={this.changeMemberId.bind(this)}
                             changeVisibility={this.changeAddToChatFormVisibility.bind(this)}
                         />
+                    </Route>
+                    <Route path='/chat/:name'>
+                        <Messenger />
                     </Route>
                 </Switch>
             </div>

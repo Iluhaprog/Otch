@@ -2,11 +2,17 @@ import React from 'react';
 import { apiUrl } from '../../../../config';
 
 import emptyUser from '../../../../assets/images/emptyUser.png'
+import { NavLink } from 'react-router-dom';
 
 export default props => {
+    const selectedSelector = props.selected ? 'chat-box_selected' : '';
+    const subPath = props.chatData.name.toLowerCase().split(' ').join('-');
     return (
         <li className='list__item'>
-            <div className="chat-box">
+            <NavLink 
+                to={`/chat/${subPath}`}
+                className={`chat-box ${selectedSelector}`} 
+                onClick={props.onClick}>
                 <div className="row row_ai-c row_jc-fs">
                     <div>
                         <div className="avatar avatar_chat ">
@@ -15,7 +21,6 @@ export default props => {
                                 ? <img src={`${apiUrl}${props.chatData.avatar}`} alt="chat" />
                                 :  <img src={emptyUser} className='empty' alt="empty" />
                             }
-                            <img src={ props.chatData.avatar ? `${apiUrl}${props.chatData.avatar}` : emptyUser} alt="emptyUser" />
                         </div>
                     </div>
                     <div className="column">
@@ -24,7 +29,7 @@ export default props => {
                         </h1>
                     </div>
                 </div>
-            </div>
+            </NavLink>
         </li>
     );
 }

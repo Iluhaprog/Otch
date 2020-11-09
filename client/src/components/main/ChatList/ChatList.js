@@ -7,7 +7,16 @@ import ChatListItem from './ChatListItem/ChatListItem';
 import './chatList.scss';
 
 class ChatList extends React.Component {
-    state = {}
+    state = {
+        selectedChat: -1,
+    }
+
+    handleChatSelection(id) {
+        this.setState({
+            selectedChat: id,
+        });
+    }
+
     render() {
         return (
             <div className="chats-list">
@@ -16,7 +25,15 @@ class ChatList extends React.Component {
                         <div className="column top">
                             <ul className='list'>
                                 {this.props.chatList.map(chat => {
-                                    return <ChatListItem chatData={chat} key={chat.id}/>
+                                    let selected = chat.id === this.state.selectedChat;
+                                    return (
+                                        <ChatListItem 
+                                            chatData={chat} 
+                                            key={chat.id} 
+                                            selected={selected} 
+                                            onClick={this.handleChatSelection.bind(this, chat.id)}
+                                        />
+                                    )
                                 })}                                
                             </ul>
                         </div>
