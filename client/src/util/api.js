@@ -28,7 +28,7 @@ const xhrRequest = method => {
 const webSocket = () => {
     const mainHost = apiWsHost;
     return ({host, url, params, protocols,  onopen, onmessage, onclose, onerror}) => {
-        const wss = new WebSocket(`${mainHost || host}${url}${params ? '?' + toParams(params) : ''}`);
+        const wss = new WebSocket(`${mainHost || host}${url}${params ? '?' + toParams(params) : ''}`, protocols);
         wss.onopen = onopen;
         wss.onmessage = onmessage;
         wss.onclose = onclose;
