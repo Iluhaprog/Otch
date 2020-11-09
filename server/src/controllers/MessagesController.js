@@ -18,7 +18,7 @@ class MessagesController {
 
     async getByChatId(req, res) {
         try {
-            const chatId = req.body.chatId;
+            const chatId = req.query.chatId;
             const messages = await MessagesService.getByChatId(chatId);
             res.json(messages);
         } catch (err) {
