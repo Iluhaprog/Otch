@@ -13,6 +13,7 @@ class Main extends React.Component {
         searchResults: [],
         isVisibleAddToChatForm: false,
         memberId: -1,
+        selectedChat: {},
     }
 
     changeAddToChatFormVisibility(value) {
@@ -33,6 +34,13 @@ class Main extends React.Component {
         });
     }
 
+    changeSelectedChat(chat) {
+        console.log(chat);
+        this.setState({
+            selectedChat: chat
+        });
+    }
+
     render() {
         if (!this.props.isAuth) return <Redirect to='/auth' />
 
@@ -45,15 +53,18 @@ class Main extends React.Component {
                     onSearch={this.setSearchResults.bind(this)}
                     onLogout={this.props.onLogout}
                 />
-                <ChatList chatList={this.props.chatList}/>
-                <AddToChatForm 
-                    chats={this.props.chatList} 
+                <ChatList
+                    chatList={this.props.chatList}
+                    changeChat={this.changeSelectedChat.bind(this)}
+                />
+                <AddToChatForm
+                    chats={this.props.chatList}
                     visible={this.state.isVisibleAddToChatForm}
                     adminId={this.props.userId}
                     memberId={this.state.memberId}
-                    changeVisibility={this.changeAddToChatFormVisibility.bind(this)} 
+                    changeVisibility={this.changeAddToChatFormVisibility.bind(this)}
                     webSocket={this.props.webSocket}
-                    />
+                />
                 <Switch>
                     <Route path='/settings'>
                         <Settings
@@ -64,11 +75,11 @@ class Main extends React.Component {
                         />
                     </Route>
                     <Route path='/create-chat'>
-                        <CreateChat userId={this.props.userId} webSocket={this.props.webSocket}/>
+                        <CreateChat userId={this.props.userId} webSocket={this.props.webSocket} />
                     </Route>
                     <Route path='/search'>
-                        <SearchResults 
-                            results={this.state.searchResults} 
+                        <SearchResults
+                            results={this.state.searchResults}
                             adminId={this.props.userId}
                             webSocket={this.props.webSocket}
                             changeMemberId={this.changeMemberId.bind(this)}
@@ -76,7 +87,10 @@ class Main extends React.Component {
                         />
                     </Route>
                     <Route path='/chat/:name'>
-                        <Messenger />
+                        <Messenger 
+                            chat={this.state.selectedChat}
+                            userId={this.props.userId}
+                        />
                     </Route>
                 </Switch>
             </div>
