@@ -18,6 +18,7 @@ class MessengerForm extends React.Component {
         wss.send(JSON.stringify({
             userId:  this.props.userId,
             chatId: this.props.chatId,
+            name: this.props.senderName,
             message: this.state.message,
         }));
         this.setState({

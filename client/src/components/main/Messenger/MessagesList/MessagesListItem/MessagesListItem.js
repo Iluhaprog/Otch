@@ -7,7 +7,7 @@ export default props => {
             <div className={`message-box ${right}`}>
                 <div className='sender-name'>
                     <p>
-                        {props.memberId}
+                        {props.senderName}
                     </p>
                 </div>
                 <div className="message-text">

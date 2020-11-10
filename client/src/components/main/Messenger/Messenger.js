@@ -92,6 +92,7 @@ class Messenger extends React.Component {
                             messages={this.state.messages}
                             userId={this.props.userId} />
                         <MessengerForm 
+                            senderName={this.props.userName}
                             userId={this.props.userId}
                             chatId={this.props.chat.id}
                             webSocket={this.state.wss}/>

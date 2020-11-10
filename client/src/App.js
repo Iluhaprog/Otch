@@ -111,6 +111,7 @@ class App extends React.Component {
                             userData={user}
                             isAuth={this.state.isAuth}
                             userId={this.state.userId}
+                            userName={this.state.userName}
                             chatList={this.state.chatList}
                             updateUser={this.updateUser.bind(this)}
                             onLogout={() => this.logout()}

@@ -12,11 +12,11 @@ export default props => {
                 {
                     props.messages.map((message, index) => {
                         const id = message.id || (index ? props.messages[index - 1].id + 1 : 1);
-
                         return (
                             <MessagesListItem 
                                 key={id} 
                                 userId={props.userId}
+                                senderName={message.name}
                                 memberId={message.user_id || message.userId} 
                                 message={message.message} 
                             />

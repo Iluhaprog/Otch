@@ -36,7 +36,6 @@ class Main extends React.Component {
     }
 
     changeSelectedChat(chat) {
-        console.log(chat);
         this.setState({
             selectedChat: chat
         });
@@ -91,6 +90,7 @@ class Main extends React.Component {
                         <Messenger 
                             chat={this.state.selectedChat}
                             userId={this.props.userId}
+                            userName={this.props.userName}
                         />
                     </Route>
                 </Switch>
