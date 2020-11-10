@@ -28,7 +28,14 @@ class MessagesService {
      * @returns {Answer} If messages exist, then Answer contains status SUCCESS and data is messages, otherwise status FAILURE and data is empty
      */
     async getByChatId(chatId) {
-        const [messages] = await query('SELECT * FROM Messages WHERE chat_id=?', [chatId]);
+        const [messages] = await query('select Users.name, Messages.* from Messages inner join Users on Users.id=Messages.user_id where chat_id=?', [chatId]);
+        messages.sort((a, b) => {
+            if (a && b) {
+                const time1 = new Date(a.creation_date).getTime();
+                const time2 = new Date(b.creation_date).getTime();
+                return time1 - time2;
+            }
+        })
         return messages ? new Answer(SUCCESS, messages) : new Answer(FAILURE);
     }
 
