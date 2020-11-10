@@ -14,23 +14,27 @@ class Messenger extends React.Component {
     _key = '';
     _isMounted = false;
 
+    init() {
+        this.getMessages()
+            .then(() => {
+                this.createWebSocket();
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
     componentDidMount() {
         this._isMounted = true;
         this._key = this.props.chat.key;
-        this.getMessages()
-                .then(() => {
-                    this.createWebSocket();
-                });
+        this.init();
     }
     
     componentDidUpdate() {
         if (this.props.chat.key !== this._key) {
             this.state.wss.close();
             this._key = this.props.chat.key;
-            this.getMessages()
-                .then(() => {
-                    this.createWebSocket();
-                });
+            this.init();
         }
     }
     
@@ -72,15 +76,10 @@ class Messenger extends React.Component {
             }
         });
 
-        console.log(newWss);
-
         if (chat.id) {
             this.setState({
                 wss: newWss
             });
-            console.log('Created');
-        } else {
-            console.log('Chat is not defined');
         }
     }
     
@@ -89,7 +88,9 @@ class Messenger extends React.Component {
             <div className="messages">
                 <div className="row row_jc-c row_ai-c">
                     <div className='messages-box'>
-                        <MessagesList messages={this.state.messages} />
+                        <MessagesList
+                            messages={this.state.messages}
+                            userId={this.props.userId} />
                         <MessengerForm 
                             userId={this.props.userId}
                             chatId={this.props.chat.id}

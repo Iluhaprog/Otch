@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+
 import { compare } from '../../api/verification.api';
 import { handleChange } from '../../util/forms';
 import SendButton from '../buttons/SendButton/SendButton';

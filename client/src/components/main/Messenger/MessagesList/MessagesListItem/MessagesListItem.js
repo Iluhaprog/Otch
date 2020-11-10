@@ -1,13 +1,13 @@
 import React from 'react';
 
 export default props => {
+    const right = parseInt(props.memberId) === parseInt(props.userId) ? '' : 'r';
     return (
         <li>
-            <div className="message-box">
-                <div className="sender-name">
+            <div className={`message-box ${right}`}>
+                <div className='sender-name'>
                     <p>
-                        Name
-                        {/* {props.senderName} */}
+                        {props.memberId}
                     </p>
                 </div>
                 <div className="message-text">

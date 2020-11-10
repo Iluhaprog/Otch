@@ -1,7 +1,9 @@
 import React from 'react';
 import {faPaperPlane, faFileUpload} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { handleChange } from '../../../../util/forms';
+import SendButton from '../../../buttons/SendButton/SendButton';
 
 import './messengerFrom.scss';
 
@@ -36,12 +38,12 @@ class MessengerForm extends React.Component {
                         onChange={e => handleChange(e, this)}
                         >    
                     </textarea>
-                    <button className="button button_send">
+                    <SendButton>
                         <FontAwesomeIcon icon={faFileUpload} />
-                    </button>
-                    <button className="button button_send">
+                    </SendButton>
+                    <SendButton>
                         <FontAwesomeIcon icon={faPaperPlane} />
-                    </button>
+                    </SendButton>
                 </div>
             </form>
          );
