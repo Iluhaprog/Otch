@@ -66,10 +66,13 @@ CREATE TABLE Files(
     `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `chat_id` INT NOT NULL,
     `user_id` INT NOT NULL,
+    `message_id` INT NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`chat_id`) REFERENCES Chats(`id`)
         ON DELETE CASCADE,
     FOREIGN KEY (`user_id`) REFERENCES Users(`id`)
+        ON DELETE CASCADE,
+    FOREIGN KEY (`message_id`) REFERENCES Messages(`id`)
         ON DELETE CASCADE
 );
 
