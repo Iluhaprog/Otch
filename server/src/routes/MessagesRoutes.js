@@ -70,6 +70,7 @@ router.ws('/send', (ws, req) => {
             const data = {
                 chatId: req.query.ci,
                 userId: req.query.ui,
+                messageId: req.query.mi,
                 message: message
             };            
             result = await runAction(action, data);
