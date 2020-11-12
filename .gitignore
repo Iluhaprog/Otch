@@ -7,3 +7,4 @@ server/src/public
 .vscode/
 server/src/config/mailUser.js
 server/logs
+server/src/config/paths.js
