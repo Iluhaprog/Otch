@@ -115,8 +115,9 @@ class MessagesService {
      */
     async createFileInDB(file) {
         if (file) {
-            await query(`INSERT INTO Files(\`name\`, \`user_id\`, \`chat_id\`, \`creation_date\`) VALUES (?, ?, ?, ?)`,
-                    [file.name, file.userId, file.chatId, file.creationDate]);
+            await query(`INSERT INTO Files(\`name\`, \`user_id\`, \`chat_id\`, \`creation_date\`, \`message_id\`) 
+                            VALUES (?, ?, ?, ?, ?)`,
+                    [file.name, file.userId, file.chatId, file.creationDate, file.messageId]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -154,6 +155,7 @@ class MessagesService {
                 name: fileName,
                 userId: data.userId,
                 chatId: data.chatId,
+                messageId: data.messageId,
                 creationDate: formatDate(new Date())
             });
             return result.status ? new Answer(SUCCESS, {path: fileName}) : new Answer(FAILURE);
