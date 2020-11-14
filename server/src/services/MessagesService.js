@@ -22,6 +22,26 @@ class MessagesService {
     }
 
     /**
+     * Return messages with files by chatId
+     * 
+     * @param {number} chatId 
+     * @return {Array} array of messages
+     */
+    async getMessagesWithFilesByChatId(chatId) {
+        const [messages] = await query(`
+                    select 
+                        Users.name, 
+                        Files.name as path, 
+                        Messages.* 
+                    from Messages 
+                    inner join Users on Users.id=Messages.user_id 
+                    inner join Files on Messages.id=Files.message_id 
+                    where Messages.chat_id=?
+        `, [chatId]);
+        return messages;
+    }
+
+    /**
      * Return all messages of chat
      * 
      * @param {number} chatId 
@@ -29,13 +49,22 @@ class MessagesService {
      */
     async getByChatId(chatId) {
         const [messages] = await query('select Users.name, Messages.* from Messages inner join Users on Users.id=Messages.user_id where chat_id=?', [chatId]);
+        const messagesWithFiles = await this.getMessagesWithFilesByChatId(chatId);
+        for (let i = 0; i < messages.length; i++) {
+            for (let j = 0; j < messagesWithFiles.length; j++) {
+                if (messages[i].id === messagesWithFiles[j].id) {
+                    messages[i] = messagesWithFiles[j];
+                }
+            }
+        }
         messages.sort((a, b) => {
             if (a && b) {
                 const time1 = new Date(a.creation_date).getTime();
                 const time2 = new Date(b.creation_date).getTime();
                 return time1 - time2;
             }
-        })
+        });
+    
         return messages ? new Answer(SUCCESS, messages) : new Answer(FAILURE);
     }
 
