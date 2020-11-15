@@ -1,4 +1,5 @@
 const { express } = require('../config/express');
+const paths = require('../config/paths');
 const router = express.Router();
 const MessagesController = require('../controllers/MessagesController');
 const Answer = require('../libs/Answer');
@@ -42,7 +43,7 @@ const send = (message, key) => {
  */
 const runAction = async (action, data) => {
     let result = new Answer(FAILURE);
-    switch(action) {
+    switch (action) {
         case 'c':
             result = await MessagesController.create(data);
             break;
@@ -66,25 +67,31 @@ router.ws('/send', (ws, req) => {
     ws.on('message', async message => {
         const action = req.query.a;
         let result = new Answer(FAILURE);
-        if (message instanceof Buffer) {
-            const data = {
-                chatId: req.query.ci,
-                userId: req.query.ui,
-                messageId: req.query.mi,
-                message: message
-            };            
-            result = await runAction(action, data);
-            send(result, key);
-        } else if (typeof message === 'string') {
-            message = JSON.parse(message);
-            result = await runAction(action, message);
-            message.action = action;
-            message.id = result.data.last_id;
-            result.setData(JSON.stringify(message));
-            send(result, key);
-        } else {
-            result.setData({message: 'type of loaded is data not supported'});
-            ws.send(JSON.stringify(result));
+        try {
+            if (message instanceof Buffer) {
+                const data = {
+                    chatId: req.query.ci,
+                    userId: req.query.ui,
+                    messageId: req.query.mi,
+                    message: message
+                };
+                result = await runAction(action, data);
+                result.data.messageId = data.messageId;
+                result.data.path = paths.files.chatsResp + result.data.path;
+                send(result, key);
+            } else if (typeof message === 'string') {
+                message = JSON.parse(message);
+                result = await runAction(action, message);
+                message.action = action;
+                message.id = result.data.last_id;
+                result.setData(JSON.stringify(message));
+                send(result, key);
+            } else {
+                result.setData({ message: 'type of loaded is data not supported' });
+                ws.send(JSON.stringify(result));
+            }
+        } catch(error) {
+            console.error(error);
         }
     });
 
