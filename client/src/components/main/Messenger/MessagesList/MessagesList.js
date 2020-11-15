@@ -10,11 +10,10 @@ export default props => {
         <div className="messages-list">
             <ul className='column'>
                 {
-                    props.messages.map((message, index) => {
-                        const id = message.id || (index ? props.messages[index - 1].id + 1 : 1);
+                    props.messages.map((message) => {
                         return (
                             <MessagesListItem 
-                                key={id} 
+                                key={message.id} 
                                 userId={props.userId}
                                 senderName={message.name}
                                 memberId={message.user_id || message.userId} 
