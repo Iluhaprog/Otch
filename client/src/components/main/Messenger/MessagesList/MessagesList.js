@@ -14,6 +14,7 @@ export default props => {
                         return (
                             <MessagesListItem 
                                 key={message.id} 
+                                filePath={message.path}
                                 userId={props.userId}
                                 senderName={message.name}
                                 memberId={message.user_id || message.userId} 
