@@ -180,7 +180,7 @@ class MessagesService {
         if (data.message) {
             const fileName = await this.createFileInFS(data.message);
             const result = await this.createFileInDB({
-                name: fileName,
+                name: paths.files.chatsResp + fileName,
                 userId: data.userId,
                 chatId: data.chatId,
                 messageId: data.messageId,
