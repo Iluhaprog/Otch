@@ -66,7 +66,15 @@ class Messenger extends React.Component {
             onmessage: e => {
                 const messages = this.state.messages;
                 const message = JSON.parse(e.data);
-                messages.push(JSON.parse(message.data))
+                if(message.data.path) {
+                    messages.forEach(msg => {
+                        if(parseInt(msg.id) === parseInt(message.data.messageId)) {
+                            msg.path = message.data.path;
+                        }
+                    });
+                } else {
+                    messages.push(JSON.parse(message.data));
+                }
                 this.setState({
                     messages: messages
                 });
@@ -93,6 +101,8 @@ class Messenger extends React.Component {
                             userId={this.props.userId} />
                         <MessengerForm 
                             senderName={this.props.userName}
+                            chat={this.props.chat}
+                            messages={this.state.messages}
                             userId={this.props.userId}
                             chatId={this.props.chat.id}
                             webSocket={this.state.wss}/>
