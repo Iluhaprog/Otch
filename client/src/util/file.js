@@ -11,6 +11,16 @@ const formData = props => {
     return data;
 }
 
+/**
+ * Get type of file 
+ * @param {*} path 
+ */
+const getFileType = path => {
+    const ext = path && path.split('.');
+    return (ext && ext[ext.length - 1]);
+}
+
 export {
     formData,
+    getFileType,
 };
