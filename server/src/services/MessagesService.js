@@ -93,10 +93,9 @@ class MessagesService {
     async create(message) {
         if (message) {
             const creationDate = message.creationDate || new Date();
-            await query(`INSERT INTO Messages(\`user_id\`, \`chat_id\`, \`message\`, \`creation_date\`) VALUES
-                            (?, ?, ?, ?)`,
+            const [[result]] = await query(`SELECT insertMessage(?, ?, ?, ?) as last_id`,
                         [message.userId, message.chatId, message.message, formatDate(creationDate)]);
-            return new Answer(SUCCESS);
+            return new Answer(SUCCESS, result);
         }
         return new Answer(FAILURE);
     }
