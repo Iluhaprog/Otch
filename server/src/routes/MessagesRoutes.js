@@ -79,6 +79,7 @@ router.ws('/send', (ws, req) => {
             message = JSON.parse(message);
             result = await runAction(action, message);
             message.action = action;
+            message.id = result.data.last_id;
             result.setData(JSON.stringify(message));
             send(result, key);
         } else {
