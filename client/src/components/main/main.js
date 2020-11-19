@@ -54,6 +54,7 @@ class Main extends React.Component {
                     onLogout={this.props.onLogout}
                 />
                 <ChatList
+                    userId={this.props.userId}
                     chatList={this.props.chatList}
                     changeChat={this.changeSelectedChat.bind(this)}
                 />

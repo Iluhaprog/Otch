@@ -29,6 +29,7 @@ class ChatList extends React.Component {
                                     let selected = chat.id === this.state.selectedChat;
                                     return (
                                         <ChatListItem 
+                                            userId={this.props.userId}
                                             chatData={chat} 
                                             key={chat.id} 
                                             selected={selected} 
