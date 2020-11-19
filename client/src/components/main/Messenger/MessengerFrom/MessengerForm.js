@@ -42,13 +42,15 @@ class MessengerForm extends React.Component {
                 onerror: err => console.error(err),
             });
         } else {
-            const wss = this.props.webSocket;
-            wss.send(JSON.stringify({
-                userId: this.props.userId,
-                chatId: this.props.chatId,
-                name: this.props.senderName,
-                message: this.state.message,
-            }));
+            if(this.state.message) {
+                const wss = this.props.webSocket;
+                wss.send(JSON.stringify({
+                    userId: this.props.userId,
+                    chatId: this.props.chatId,
+                    name: this.props.senderName,
+                    message: this.state.message,
+                }));
+            }
         }
         this.setState({
             message: '',
@@ -99,9 +101,12 @@ class MessengerForm extends React.Component {
                         name="message"
                         cols="30"
                         rows="10"
+                        required
                         placeholder="Write messages..."
                         value={this.state.message}
                         onChange={e => handleChange(e, this)}
+                        onInvalid={e => e.target.setCustomValidity('Write message!')}
+                        onInput={e => e.target.setCustomValidity('')}
                     >
                     </textarea>
                     <SendButton onClick={e => this.selectFile(e)}>
