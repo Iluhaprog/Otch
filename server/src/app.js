@@ -1,5 +1,5 @@
 const { port, env } = require('./config/vars');
-const { app, express, passport, server } = require('./config/express');
+const { app, express, passport } = require('./config/express');
 const { cors } = require('./config/cors');
 
 
@@ -22,7 +22,7 @@ app.use('/verification', cors, VerificationsRoutes);
 app.use(ErrorsController.error404);
 app.use(ErrorsController.error500);
 
-server.listen(port, function () {
+app.listen(port, function () {
   console.log(`Server listening on port ${port}!`);
 });
 

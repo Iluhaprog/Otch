@@ -4,12 +4,9 @@ const app = express();
 const path = require('path');
 const { morgan, accessLogStream } = require('./log');
 
-const https = require('https');
-const fs = require('fs');
-
 const paths = require('./paths');
 
-const expressWs = require('express-ws');
+const expressWs = require('express-ws')(app);
 const expressSession = require('express-session');
 const redis = require('redis');
 const RedisStore = require('connect-redis')(expressSession);
@@ -50,7 +47,6 @@ app.use(expressSession({
     cookie: {
         maxAge: 60*60*24*365,
         httpOnly: true,
-        secure: true
     },
 }));
 
@@ -58,26 +54,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(morgan('combined', { stream: accessLogStream }));
 
-
-const key = fs.readFileSync(paths.ssl.key);
-const cert = fs.readFileSync(paths.ssl.cert);
-const ca = fs.readFileSync(paths.ssl.ca);
-const options = {
-    key: key,
-    cert: cert,
-    ca: ca
-};
-
-
-const server = https.createServer(options, app);
-
-expressWs(app, server);
-
 module.exports = {
     app: app,
     express: express,
     logger: logger,
-    server: server,
     expressWs: expressWs,
     passport: passport,
     upload: upload

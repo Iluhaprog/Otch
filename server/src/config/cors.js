@@ -1,6 +1,6 @@
 let cors = require('cors');
 
-var whitelist = ['http://127.0.0.1:5500', 'https://localhost:3001'];
+var whitelist = ['http://localhost:3001'];
 
 var corsOptions = {
   credentials: true,
