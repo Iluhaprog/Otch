@@ -106,7 +106,11 @@ h4 {
     grid-area: header;
 }
 
-.chats-list {
+.chats-list_mobile {
+    display: none;
+}
+
+.chats-list_desktop {
     grid-area: chats-list;
 }
 
@@ -135,7 +139,19 @@ h4 {
             'mobile-nav';
     }
 
-    .chats-list,
+    .chats-list_mobile {
+        display: block;
+    }    
+
+    .mobile-menu_hidden {
+        grid-template-rows: 50px calc(100vh - 50px);
+        /* grid-template-rows: 100vh; */
+        grid-template-areas: 
+            'top-bar'
+            'main';
+    }
+
+    .chats-list_desktop,
     .header {
         display: none;
     }
