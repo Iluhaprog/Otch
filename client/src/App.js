@@ -29,7 +29,6 @@ class App extends React.Component {
                 onopen: e => {return e},
                 onmessage: e => {
                     this.initChatList();
-                    console.log(JSON.parse(e.data));
                 },
             })
         });
