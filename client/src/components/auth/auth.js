@@ -27,7 +27,7 @@ class Auth extends React.Component {
     render() {
         const visibleTab = this.state.visibleTab;
 
-        if (this.props.isAuth) return <Redirect to='/'/>;
+        if (this.props.isAuth) return <Redirect to='/chat-list'/>;
 
         return (
             <div className="wrapper row row_jc-c row_ai-c">
