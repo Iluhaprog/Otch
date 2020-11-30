@@ -23,7 +23,7 @@ export default class ChatListItem extends React.Component {
                 key: this.props.chatData.key,
                 ui: this.props.userId
             },
-            onopen: () => console.log('open notification'),
+            onopen: () => {},
             onmessage: msg => {
                 if (!this.props.selected) {
                     this.handleNotification(true);
