@@ -3,24 +3,31 @@
 .top-bar {
     max-width: 100%;
     max-height: 30px;
-    background-color: $bg-2;
-    margin: 10px;
-    box-shadow: 0px 4px 4px $shadow;
-    border-radius: 5px;
-    padding: 3px 10px;
+    .box {
+        position: fixed;
+        left: 0;
+        right: 0;
+        background-color: $bg-2;
+        margin: 10px;
+        box-shadow: 0px 4px 4px $shadow;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 3px 10px;
+        z-index: 1;
 
-    a, p {
-        font-size: 20px;
-    }
+        a, p {
+            font-size: 20px;
+        }
 
-    p { 
-        color: $color-1;
-        font-weight: 300;
-    }
+        p { 
+            color: $color-1;
+            font-weight: 300;
+        }
 
-    a {
-        svg {
-            color: $bg-4;
+        a {
+            svg {
+                color: $bg-4;
+            }
         }
     }
 }

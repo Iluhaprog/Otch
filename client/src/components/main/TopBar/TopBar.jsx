@@ -8,17 +8,19 @@ export default props => {
     const topbar = props.data;
     return (
         <div className='top-bar'>
-            <div className={topbar.button.location ? 'row row_jc-sb' : 'row row_jc-c'}>
-                { 
-                    topbar.button.location
-                        ? 
-                        <NavLink to={topbar.button.location || ''} onClick={topbar.button.onClick}>
-                            <FontAwesomeIcon icon={topbar.button.inner} />
-                        </NavLink>
-                        : 
-                        ''
-                }
-                <p>{topbar.title}</p>
+            <div className='box'>
+                <div className={topbar.button.location ? 'row row_jc-sb' : 'row row_jc-c'}>
+                    { 
+                        topbar.button.location
+                            ? 
+                            <NavLink to={topbar.button.location || ''} onClick={topbar.button.onClick}>
+                                <FontAwesomeIcon icon={topbar.button.inner} />
+                            </NavLink>
+                            : 
+                            ''
+                    }
+                    <p>{topbar.title}</p>
+                </div>
             </div>
         </div>
     )
