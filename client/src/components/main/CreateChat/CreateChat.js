@@ -7,6 +7,7 @@ import { handleChange } from '../../../util/forms';
 import SendButton from '../../buttons/SendButton/SendButton';
 
 import './createChat.scss';
+import { withRouter } from 'react-router-dom';
 
 class CreateChat extends React.Component {
     state = { 
@@ -39,7 +40,6 @@ class CreateChat extends React.Component {
                     key: response.data.key,
                 };
                 addMember(req).then(result => {
-                    console.log(result);
                     wss.send(JSON.stringify({userId: userId}));
                 });
             },
@@ -49,6 +49,7 @@ class CreateChat extends React.Component {
             name: '',
             data: new FormData(),
         });
+        this.props.history.push('/chat-list');
     }
 
     render() { 
@@ -77,4 +78,4 @@ class CreateChat extends React.Component {
     }
 }
  
-export default CreateChat;
+export default withRouter(CreateChat);
