@@ -62,7 +62,7 @@ class Messenger extends React.Component {
                 ci: chat.id,
                 a: 'c',
             },
-            onopen: () => console.log('open'),
+            onopen: () => {},
             onmessage: e => {
                 const messages = this.state.messages;
                 const message = JSON.parse(e.data);

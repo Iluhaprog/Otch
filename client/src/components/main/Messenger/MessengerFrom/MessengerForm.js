@@ -99,8 +99,6 @@ class MessengerForm extends React.Component {
                 <div className="row row_ai-c">
                     <textarea
                         name="message"
-                        cols="30"
-                        rows="10"
                         required
                         placeholder="Write messages..."
                         value={this.state.message}

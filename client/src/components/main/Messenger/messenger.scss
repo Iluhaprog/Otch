@@ -37,8 +37,9 @@
 
     .message-box,
     .messages,
-    .messages-list {
-        background-color: var(--bg-1);
+    .messages-list,
+    .messages-box {
+        background: none;
     }
 
     .messages-box {
@@ -47,10 +48,6 @@
 
     .messages-list {
         padding-top: 80px;
-    }
-
-    .message-text p {
-        background-color: var(--bg-2);
     }
 
     .form-message {
