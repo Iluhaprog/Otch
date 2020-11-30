@@ -20,7 +20,7 @@ class ChatList extends React.Component {
 
     render() {
         return (
-            <div className="chats-list">
+            <div className={`chats-list chats-list${this.props.mobile ? '_mobile' : '_desktop'}`}>
                 <div className="row row_ai-c clr">
                     <div className="chats-list-box">
                         <div className="column top">
@@ -39,11 +39,17 @@ class ChatList extends React.Component {
                                 })}                                
                             </ul>
                         </div>
-                        <div className="bottom row row_jc-c">
-                            <Link to='/create-chat'>
-                                <IconButton icon={faPlusSquare} onClick={e => console.log('ok') }/>
-                            </Link>
-                        </div>
+                        { 
+                            !this.props.mobile
+                                ? 
+                                <div className="bottom row row_jc-c">
+                                    <Link to='/create-chat'>
+                                        <IconButton icon={faPlusSquare} onClick={e => console.log('ok') }/>
+                                    </Link>
+                                </div>
+                                : 
+                                ''
+                        }
                     </div>
                 </div>
             </div>
