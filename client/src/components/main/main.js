@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { AddToChatForm } from './AddToChat/AddToChat';
 import ChatList from './ChatList/ChatList';
@@ -24,7 +24,8 @@ class Main extends React.Component {
                 inner: faPlusSquare,
                 location: '/create-chat'
             }
-        }
+        },
+        mobileMenu: true
     }
 
     changeTopBar(topbar) {
@@ -53,7 +54,27 @@ class Main extends React.Component {
 
     changeSelectedChat(chat) {
         this.setState({
-            selectedChat: chat
+            selectedChat: chat,
+            mobileMenu: false,
+            topbar: {
+                title: chat.name,
+                button: {
+                    inner: faChevronLeft,
+                    location: '/chat-list',
+                    onClick: () => {
+                        this.setState({
+                            mobileMenu: true,
+                            topbar: {
+                                title: 'Chats',
+                                button: {
+                                    inner: faPlusSquare,
+                                    location: '/create-chat',
+                                }
+                            }
+                        })
+                    }
+                }
+            }
         });
     }
 
@@ -61,7 +82,7 @@ class Main extends React.Component {
         if (!this.props.isAuth) return <Redirect to='/auth' />
 
         return (
-            <div className='wrapper wrapper_main'>
+            <div className={`wrapper wrapper_main ${this.state.mobileMenu ? '' : 'mobile-menu_hidden'}`}>
                 <Header
                     userId={this.props.userId}
                     userName={this.props.userData.userName}
@@ -111,8 +132,21 @@ class Main extends React.Component {
                             userName={this.props.userName}
                         />
                     </Route>
+                    <Route path='/chat-list'>
+                        <ChatList
+                            userId={this.props.userId}
+                            chatList={this.props.chatList}
+                            changeChat={this.changeSelectedChat.bind(this)}
+                            mobile={true}
+                        />
+                    </Route>
                 </Switch>
-                <MobileNav changeTopBar={this.changeTopBar.bind(this)}/>
+                {this.state.mobileMenu 
+                    ?
+                    <MobileNav changeTopBar={this.changeTopBar.bind(this)}/>
+                    : 
+                    ''
+                }
             </div>
         )
     }
