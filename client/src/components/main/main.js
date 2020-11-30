@@ -11,6 +11,7 @@ import MobileNav from './MobileNav/MobileNav';
 import SearchResults from './SearchResults/SearchResults';
 import Settings from './settings/settings';
 import TopBar from './TopBar/TopBar';
+import SearchForm from './search/search';
 
 class Main extends React.Component {
     state = {
@@ -25,6 +26,7 @@ class Main extends React.Component {
                 location: '/create-chat'
             }
         },
+        queruParam: '',
         mobileMenu: true
     }
 
@@ -46,9 +48,10 @@ class Main extends React.Component {
         });
     }
 
-    setSearchResults(results) {
+    setSearchResults(results, queruParam) {
         this.setState({
             searchResults: results,
+            queruParam: queruParam
         });
     }
 
@@ -117,13 +120,18 @@ class Main extends React.Component {
                         <CreateChat userId={this.props.userId} webSocket={this.props.webSocket} />
                     </Route>
                     <Route path='/search'>
-                        <SearchResults
-                            results={this.state.searchResults}
-                            adminId={this.props.userId}
-                            webSocket={this.props.webSocket}
-                            changeMemberId={this.changeMemberId.bind(this)}
-                            changeVisibility={this.changeAddToChatFormVisibility.bind(this)}
-                        />
+                        <div>
+                            <SearchForm onSearch={this.setSearchResults.bind(this)} mobile={true}/>
+                            <SearchResults
+                                results={this.state.searchResults}
+                                adminId={this.props.userId}
+                                webSocket={this.props.webSocket}
+                                changeMemberId={this.changeMemberId.bind(this)}
+                                changeVisibility={this.changeAddToChatFormVisibility.bind(this)}
+                                onMore={this.setSearchResults.bind(this)}
+                                qP={this.state.queruParam}
+                            />
+                        </div>
                     </Route>
                     <Route path='/chat/:name'>
                         <Messenger 

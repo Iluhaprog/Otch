@@ -89,13 +89,13 @@ const updateAvatar = ({id, formData, success}) => {
     });
 }
 
-const search = name => {
+const search = (name, offset = 0) => {
     return GET({
         url: '/users/search',
         params: {
             q: name,
-            l: 20,
-            o: 0,
+            l: 15,
+            o: offset,
         }
     }).then(response => response.json());
 }

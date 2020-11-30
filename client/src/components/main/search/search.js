@@ -20,14 +20,18 @@ class SearchForm extends React.Component {
         .then(result => {
             if (result.data) {
                     this.props.history.push('/search')
-                    this.props.onSearch(result.data);
+                    this.props.onSearch(result.data, this.state.searchQ);
                 }
             });
     }
 
     render() {
         return (
-            <form name="search" onSubmit={(e) => this.handleSubmit(e)} className="form form_search">
+            <form 
+                name="search" 
+                onSubmit={(e) => this.handleSubmit(e)} 
+                className={`form form_search ${this.props.mobile ? 'form_mobile' : ''}`}
+            >
                 <div className="form-inner">
                     <div className="row">
                         <input 

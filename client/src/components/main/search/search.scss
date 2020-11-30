@@ -11,6 +11,13 @@
         margin: 0 10px;
     }
 
+    &_mobile {
+        width: auto;
+        @media screen and (min-width: 481px) {
+            display: none;
+        }
+    }
+
     &-inner {
         background-color: $bg-1;
         border-radius: 10px;

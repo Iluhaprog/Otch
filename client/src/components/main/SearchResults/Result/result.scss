@@ -16,6 +16,13 @@
     padding: 20px;
     box-shadow: 0 10px 10px $shadow;
     margin-bottom: 20px;
+
+    .user-name {
+        max-width: 150px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
 
 
