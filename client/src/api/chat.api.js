@@ -1,4 +1,4 @@
-import { GET, POST_X, PUT, DELETE, WS } from './../util/api';
+import { GET, POST_X, PUT, WS } from './../util/api';
 
 const getByUserId = userId => {
     return GET({

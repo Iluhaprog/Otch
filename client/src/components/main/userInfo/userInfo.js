@@ -1,9 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import { setCookie } from '../../../util/cookie';
-import { getById } from './../../../api/user.api';
 import emptyUser from '../../../assets/images/emptyUser.png';
-import { apiUrl } from '../../../config';
 
 import './userInfo.scss';
 

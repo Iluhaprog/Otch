@@ -6,8 +6,10 @@
  */
 
 function getCookie(name) {
+    const r1 = /(?:^|; )/;
+    const r2 = /=([^;]*)/; 
     let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        r1.source + name.replace(/([.$?*|{}()[\]/+^])/g, /\$1/) + r2.source
     ));
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }

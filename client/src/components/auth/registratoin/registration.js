@@ -28,12 +28,14 @@ class Registration extends React.Component {
             case 3:
                 this.setState({failMessage: 'Login exist'})
                 break;
+            default:
+                break;
         }
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        const { password, confrimPassword, age } = this.state;
+        const { password, confrimPassword } = this.state;
         if (password === confrimPassword) {
             registration(this.state)
                 .then(result => {

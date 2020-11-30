@@ -26,7 +26,7 @@ class App extends React.Component {
         this.setState({
             wss: updateChatList({
                 userId: userId,
-                onopen: e => console.log(e),
+                onopen: e => {return e},
                 onmessage: e => {
                     this.initChatList();
                     console.log(JSON.parse(e.data));

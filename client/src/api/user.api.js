@@ -1,4 +1,4 @@
-import { GET, POST, PUT, DELETE, POST_X } from './../util/api';
+import { GET, POST, PUT, POST_X } from './../util/api';
 import base64 from 'base-64';
 
 const getById = id => {

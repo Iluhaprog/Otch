@@ -1,5 +1,5 @@
 import React from 'react';
-import { addMember, create, updateChatList } from '../../../api/chat.api';
+import { addMember, create } from '../../../api/chat.api';
 import { dropHandler, handleDragOver } from '../../../util/dragAndDrop';
 import DragAndDrop from '../DragAndDrop/DragAndDrop';
 import FormBox from '../FormBox/FormBox';

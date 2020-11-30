@@ -47,7 +47,7 @@ class Login extends React.Component {
                             required />
                     </label>
                     <SendButton text="SingIn" />
-                    <a href="#" className='link'>
+                    <a href="/" className='link'>
                         Forgot password
                 </a>
                 </div>

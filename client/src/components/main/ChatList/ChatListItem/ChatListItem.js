@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { apiUrl } from '../../../../config';
 
 import emptyUser from '../../../../assets/images/emptyUser.png'
