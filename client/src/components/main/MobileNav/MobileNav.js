@@ -33,21 +33,21 @@ class MobileNav extends React.Component {
                 <NavLink 
                     to='/search'
                     onClick={() => this.onClick(1, 'Find users')}
-                    className={selected === 1 && 'selected'}
+                    className={selected === 1 ? 'selected' : ''}
                 >
                     <FontAwesomeIcon icon={faSearch}/>
                 </NavLink>
                 <NavLink 
                     to='/chat-list'
                     onClick={() => this.onClick(2, 'Chats', button)}
-                    className={selected === 2 && 'selected'}
+                    className={selected === 2 ? 'selected' : ''}
                 >
                     <FontAwesomeIcon icon={faComment}/>
                 </NavLink>
                 <NavLink 
                     to='/settings'
                     onClick={() => this.onClick(3, 'Settings')}
-                    className={selected === 3 && 'selected'}
+                    className={selected === 3 ? 'selected' : ''}
                 >
                     <FontAwesomeIcon icon={faUserCog}/>
                 </NavLink>
