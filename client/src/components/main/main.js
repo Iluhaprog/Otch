@@ -6,6 +6,7 @@ import ChatList from './ChatList/ChatList';
 import CreateChat from './CreateChat/CreateChat';
 import Header from './header/header';
 import Messenger from './Messenger/Messenger';
+import MobileNav from './MobileNav/MobileNav';
 import SearchResults from './SearchResults/SearchResults';
 import Settings from './settings/settings';
 
@@ -95,6 +96,7 @@ class Main extends React.Component {
                         />
                     </Route>
                 </Switch>
+                <MobileNav />
             </div>
         )
     }
