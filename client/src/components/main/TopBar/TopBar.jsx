@@ -9,16 +9,16 @@ export default props => {
     return (
         <div className='top-bar'>
             <div className={topbar.button.location ? 'row row_jc-sb' : 'row row_jc-c'}>
-                <p>{topbar.title}</p>
                 { 
                     topbar.button.location
                         ? 
-                        <NavLink to={topbar.button.location || ''}>
+                        <NavLink to={topbar.button.location || ''} onClick={topbar.button.onClick}>
                             <FontAwesomeIcon icon={topbar.button.inner} />
                         </NavLink>
                         : 
                         ''
                 }
+                <p>{topbar.title}</p>
             </div>
         </div>
     )
