@@ -121,14 +121,16 @@ h4 {
 
 .top-bar {
     display: none;
+    grid-area: top-bar;
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
     .wrapper {
         grid-template-columns: 100vw;
-        grid-template-rows: 90vh 10vh;
+        grid-template-rows: 50px calc(90vh - 50px) 10vh;
         /* grid-template-rows: 100vh; */
         grid-template-areas: 
+            'top-bar'
             'main'
             'mobile-nav';
     }

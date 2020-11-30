@@ -1,0 +1,26 @@
+@import './../../../vars.scss';
+
+.top-bar {
+    max-width: 100%;
+    max-height: 30px;
+    background-color: $bg-2;
+    margin: 10px;
+    box-shadow: 0px 4px 4px $shadow;
+    border-radius: 5px;
+    padding: 3px 10px;
+
+    a, p {
+        font-size: 20px;
+    }
+
+    p { 
+        color: $color-1;
+        font-weight: 300;
+    }
+
+    a {
+        svg {
+            color: $bg-4;
+        }
+    }
+}

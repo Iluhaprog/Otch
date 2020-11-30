@@ -26,8 +26,17 @@
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
-    .settings-form {
-        padding-top: 40px;
-        padding-bottom: 20px;
+    .settings {
+        &-form {
+            padding-top: 0px;
+        }
+        .sr {
+            height: auto;
+            padding-top: 0px;
+        }
+        .sc {
+            height: auto;
+            margin-bottom: 20px;
+        }
     }
 }

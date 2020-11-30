@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { AddToChatForm } from './AddToChat/AddToChat';
 import ChatList from './ChatList/ChatList';
@@ -9,6 +10,7 @@ import Messenger from './Messenger/Messenger';
 import MobileNav from './MobileNav/MobileNav';
 import SearchResults from './SearchResults/SearchResults';
 import Settings from './settings/settings';
+import TopBar from './TopBar/TopBar';
 
 class Main extends React.Component {
     state = {
@@ -16,6 +18,19 @@ class Main extends React.Component {
         isVisibleAddToChatForm: false,
         memberId: -1,
         selectedChat: {},
+        topbar: {
+            title: 'Chats',
+            button: {
+                inner: faPlusSquare,
+                location: '/create-chat'
+            }
+        }
+    }
+
+    changeTopBar(topbar) {
+        this.setState({
+            topbar: topbar
+        });
     }
 
     changeAddToChatFormVisibility(value) {
@@ -67,6 +82,7 @@ class Main extends React.Component {
                     changeVisibility={this.changeAddToChatFormVisibility.bind(this)}
                     webSocket={this.props.webSocket}
                 />
+                <TopBar data={this.state.topbar}/>
                 <Switch>
                     <Route path='/settings'>
                         <Settings
@@ -96,7 +112,7 @@ class Main extends React.Component {
                         />
                     </Route>
                 </Switch>
-                <MobileNav />
+                <MobileNav changeTopBar={this.changeTopBar.bind(this)}/>
             </div>
         )
     }
