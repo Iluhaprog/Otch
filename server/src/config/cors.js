@@ -1,7 +1,9 @@
 let cors = require('cors');
 
-var whitelist = ['http://localhost:3001', 'http://192.168.100.5:3001'];
- 
+//var whitelist = ['https://otch.herokuapp.com/'];
+var whitelist = ['http://192.168.100.5:3001'];
+
+  
 var corsOptions = {
   credentials: true,
   origin: function (origin, callback) {

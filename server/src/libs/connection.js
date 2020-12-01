@@ -1,5 +1,11 @@
 const mysql = require('mysql');
-const config = require('../config/db');
+let config = {};
+if (process.env.NODE_ENV !== 'production') {
+    config = require('../config/db');
+} else {
+    let { db } = require('../config/prod_config');
+    config = db;
+}
 
 const pool = mysql.createPool(config);
 

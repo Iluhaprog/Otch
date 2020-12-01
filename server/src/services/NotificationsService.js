@@ -2,6 +2,7 @@ const query = require('../libs/connection');
 const Answer = require('../libs/Answer');
 const { formatDate } = require('../libs/format');
 const { SUCCESS, FAILURE, RECORD_NF } = require('../libs/statuses');
+const { NOTIFICATIONS } = require('../config/db_table_names');
 
 class NotificationsService {
 
@@ -13,7 +14,7 @@ class NotificationsService {
      *                   otherwise status RECORD_NF
      */
     async getById(id) {
-        const [[notification]] = await query('SELECT * FROM Notifications WHERE `id`=?;', [id]);
+        const [[notification]] = await query(`SELECT * FROM ${NOTIFICATIONS} WHERE id=?;`, [id]);
         return notification ? new Answer(SUCCESS, notification) : new Answer(RECORD_NF);
     }
 
@@ -25,7 +26,7 @@ class NotificationsService {
      *                   otherwise status RECORD_NF
      */
     async getByUserId(userId) {
-        const [notifications] = await query('SELECT * FROM Notifications WHERE `user_id`=?;', [userId]);
+        const [notifications] = await query(`SELECT * FROM ${NOTIFICATIONS} WHERE user_id=?;`, [userId]);
         return notifications.length ? new Answer(SUCCESS, notifications) : new Answer(RECORD_NF);
     }
 
@@ -42,7 +43,7 @@ class NotificationsService {
     async create(notification) {
         if (notification) {
             const creationDate = notification.creationDate || new Date();
-            await query('INSERT INTO Notifications(`message`, `viewed`, `creation_date`, `user_id`) VALUE (?, ?, ?, ?);',
+            await query(`INSERT INTO ${NOTIFICATIONS}(message, viewed, creation_date, user_id) VALUE (?, ?, ?, ?);`,
                         [
                             notification.message, 
                             notification.viewed, 
@@ -65,7 +66,7 @@ class NotificationsService {
     async update(notification) {
         const answer = await this.getById(notification.id);
         if (answer.getStatus()) {
-            await query('UPDATE Notifications SET `viewed`=? WHERE `id`=?;', [notification.viewed, notification.id]);
+            await query(`UPDATE ${NOTIFICATIONS} SET viewed=? WHERE id=?;`, [notification.viewed, notification.id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -80,7 +81,7 @@ class NotificationsService {
     async deleteById(id) {
         const answer = await this.getById(id);
         if (answer.getStatus()) {
-            await query('DELETE FROM Notifications WHERE `id`=?', [id]);
+            await query(`DELETE FROM ${NOTIFICATIONS} WHERE id=?`, [id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);

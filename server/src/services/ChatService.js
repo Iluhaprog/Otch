@@ -3,7 +3,7 @@ const { formatDate } = require('../libs/format');
 const { token } = require('../libs/crypt');
 const Answer = require('../libs/Answer');
 const { SUCCESS, FAILURE, NOT_CHAT_ADMIN, USER_E } = require('../libs/statuses');
-
+const { CHATS, USERS, USERS_CHATS } = require('../config/db_table_names');
 class ChatService {
 
 
@@ -14,7 +14,7 @@ class ChatService {
      * @returns {Answer} If chat exist, then Answer contains status SUCCESS and data is chat, otherwise status FAILURE and data is empty 
      */
     async getById(id) {
-        const [[chat]] = await query('SELECT * FROM Chats WHERE id=?', [id]);
+        const [[chat]] = await query(`SELECT * FROM ${CHATS} WHERE id=?`, [id]);
         return chat ? new Answer(SUCCESS, chat) : new Answer(FAILURE);
     }
 
@@ -25,7 +25,7 @@ class ChatService {
      * @returns {Answer} If chat exist, then Answer contains status SUCCESS and data is chat, otherwise status FAILURE and data is empty 
      */
     async getByKey(key) {
-        const [[chat]] = await query('SELECT * FROM Chats WHERE `key`=?', [key]);
+        const [[chat]] = await query(`SELECT * FROM ${CHATS} WHERE \`key\`=?`, [key]);
         return  chat ? new Answer(SUCCESS, chat) : new Answer(FAILURE);
     }
 
@@ -37,12 +37,12 @@ class ChatService {
      */
     async getByUserId(userId) {
         const [chats] = await query(`
-            SELECT Chats.id, Chats.name, Chats.creation_date, Chats.key, Chats.avatar
-                FROM Chats
-                JOIN Users_Chats
-                    ON Users_Chats.chat_id = Chats.id
+            SELECT ${CHATS}.id, ${CHATS}.name, ${CHATS}.creation_date, ${CHATS}.key, ${CHATS}.avatar
+                FROM ${CHATS}
+                JOIN ${USERS_CHATS}
+                    ON ${USERS_CHATS}.chat_id = ${CHATS}.id
                 JOIN Users
-                    ON Users.id = Users_Chats.user_id WHERE Users.id=?;
+                    ON Users.id = ${USERS_CHATS}.user_id WHERE ${USERS}.id=?;
             `, 
             [userId]);
             console.log(userId);
@@ -65,7 +65,7 @@ class ChatService {
             const creation_date = formatDate(chat.creation_date || new Date());
             const chatAvatar = chat.avatar ? `/avatars/${chat.avatar}` : '';
             await query(`
-                INSERT INTO Chats(\`name\`, \`avatar\`, \`creation_date\`, \`key\`, \`admin_id\`) VALUES (?, ?, ?, ?, ?);
+                INSERT INTO ${CHATS}(\`name\`, \`avatar\`, \`creation_date\`, \`key\`, \`admin_id\`) VALUES (?, ?, ?, ?, ?);
                 `, 
                 [chat.name, chatAvatar, creation_date, key, chat.adminId]);
             return new Answer(SUCCESS, {key: key});
@@ -83,16 +83,16 @@ class ChatService {
      */
     async addMember(adminId, userId, key) {
         let chat = (await this.getByKey(key)).getData();
-        let [user] = await query(`select Users.name  
-                                    from Chats
-                                    join Users_Chats
-                                        on Users_Chats.chat_id = Chats.id
+        let [user] = await query(`select ${USERS}.name  
+                                    from ${CHATS}
+                                    join ${USERS_CHATS}
+                                        on ${USERS_CHATS}.chat_id = ${CHATS}.id
                                     JOIN Users
-                                        on Users.id = Users_Chats.user_id
-                                    where Users.id=? and Chats.id=?;`, [userId, chat.id]);
+                                        on ${USERS}.id = ${USERS_CHATS}.user_id
+                                    where ${USERS}.id=? and ${CHATS}.id=?;`, [userId, chat.id]);
         if (!user.length){
             if (parseInt(adminId) === parseInt(chat.admin_id)) {
-                await query('INSERT INTO Users_Chats(\`user_id\`, \`chat_id\`) VALUE (?, ?)', [userId, chat.id]);
+                await query(`INSERT INTO ${USERS_CHATS}(\`user_id\`, \`chat_id\`) VALUE (?, ?)`, [userId, chat.id]);
                 return new Answer(SUCCESS);
             } else {
                 return new Answer(NOT_CHAT_ADMIN);
@@ -113,7 +113,7 @@ class ChatService {
         const chat = (await this.getByKey(key)).getData();
         if (adminId === chat.admin_id || adminId === userId) {
             const chatId = chat.id;
-            await query('DELETE FROM Users_Chats WHERE `user_id`=? AND `chat_id`=?', [userId, chatId]);
+            await query(`DELETE FROM ${USERS_CHATS} WHERE user_id=? AND chat_id=?`, [userId, chatId]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -127,17 +127,17 @@ class ChatService {
      */
     async deleteById(id) {
         const [users] = await query(`
-            SELECT Users.id  
-                FROM Chats
-                JOIN Users_Chats
-                    ON Users_Chats.chat_id = Chats.id
-                JOIN Users
-                    ON Users.id = Users_Chats.user_id
-                WHERE Chats.id = ?;
+            SELECT ${USERS}.id  
+                FROM ${CHATS}
+                JOIN ${USERS_CHATS}
+                    ON ${USERS_CHATS}.chat_id = ${CHATS}.id
+                JOIN ${USERS}
+                    ON ${USERS}.id = ${USERS_CHATS}.user_id
+                WHERE ${CHATS}.id = ?;
             `, 
             [id]);
         if(!users.length) {
-            await query(`DELETE FROM Chats WHERE id=?`, [id]);
+            await query(`DELETE FROM ${CHATS} WHERE id=?`, [id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);

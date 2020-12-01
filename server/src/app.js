@@ -1,6 +1,15 @@
 const { port, env } = require('./config/vars');
 const { app, express, passport } = require('./config/express');
-const { cors } = require('./config/cors');
+
+let { cors } = require('./config/cors');
+
+if (process.env.NODE_ENV !== 'production') {
+  const { cors: crs } = require('./config/cors');
+  cors = crs;
+} else {
+  const { cors: crs } = require('./config/prod_config');
+  cors = crs;
+}
 
 
 const MessagesRouter = require('./routes/MessagesRoutes'); 

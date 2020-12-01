@@ -4,6 +4,8 @@ const { formatDate } = require('../libs/format');
 const { SUCCESS, EMAIL_E, LOGIN_E, FAILURE, RECORD_NF } = require('../libs/statuses');
 const Answer = require('../libs/Answer');
 const { sendMail, create } = require('../services/VerificationService');
+const { USERS } = require('../config/db_table_names');
+
 
 class UserService {
 
@@ -34,7 +36,7 @@ class UserService {
      * @returns {Answer} If user exist, then Answer contains status SUCCESS and data is user, otherwise status FAILURE and data is empty
      */
     async getById(id) {
-        const [[user]] = await query('SELECT * FROM Users WHERE `id`=?', [id]);
+        const [[user]] = await query(`SELECT * FROM ${USERS} WHERE id=?`, [id]);
         return user ? new Answer(SUCCESS, user) : new Answer(RECORD_NF);
     }
 
@@ -45,7 +47,7 @@ class UserService {
      * @returns {Answer} If user exist, then Answer contains status SUCCESS and data is user, otherwise status FAILURE and data is empty
      */
     async getByLogin(login) {
-        const [[user]] = await query('SELECT * FROM Users WHERE `login`=?', [login]);
+        const [[user]] = await query(`SELECT * FROM ${USERS} WHERE login=?`, [login]);
         return user ? new Answer(SUCCESS, user) : new Answer(RECORD_NF);
     }
 
@@ -57,7 +59,7 @@ class UserService {
      * @returns {Answer} If user exist, then Answer contains status SUCCESS and data is user, otherwise status FAILURE and data is empty
      */
     async getByEmail(email) {
-        const [[user]] = await query('SELECT * FROM Users WHERE `email`=?', [email]);
+        const [[user]] = await query(`SELECT * FROM ${USERS} WHERE email=?`, [email]);
         return user ? new Answer(SUCCESS, user) : new Answer(RECORD_NF);
     }
 
@@ -69,7 +71,7 @@ class UserService {
      * @returns {Answer} If user exist, then Answer contains status SUCCESS and data is user, otherwise status FAILURE and data is empty
      */
     async getByLoginAndPassord(login, password) {
-        const [[user]] = await query('SELECT * FROM Users WHERE login=? AND password=?;', [login, password]);
+        const [[user]] = await query(`SELECT * FROM ${USERS} WHERE login=? AND password=?;`, [login, password]);
         return user ? new Answer(SUCCESS, user) : new Answer(RECORD_NF);
     }
 
@@ -81,7 +83,7 @@ class UserService {
      * @returns {Answer} If user exist, then Answer contains status SUCCESS and data is user, otherwise status FAILURE and data is empty
      */
     async getByEmailAndPassword(email, password) {
-        const [[user]] = await query('SELECT * FROM Users WHERE email=? AND password=?;', [email, password]);
+        const [[user]] = await query(`SELECT * FROM ${USERS} WHERE email=? AND password=?;`, [email, password]);
         return user ? new Answer(SUCCESS, user) : new Answer(RECORD_NF);
     }
 
@@ -104,9 +106,9 @@ class UserService {
         const loginIsUnique = await this.loginIsUnique(user.login);
         const result = new Answer(SUCCESS);
         if (user && emailIsUnique && loginIsUnique) {
-            await query(`INSERT INTO Users(\`email\`, \`login\`, \`name\`, \`age\`, \`creation_date\`, \`password\`, \`salt\`, \`role_id\`) 
+            await query(`INSERT INTO ${USERS}(\`email\`, \`login\`, \`name\`, \`age\`, \`creation_date\`, \`password\`, \`salt\`, \`role_id\`) 
                             VALUE (?, ?, ?, ?, ?, ?, ?, ?);`,
-                        [user.email, user.login, user.name, user.age, creationDate, passHash.hash, passHash.salt, 2]);
+                        [user.email, user.login, user.name, user.age, creationDate, passHash.hash, passHash.salt, 11]);
                         
             const newUser = (await this.getByEmail(user.email)).getData();
             
@@ -137,7 +139,7 @@ class UserService {
         const user = await this.getById(id);
         if (user.getStatus() && compare(oldPassword, user.data.password)) {
             newPassword = hash(newPassword);
-            await query('UPDATE Users SET `password`=?, `salt`=? WHERE `id`=?', [newPassword.hash, newPassword.salt, id]);
+            await query(`UPDATE ${USERS} SET password=?, salt=? WHERE id=?`, [newPassword.hash, newPassword.salt, id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -154,7 +156,7 @@ class UserService {
     async update(user) {
         const oldUser = await this.getById(user.id);
         if (oldUser.getStatus()) {
-            await query('UPDATE Users SET name=?, age=? WHERE id=?', [user.name, user.age, user.id]);
+            await query(`UPDATE ${USERS} SET name=?, age=? WHERE id=?`, [user.name, user.age, user.id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -168,7 +170,7 @@ class UserService {
      */
     async updateVerification(id) {
         if (id) {
-            await query('UPDATE Users SET `verified`=? WHERE `id`=?', [1, id]);
+            await query(`UPDATE ${USERS} SET verified=? WHERE id=?`, [1, id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -184,7 +186,7 @@ class UserService {
      */
     async updateAvatar(user) {
         if (user.avatarName) {
-            await query('UPDATE Users SET `avatar_image`=? WHERE `id`=?', ['/avatars/' + user.avatarName, user.id]);
+            await query(`UPDATE ${USERS} SET avatar_image=? WHERE id=?`, ['/avatars/' + user.avatarName, user.id]);
             return new Answer(SUCCESS, {path: '/avatars/' + user.avatarName});
         }
         return new Answer(FAILURE);
@@ -199,7 +201,7 @@ class UserService {
     async deleteById(id) {
         const user = await this.getById(id)
         if (user.getStatus()) {
-            await query('DELETE FROM Users WHERE `id`=?', [id]);
+            await query(`DELETE FROM ${USERS} WHERE id=?`, [id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -218,10 +220,10 @@ class UserService {
         if (limit > 30) limit = 30;
         const [users] = await query(`
             SELECT 
-                Users.id, 
-                Users.name, 
-                Users.avatar_image 
-            FROM Users WHERE name LIKE ?
+                ${USERS}.id, 
+                ${USERS}.name, 
+                ${USERS}.avatar_image 
+            FROM ${USERS} WHERE name LIKE ?
             LIMIT ? OFFSET ?`, [regEx, parseInt(limit), parseInt(offset)]);
         return new Answer(SUCCESS, users);
     }

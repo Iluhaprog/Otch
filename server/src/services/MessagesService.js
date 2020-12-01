@@ -8,6 +8,8 @@ const Answer = require('../libs/Answer');
 const { SUCCESS, FAILURE } = require('../libs/statuses');
 const paths = require('../config/paths');
 
+const { MESSAGES, FILES, USERS } = require('../config/db_table_names');
+
 class MessagesService {
 
     /**
@@ -17,7 +19,7 @@ class MessagesService {
      * @returns {Answer} If message exist, then Answer contains status SUCCESS and data is message, otherwise status FAILURE and data is empty
      */
     async getById(id) {
-        const [[message]] = await query('SELECT * FROM Messages WHERE id=?', [id]);
+        const [[message]] = await query(`SELECT * FROM ${MESSAGES} WHERE id=?`, [id]);
         return message ? new Answer(SUCCESS, message) : new Answer(FAILURE);
     }
 
@@ -30,13 +32,13 @@ class MessagesService {
     async getMessagesWithFilesByChatId(chatId) {
         const [messages] = await query(`
                     select 
-                        Users.name, 
-                        Files.name as path, 
-                        Messages.* 
-                    from Messages 
-                    inner join Users on Users.id=Messages.user_id 
-                    inner join Files on Messages.id=Files.message_id 
-                    where Messages.chat_id=?
+                        ${USERS}.name, 
+                        ${FILES}.name as path, 
+                        ${MESSAGES}.* 
+                    from ${MESSAGES}
+                    inner join ${USERS} on ${USERS}.id=${MESSAGES}.user_id 
+                    inner join ${FILES} on ${MESSAGES}.id=${FILES}.message_id 
+                    where ${MESSAGES}.chat_id=?
         `, [chatId]);
         return messages;
     }
@@ -48,7 +50,7 @@ class MessagesService {
      * @returns {Answer} If messages exist, then Answer contains status SUCCESS and data is messages, otherwise status FAILURE and data is empty
      */
     async getByChatId(chatId) {
-        const [messages] = await query('select Users.name, Messages.* from Messages inner join Users on Users.id=Messages.user_id where chat_id=?', [chatId]);
+        const [messages] = await query(`select ${USERS}.name, ${MESSAGES}.* from ${MESSAGES} inner join ${USERS} on ${USERS}.id=${MESSAGES}.user_id where chat_id=?`, [chatId]);
         const messagesWithFiles = await this.getMessagesWithFilesByChatId(chatId);
         for (let i = 0; i < messages.length; i++) {
             for (let j = 0; j < messagesWithFiles.length; j++) {
@@ -76,7 +78,7 @@ class MessagesService {
      * @returns {Answer} If messages exist, then Answer contains status SUCCESS and data is messages, otherwise status FAILURE and data is empty
      */
     async getByUserIdAndChatId(userId, chatId) {
-        const [messages] = await query('SELECT * FROM Messages WHERE user_id=? and chat_id=?', [userId, chatId]);
+        const [messages] = await query(`SELECT * FROM ${MESSAGES} WHERE user_id=? and chat_id=?`, [userId, chatId]);
         return messages ? new Answer(SUCCESS, messages) : new Answer(FAILURE);
     }
 
@@ -93,7 +95,7 @@ class MessagesService {
     async create(message) {
         if (message) {
             const creationDate = message.creationDate || new Date();
-            const [okPacket] =  await query('INSERT INTO Messages(user_id, chat_id, message, creation_date) VALUES (?, ?, ?, ?)',
+            const [okPacket] =  await query(`INSERT INTO ${MESSAGES}(user_id, chat_id, message, creation_date) VALUES (?, ?, ?, ?)`,
                         [message.userId, message.chatId, message.message, formatDate(creationDate)]);
             const result = {last_id: okPacket.insertId};
             return new Answer(SUCCESS, result);
@@ -111,7 +113,7 @@ class MessagesService {
     async updateById(id, newMessage) {
         const message = await this.getById(id);
         if (message.getStatus()) {
-            await query('UPDATE Messages SET message=? WHERE id=?', [newMessage, id]);
+            await query(`UPDATE ${MESSAGES} SET message=? WHERE id=?`, [newMessage, id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -126,7 +128,7 @@ class MessagesService {
     async deleteById(id) {
         const message = await this.getById(id);
         if(message.getStatus()) {
-            await query('DELETE FROM Messages WHERE id=?', [id]);
+            await query(`DELETE FROM ${MESSAGES} WHERE id=?`, [id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -144,7 +146,7 @@ class MessagesService {
      */
     async createFileInDB(file) {
         if (file) {
-            await query(`INSERT INTO Files(\`name\`, \`user_id\`, \`chat_id\`, \`creation_date\`, \`message_id\`) 
+            await query(`INSERT INTO ${FILES}(\`name\`, \`user_id\`, \`chat_id\`, \`creation_date\`, \`message_id\`) 
                             VALUES (?, ?, ?, ?, ?)`,
                     [file.name, file.userId, file.chatId, file.creationDate, file.messageId]);
             return new Answer(SUCCESS);

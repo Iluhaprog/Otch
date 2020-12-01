@@ -5,6 +5,7 @@ const { SUCCESS, FAILURE, RECORD_NF } = require('../libs/statuses');
 const nodemailer = require('nodemailer');
 const mailUser = require('../config/mailUser');
 const { formatMailHTML } = require('../libs/format');
+const { VERIFICATION_CODES } = require('../config/db_table_names');
 
 class VerificationService {
 
@@ -26,7 +27,7 @@ class VerificationService {
      * @returns {Answer} If verification code exist, then Answer contains status SUCCESS and data is verification code, otherwise status FAILURE and data is empty
      */
     async getById(id) {
-        const [[verificationCode]] = await query('SELECT * FROM VerificationCodes WHERE `id`=?', [id]);
+        const [[verificationCode]] = await query(`SELECT * FROM ${VERIFICATION_CODES} WHERE id=?`, [id]);
         return verificationCode 
                     ? new Answer(SUCCESS, verificationCode) 
                     : new Answer(RECORD_NF);
@@ -39,7 +40,7 @@ class VerificationService {
      * @returns {Answer} If verification code exist, then Answer contains status SUCCESS and data is verification code, otherwise status FAILURE and data is empty
      */
     async getByUserId(userId) {
-        const [[verificationCode]] = await query('SELECT * FROM VerificationCodes WHERE `user_id`=?', [userId]);
+        const [[verificationCode]] = await query(`SELECT * FROM ${VERIFICATION_CODES} WHERE user_id=?`, [userId]);
         return verificationCode 
                     ? new Answer(SUCCESS, verificationCode) 
                     : new Answer(RECORD_NF);
@@ -54,7 +55,7 @@ class VerificationService {
     async create(userId) {
         if (userId) {
             const code = token().slice(0, 6);
-            await query('INSERT INTO VerificationCodes(`code`, `user_id`) VALUE (?, ?)', [code, userId]);
+            await query(`INSERT INTO ${VERIFICATION_CODES}(code, user_id) VALUE (?, ?)`, [code, userId]);
             return new Answer(SUCCESS, {code: code});
         }
         return new Answer(FAILURE);
@@ -70,7 +71,7 @@ class VerificationService {
         const result = await this.getById(id);
         if (result.getStatus() === SUCCESS) {
             const newCode = token().slice(0, 6);
-            await query('UPDATE VerificationCodes SET `code`=? WHERE `id`=?', [newCode, id]);
+            await query(`UPDATE ${VERIFICATION_CODES} SET code=? WHERE id=?`, [newCode, id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);
@@ -85,7 +86,7 @@ class VerificationService {
      */
     async deleteById(id) {
         if (id) {
-            await query('DELETE FORM VerificationCodes WHERE `id`=?', [id]);
+            await query(`DELETE FORM ${VERIFICATION_CODES} WHERE id=?`, [id]);
             return new Answer(SUCCESS);
         }
         return new Answer(FAILURE);

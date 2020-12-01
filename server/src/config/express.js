@@ -10,7 +10,7 @@ const expressWs = require('express-ws')(app);
 const expressSession = require('express-session');
 const redis = require('redis');
 const RedisStore = require('connect-redis')(expressSession);
-const redisClient = redis.createClient();
+const redisClient = redis.createClient(process.env.REDIS_URL);
 
 const pino = require('pino');
 const expressPino = require('express-pino-logger');
@@ -35,6 +35,7 @@ const storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 app.use(expressLogger);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
