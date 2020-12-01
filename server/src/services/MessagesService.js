@@ -93,8 +93,9 @@ class MessagesService {
     async create(message) {
         if (message) {
             const creationDate = message.creationDate || new Date();
-            const [[result]] = await query(`SELECT insertMessage(?, ?, ?, ?) as last_id`,
+            const [okPacket] =  await query('INSERT INTO Messages(user_id, chat_id, message, creation_date) VALUES (?, ?, ?, ?)',
                         [message.userId, message.chatId, message.message, formatDate(creationDate)]);
+            const result = {last_id: okPacket.insertId};
             return new Answer(SUCCESS, result);
         }
         return new Answer(FAILURE);
