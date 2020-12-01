@@ -1,4 +1,4 @@
-USE OtchDB;
+USE heroku_2a79b42d4f668ed;
 
 DELIMITER $$
 DROP FUNCTION IF EXISTS insertMessage$$
