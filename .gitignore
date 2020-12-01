@@ -8,3 +8,5 @@ server/src/public
 server/src/config/mailUser.js
 server/logs
 server/src/config/paths.js
+server/.gitignore
+client/.gitignore
