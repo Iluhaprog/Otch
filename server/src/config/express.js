@@ -1,8 +1,8 @@
 const { logLevel } = require('./vars');
 const express = require('express');
 const app = express();
-const path = require('path');
 const { morgan, accessLogStream } = require('./log');
+const  { shouldSendSameSiteNone } = require('should-send-same-site-none');
 
 const paths = require('./paths');
 
@@ -38,6 +38,7 @@ app.use(expressLogger);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(shouldSendSameSiteNone);
 
 app.use(expressSession({
     secret: 'secret',
@@ -48,8 +49,12 @@ app.use(expressSession({
     cookie: {
         maxAge: 60*60*24*365,
         httpOnly: true,
+        sameSite: 'none',
+        secure: true,
     },
 }));
+
+app.enable('trust proxy');
 
 app.use(passport.initialize());
 app.use(passport.session());
