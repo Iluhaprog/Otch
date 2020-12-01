@@ -18,7 +18,7 @@ class Header extends React.Component {
                     <Weather />
                     <div className="header__buttons-box row row_ai-c">
                         <NavLink to='/settings'>
-                            <IconButton icon={faSlidersH} onClick={() => console.log('sl') } />
+                            <IconButton icon={faSlidersH} />
                         </NavLink>
                         <IconButton icon={faDoorClosed} onClick={() => this.props.onLogout()} />
                     </div>
