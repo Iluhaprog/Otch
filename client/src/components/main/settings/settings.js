@@ -47,6 +47,27 @@ class Settings extends React.Component {
         });
     }
 
+    handleClick(e) {
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        if (FileReader && file) {
+            let fr = new FileReader();
+            fr.onload = () => {
+                this.setState({
+                    image: fr.result,
+                });
+            }
+            fr.readAsDataURL(file);
+        }
+
+        updateAvatar({
+            id: this.props.userId,
+            formData: formData,
+        });
+    }
+
     render() { 
         return ( 
             <div className="settings">
@@ -58,6 +79,7 @@ class Settings extends React.Component {
                                     onDrop={e => dropHandler(e, this.handleImageChange.bind(this))} 
                                     onDragOver={e => handleDragOver(e)}
                                     image={this.state.image}
+                                    onClick={this.handleClick.bind(this)}
                                     />
                                 <div className="column">
                                     <input 

@@ -5,6 +5,7 @@ const handleDragOver = e => {
 }
 
 const dropHandler = (e, callback) => {
+    console.log(e.dataTransfer.files[0]);
     e.preventDefault();
     const imageData = formData({
         'avatar':  e.dataTransfer.files[0],
