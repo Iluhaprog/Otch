@@ -1,6 +1,8 @@
 const Answer = require('../libs/Answer');
 const { FAILURE } = require('../libs/statuses');
 const MessagesService = require('../services/MessagesService');
+const FileManager = require('../libs/FileManager');
+const paths = require('../config/paths');
 
 class MessagesController {
 
@@ -20,7 +22,17 @@ class MessagesController {
         try {
             const chatId = req.query.chatId;
             const messages = await MessagesService.getByChatId(chatId);
-            res.json(messages);
+            new Promise((res, rej) => {
+                let lastStream = null;
+                messages.data.forEach(message => {
+                    if (message.path) {
+                        lastStream = FileManager.download(paths.files.chats, message.path);
+                        message.path = paths.files.chatsResp + message.path;
+                    }
+                });
+                if (lastStream) lastStream.on('end', () => res());
+                else res();
+            }).then(() => res.json(messages))
         } catch (err) {
             console.log(err);
             res.setStatus(500);

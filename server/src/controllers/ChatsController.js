@@ -1,3 +1,5 @@
+const FileManager = require('../libs/FileManager');
+const paths = require('../config/paths');
 const ChatsService = require('../services/ChatService');
 
 class ChatsController {
@@ -30,7 +32,22 @@ class ChatsController {
         try {
             const userId = req.query.userId;
             const result = await ChatsService.getByUserId(userId);
-            res.json(result);
+            new Promise((res, rej) => {
+                let lastStream = null;
+                if (Array.isArray(result.data)) {
+                    result.data.forEach(chat => {
+                        if (chat.avatar) {
+                            lastStream = FileManager.download(paths.files.avatars, chat.avatar, () => {
+                                chat.avatar = '/avatars/' + chat.avatar;
+                            });
+                        }
+                    });
+                }
+                if (lastStream) lastStream.on('end', () => res());
+                else res();
+            }).then(() => {
+                res.json(result);
+            });
         } catch (err) {
             console.log(err);
             res.setStatus(500);
@@ -43,7 +60,7 @@ class ChatsController {
             const chat = {
                 adminId: req.body.adminId,
                 name: req.body.name,
-                avatar: req.file && req.file.filename,
+                avatar: req.file && req.file.name,
             }
             const result = await ChatsService.create(chat);
             res.json(result);

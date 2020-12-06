@@ -1,6 +1,8 @@
 const UsersService = require('../services/UserService');
 const Answer = require('../libs/Answer');
-const { SUCCESS } = require('../libs/statuses');
+const { SUCCESS, FAILURE } = require('../libs/statuses');
+const FileManager = require('../libs/FileManager');
+const paths = require('../config/paths');
 
 class UsersController {
 
@@ -44,10 +46,13 @@ class UsersController {
         try {
             const user = {
                 id: req.query.id,
-                avatarName: req.file && req.file.filename
+                avatarName: req.file && req.file.name
             };
-            const result = await UsersService.updateAvatar(user);
-            res.json(result);
+            let result = new Answer(FAILURE);
+            FileManager.download(paths.files.avatars, user.avatarName, async () => {
+                result = await UsersService.updateAvatar(user);
+                res.json(result);
+            });
         } catch (err) {
             console.log(err);
             res.setStatus(500);
@@ -83,7 +88,14 @@ class UsersController {
         try {
             const { id } = req.query;
             const result = await UsersService.getById(id);
-            res.json(result);
+            if (result.data.avatar_image) {
+                FileManager.download(paths.files.avatars, result.data.avatar_image, async () => {
+                    result.data.avatar_image = '/avatars/' + result.data.avatar_image;
+                    res.json(result);
+                });
+            } else {
+                res.json(result);
+            }
         } catch (err) {
             console.log(err);
             res.setStatus(500);
@@ -107,7 +119,17 @@ class UsersController {
         try {
             const { q, l, o } = req.query;
             const result = await UsersService.searchByName(q, l, o);
-            res.json(result);
+            new Promise((res, rej) => {
+                let lastStream = null;
+                result.data.forEach(user => {
+                    if (user.avatar_image) {
+                        lastStream = FileManager.download(paths.files.avatars, user.avatar_image);
+                        user.avatar_image = '/avatars/' + user.avatar_image;
+                    }
+                });
+                if (lastStream) lastStream.on('end', () => res());
+                else res();
+            }).then(() => res.json(result));
         } catch(err) {
             console.log(err);
             res.setStatus(500);
