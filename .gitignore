@@ -10,3 +10,4 @@ server/logs
 server/src/config/paths.js
 server/.gitignore
 client/.gitignore
+server/.env
