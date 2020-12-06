@@ -47,7 +47,7 @@ export default class ChatListItem extends React.Component {
         return (
             <li className='list__item'>
                 <NavLink 
-                    to={`/chat/${subPath}`}
+                    to={`/chat-list/${subPath}`}
                     className={`chat-box ${selectedSelector}`} 
                     onClick={e => this.handleClick()}>
                     <div className="row row_ai-c row_jc-fs">

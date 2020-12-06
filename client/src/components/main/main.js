@@ -133,7 +133,7 @@ class Main extends React.Component {
                             />
                         </div>
                     </Route>
-                    <Route path='/chat/:name'>
+                    <Route path='/chat-list/:name'>
                         <Messenger 
                             chat={this.state.selectedChat}
                             userId={this.props.userId}

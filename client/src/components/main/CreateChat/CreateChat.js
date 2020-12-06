@@ -52,6 +52,23 @@ class CreateChat extends React.Component {
         this.props.history.push('/chat-list');
     }
 
+    onClick(e) {
+        const file = e.target.files[0];
+        const formData = new FormData() || this.state.data;
+        formData.append('avatar', file);
+
+        if (FileReader && file) {
+            let fr = new FileReader();
+            fr.onload = () => {
+                this.setState({
+                    image: fr.result,
+                    data: formData
+                });
+            }
+            fr.readAsDataURL(file);
+        }
+    }
+
     render() { 
         return ( 
             <form onSubmit={e => this.handleSubmit(e)} className='create-chat-form'>
@@ -61,6 +78,7 @@ class CreateChat extends React.Component {
                             <DragAndDrop 
                                 onDrop={e => dropHandler(e, this.changeImageHandler.bind(this))}
                                 onDragOver={e => handleDragOver(e)}
+                                onClick={e => this.onClick(e)}
                                 image={this.state.image}
                             />
                             <input 
