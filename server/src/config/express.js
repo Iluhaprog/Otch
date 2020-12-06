@@ -1,4 +1,5 @@
 const { logLevel } = require('./vars');
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const { morgan, accessLogStream } = require('./log');
@@ -22,16 +23,29 @@ const expressLogger = expressPino({ logger });
 const { passport } = require('./passport');
 
 const multer = require('multer');
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, paths.files.avatars);
-    },
-    filename: (req, file, cb) => {
-        const extArr = file.mimetype.split('/');
-        const extension = extArr[extArr.length - 1];
-        cb(null, `${file.originalname.split('.')[0]}-${Date.now()}.${extension}`);
-    }
+const multerDbx = require('multer-dropbox');
+const { Dropbox } = require('dropbox');
+const fetch = require('isomorphic-fetch');
+
+const dbx = new Dropbox({
+    accessToken: process.env.DROP_BOX_TOKEN,
+    fetch,
 });
+
+const storage = multerDbx( dbx, {
+    path: function(req, file, cb) {
+        const fileNameSubstings = file.originalname.split('.');
+        const fileExtension = fileNameSubstings[fileNameSubstings.length - 1];
+        const fileName = fileNameSubstings.filter((substr, index) => {
+            return index < fileNameSubstings.length - 1 ? substr : '';
+        }).join().split(' ').join();
+        const date = Date.now().toLocaleString().split(',').join();
+
+        cb(null, `/uploads/${fileName}-${date}.${fileExtension}`);
+    },
+    mute: true
+});
+
 var upload = multer({ storage: storage });
 
 app.use(expressLogger);
