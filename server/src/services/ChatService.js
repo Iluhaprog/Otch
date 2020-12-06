@@ -4,6 +4,8 @@ const { token } = require('../libs/crypt');
 const Answer = require('../libs/Answer');
 const { SUCCESS, FAILURE, NOT_CHAT_ADMIN, USER_E } = require('../libs/statuses');
 const { CHATS, USERS, USERS_CHATS } = require('../config/db_table_names');
+const FileManager = require('../libs/FileManager');
+const paths = require('../config/paths');
 class ChatService {
 
 
@@ -45,7 +47,6 @@ class ChatService {
                     ON Users.id = ${USERS_CHATS}.user_id WHERE ${USERS}.id=?;
             `, 
             [userId]);
-            console.log(userId);
         return chats.length ? new Answer(SUCCESS, chats) : new Answer(FAILURE);
     }
 
@@ -63,7 +64,7 @@ class ChatService {
         if (chat) {
             const key = token();
             const creation_date = formatDate(chat.creation_date || new Date());
-            const chatAvatar = chat.avatar ? `/avatars/${chat.avatar}` : '';
+            const chatAvatar = chat.avatar || '';
             await query(`
                 INSERT INTO ${CHATS}(\`name\`, \`avatar\`, \`creation_date\`, \`key\`, \`admin_id\`) VALUES (?, ?, ?, ?, ?);
                 `, 

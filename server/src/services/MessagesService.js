@@ -9,6 +9,7 @@ const { SUCCESS, FAILURE } = require('../libs/statuses');
 const paths = require('../config/paths');
 
 const { MESSAGES, FILES, USERS } = require('../config/db_table_names');
+const FileManager = require('../libs/FileManager');
 
 class MessagesService {
 
@@ -59,6 +60,7 @@ class MessagesService {
                 }
             }
         }
+        
         messages.sort((a, b) => {
             if (a && b) {
                 const time1 = new Date(a.creation_date).getTime();
@@ -170,6 +172,11 @@ class MessagesService {
         return fileName;
     }
 
+    async createFileInDropBox(filename) {
+        const path = paths.files.chats;
+        FileManager.upload(path, filename);
+    }
+
     /**
      * Create file
      * 
@@ -183,12 +190,13 @@ class MessagesService {
         if (data.message) {
             const fileName = await this.createFileInFS(data.message);
             const result = await this.createFileInDB({
-                name: paths.files.chatsResp + fileName,
+                name: fileName,
                 userId: data.userId,
                 chatId: data.chatId,
                 messageId: data.messageId,
                 creationDate: formatDate(new Date())
             });
+            await this.createFileInDropBox(fileName);
             return result.status ? new Answer(SUCCESS, {path: fileName}) : new Answer(FAILURE);
         }
         return new Answer(FAILURE);

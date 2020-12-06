@@ -186,8 +186,8 @@ class UserService {
      */
     async updateAvatar(user) {
         if (user.avatarName) {
-            await query(`UPDATE ${USERS} SET avatar_image=? WHERE id=?`, ['/avatars/' + user.avatarName, user.id]);
-            return new Answer(SUCCESS, {path: '/avatars/' + user.avatarName});
+            await query(`UPDATE ${USERS} SET avatar_image=? WHERE id=?`, [user.avatarName, user.id]);
+            return new Answer(SUCCESS, {path: user.avatarName});
         }
         return new Answer(FAILURE);
     }
